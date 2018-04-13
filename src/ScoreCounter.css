@@ -1,0 +1,39 @@
+/*
+Gestion de la zone nombre d'essai et score en haut de la zone jeu
+ */
+.ScoreCounter {
+    display: flex;
+    justify-content: space-between;
+    width: 60%;
+    height: 10%;
+    outline: 0.1em solid #8e8e8e;
+    background: rgba(105, 157, 250, 0.36);
+    text-align: left;
+    margin: 0.2em;
+    padding: 0.2em;
+}
+
+/*
+Gestion de l'affichage score
+ */
+.Score {
+    width: 20%;
+    outline: 0.1em solid silver;
+    background: rgba(105, 157, 250, 0.04);
+    flex-wrap: wrap;
+    margin: 0.2em;
+    padding: 0.5em;
+
+}
+
+/*
+Gestion de l'affichage Nombre d'essai
+ */
+.Counter {
+    width: 30%;
+    outline: 0.1em solid silver;
+    background: rgba(105, 156, 249, 0.04);
+    flex-wrap: wrap;
+    margin: 0.2em;
+    padding: 0.5em;
+}

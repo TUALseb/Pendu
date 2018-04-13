@@ -1,0 +1,17 @@
+.Letter {
+    flex: 1 1 calc(100% / 6 - 0.4em);
+    font-size: 1.5em;
+    outline: 0.1em solid silver;
+    margin: 0.3em;
+    padding: 0.3em;
+    background: rgba(105, 157, 250, 0.04);
+}
+
+.Properpties {
+    display: flex;
+    outline: 0.1em solid #405c71;
+    background: rgba(64, 92, 113, 0.04);
+    flex-wrap: wrap;
+    margin: 0.8em;
+    padding: 0.5em;
+}

@@ -2,10 +2,16 @@
 Gestion de la liste des boutons
  */
 .ListButtons {
-    width: 15%;
-    outline: 0.1em solid #405c71;
-    background: rgba(105, 157, 250, 0.36);
-    text-align: right;
-    margin: 0.5em;
-    padding: 0.5em;
+    text-align: center;
+
+}
+
+
+/*
+Gestion des touches
+ */
+.Button {
+    margin: 0.3em;
+    padding: 0.3em;
+    cursor: pointer;
 }

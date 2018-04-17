@@ -1,25 +1,24 @@
 import React, { Component } from 'react'
 
-import './ScoreCounter.css'
+import './PlayerInfo.css'
 
 class ScoreCounter extends Component {
     /**
      *
      */
     state = {
-        counter : 0,
-        score : 0,
+        playerName: "",
+        nbPartiesToplay: 0,
+        partyInPlay: 0,
+        counter: 0,
+        score: 0,
     }
 
-
-
-    /**
-     * Constructeur
-     * @param props
-     */
-    constructor(props){
+    constructor(props) {
         super(props)
-        this.setState ({score:0, counter:0})
+        //this.state({score: props.score, counter: props.nbTry})
+        console.log ("ScoreCounter::constructor()")
+        console.log(props)
     }
 
     /**
@@ -32,9 +31,12 @@ class ScoreCounter extends Component {
     /**
      Appelé après que le composant a été retranscrit pour la première fois dans le DOM réel
      */
-    componentDidMount() {
-        this.upDateScore(0)
-        this.upDateClounter(0)
+    componentDidMount(props) {
+        console.log ("ScoreCounter::componentDidMount()")
+        console.log(this.state)
+        //this.state({score: props.score, counter: props.nbTry})
+        //this.upDateScore(0)
+        //this.upDateClounter(0)
     }
 
     /**
@@ -66,15 +68,24 @@ class ScoreCounter extends Component {
      * @returns {*}
      */
     render() {
+        const playerName = this.playerName
+        const nbPartiesToplay = this.nbPartiesToplay
+        const partyInPlay = this.partyInPlay
         const score = this.state.score
         const counter = this.state.counter
         return (
             <div className="ScoreCounter">
+                <div className="Player">
+                    <span>Joueur : </span>{playerName}
+                </div>
+                <div className="Parties">
+                    <span>partie</span> {partyInPlay}/{nbPartiesToplay}
+                </div>
                 <div className="Counter">
-                    Nombre d'essai : {counter}
+                    <span>Nombre d'essai : </span>{counter}
                 </div>
                 <div className="Score">
-                    Score : {score}
+                    <span>Score : </span>{score}
                 </div>
 
             </div>

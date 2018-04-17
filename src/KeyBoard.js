@@ -7,19 +7,21 @@ import Button from './Button.js'
 
 
 
+
+
 // Liste des constante gloabales
-const LETTERS = new Set(['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','_','\'']);
-//const SIDE = 6;
+const LETTERS = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','_','\'']
 
 /**
  * class KeyBoard permet de gérer ce qui se passe sur le "clavier virtuel" affiché à gauche
+ * Son rôle est sipmplement d'afficher les lettre de l'alkphapbet afin d'y choisir une lettre
+ * Elle retournera aussi cette lettre cliquée
  */
 class KeyBoard extends Component {
 
     state = {
         letters : this.generateTable()
-    };
-
+    }
 
     /**
      * Méthode permettant de générer un tableau qui va afficher toutes les lettres de l'halphabet,
@@ -27,14 +29,13 @@ class KeyBoard extends Component {
      * @returns {Array}
      */
     generateTable() {
-        const result = [];
-        //const sizeArray = SIDE * SIDE;
-        //let index = 0;
-        let it = LETTERS.entries()
+        const result = []
 
 
-        for (let letter of it) {
-            result.push(letter[0])
+        // Nous parcourons notre tableau afin de récupérer chaque lettre qui est sous forme de tableau
+        // ex : "A":[A][A]
+        for (let letter of LETTERS) {
+            result.push(letter)
             //index++
         }
 
@@ -44,11 +45,11 @@ class KeyBoard extends Component {
     /**
      * Méthode qui gère le click sur une des touches du clavier affiché
      * @param index
-     * @returns {boolean}
+     * @returns {String}
      */
     handleLetterClick(index) {
-        console.log (LETTERS.has(index))
-        return LETTERS.has(index)
+        console.log (LETTERS[index])
+        return LETTERS[index]
     }
 
     /**
@@ -60,15 +61,16 @@ class KeyBoard extends Component {
         //console.log (letters)
         return (
             <div className="Keyboard">
-                <div className="Button">
-                    { letters.map((letter, index) => (
-                        <Button
-                            value={letter}
-                            index={index}
-                            key={index}
-                            onClick={this.handleLetterClick}
-                        />
-                    ))}
+                { letters.map((letter, index) => (
+                    <Button
+                        value={letter}
+                        index={index}
+                        key={index}
+                        onClick={this.handleLetterClick}
+                    />
+                ))}
+
+                <div className="Btn-button">
                 </div>
             </div>
 

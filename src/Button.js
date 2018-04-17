@@ -9,7 +9,7 @@ import './Button.css'
 
 const Button = ({value, index, onClick }) => (
 
-    <div className="Letter" onClick={() => onClick(index)}>
+    <div className="Btn-Property" onClick={() => onClick(index)}>
         <span>
             {value}
         </span>

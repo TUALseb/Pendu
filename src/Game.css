@@ -1,0 +1,46 @@
+
+.Body-game {
+    outline: 0.1em solid #8e8e8e;
+    background: rgba(223, 223, 223, 0.36);
+    margin: 0.2em;
+    padding: 0.2em;
+}
+
+.Play-zone {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    margin: 0.2em;
+    padding: 0.2em;
+}
+
+
+
+.Left {
+    display: flex;
+    flex-wrap: wrap;
+    width: 30%;
+    margin: 0.2em;
+    padding: 0.2em;
+}
+
+.Top {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0.2em;
+    padding: 0.2em;
+
+}
+
+.Bottom {
+    align-content: flex-end;
+    flex-direction: row;
+
+}
+
+.Right {
+    align-content: right;
+    margin: 0.2em;
+    padding: 0.2em;
+}
+

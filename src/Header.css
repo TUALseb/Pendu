@@ -1,0 +1,20 @@
+/*
+Gestion de l'entête
+ */
+
+.App-header {
+    text-align: center;
+    background-color: #222;
+    height: 80px;
+    padding: 20px;
+    color: white;
+}
+
+/*
+Gestion du titre
+ */
+
+.App-title {
+    font-size: 2em;
+}
+

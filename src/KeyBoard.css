@@ -2,7 +2,8 @@
 Gestion du clavier affiché
  */
 .Keyboard {
-    width: 40%;
+    display: flex;
+    flex-wrap: wrap;
     outline: 0.1em solid #8e8e8e;
     background: rgba(142, 142, 142, 0.36);
     text-align: center;
@@ -15,11 +16,11 @@ Gestion du clavier affiché
 /*
 Gestion des touches
  */
-.Button {
-    display: flex;
-    flex-wrap: wrap;
-    margin: 0.8em;
-    padding: 0.5em;
-    cursor: default;
+.Btn-Button{
+    width: auto;
+    height: auto;
+    margin: 0.2em;
+    padding: 0.2em;
+    cursor: pointer;
 }
 

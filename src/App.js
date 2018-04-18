@@ -164,7 +164,8 @@ class App extends Component {
                   <Header />
                   <Game
                       playerName = {playerOne}
-                      nbPartieToPlay = {nbTotalParties}
+                      nbPartiesToPlay = {nbTotalParties}
+                      partyInPlay = {1}
                       nbTry = {nbTry}
                       score = {0}
                   />

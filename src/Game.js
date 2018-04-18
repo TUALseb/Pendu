@@ -12,8 +12,9 @@ import './Game.css'
 class Game extends Component {
 
     state = {
-        statue: 'ONE_PLAYER',
-        nbPartieToPlay: 0,
+        statue: '',
+        nbPartiesToPlay: 0,
+        partyInPlay: 0,
         nbTry : 0,
         playerName: "",
         score : 0,
@@ -23,8 +24,16 @@ class Game extends Component {
     constructor(props) {
         console.log ("Game::constructor()")
         super(props)
-        console.log ("Game::state : " +JSON.stringify(props))
-        //this.setState({score: props.score, counter: props.nbTry, playerName: props.playerOne, nbTotalParties: props.nbTotalParties})
+        console.log ("props : " +JSON.stringify(props))
+        this.state = {
+            statue: props.statue,
+            nbTry: props.nbTry,
+            nbPartiesToPlay: props.nbPartiesToPlay,
+            partyInPlay: props.partyInPlay,
+            score: props.score,
+            playerName: props.playerName,
+        }
+        console.log ("Game::state : " +JSON.stringify(this.state))
     }
 
     /**
@@ -64,11 +73,14 @@ class Game extends Component {
      */
     render() {
         //const nbParties
+        console.log ("Game::render")
+        console.log("Game::render::state" + JSON.stringify(this.state))
         const score = this.state.score
         const nbTry = this.state.nbTry
         const statue = this.state.statue
-        const nbPartiesToPlay = this.state.nbPartieToPlay
-        const playerName  =this.state.playerName
+        const nbPartiesToPlay = this.state.nbPartiesToPlay
+        const playerName  = this.state.playerName
+        const partyInPlay = this.state.partyInPlay
 
         if (statue === 'BEGIN')
         {
@@ -79,22 +91,31 @@ class Game extends Component {
         else {
             return (
                 <div className="Body-game">
-
+                    <div className="Top">
+                        <ScoreCounter
+                            playerName = {playerName}
+                            nbPartiesToPlay = {nbPartiesToPlay}
+                            partyInPlay = {partyInPlay}
+                            score = {score}
+                            nbTry = {nbTry}
+                        />
+                    </div>
                     <div className="Play-zone">
-                        <div className="Top">
-                            <ScoreCounter
-                                playName = {playerName}
-                                nbPartiesToplay = {nbPartiesToPlay}
-                                score = {score}
-                                counter = {nbTry}
-                            />
-                        </div>
 
                         <div className="Left">
                             <KeyBoard />
                         </div>
-                    </div>
+                        <div className="Play-party">
+                            <div className="Word-To-Find">
+                                JEU DU PENDU
+                            </div>
+                            <div className="Img-To-Show">
+                                <img src="../images/ajout_bras_droit.png" alt="ajout_tete.png"/>
+                            </div>
+                        </div>
 
+
+                    </div>
 
                     <div className="Bottom">
                         <div className="Right">

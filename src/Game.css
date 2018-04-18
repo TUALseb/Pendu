@@ -9,7 +9,8 @@
 .Play-zone {
     display: flex;
     flex-wrap: wrap;
-    flex-direction: column;
+    flex-direction: row;
+    outline: 0.1em solid #8e8e8e;
     margin: 0.2em;
     padding: 0.2em;
 }
@@ -32,9 +33,36 @@
 
 }
 
+.Play-party {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    margin: 0.2em;
+    padding: 0.2em;
+}
+
+
+.Word-To-Find {
+    outline: 0.1em solid #8e8e8e;
+    text-align: left;
+    font-size: 1.2em;
+    font-family: Helvetica, SansSerif, Verdana;
+    margin: 0.2em;
+    padding: 0.2em;
+}
+
+.Img-To-Show {
+    outline: 0.1em solid #8e8e8e;
+    align-content: center;
+    align-items: center;
+    margin: 0.2em;
+    padding: 0.2em;
+}
+
 .Bottom {
-    align-content: flex-end;
-    flex-direction: row;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
 
 }
 

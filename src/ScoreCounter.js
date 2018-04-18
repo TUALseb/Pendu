@@ -8,9 +8,9 @@ class ScoreCounter extends Component {
      */
     state = {
         playerName: "",
-        nbPartiesToplay: 0,
+        nbPartiesToPlay: 0,
         partyInPlay: 0,
-        counter: 0,
+        nbTry: 0,
         score: 0,
     }
 
@@ -18,7 +18,15 @@ class ScoreCounter extends Component {
         super(props)
         //this.state({score: props.score, counter: props.nbTry})
         console.log ("ScoreCounter::constructor()")
-        console.log(props)
+        console.log("props : " + JSON.stringify(props))
+        this.state = {
+            nbTry: props.nbTry,
+            nbPartiesToPlay: props.nbPartiesToPlay,
+            partyInPlay : props.partyInPlay,
+            playerName: props.playerName,
+            score: props.score,
+        }
+        console.log ("ScoreCounter::constructor():: state : " + JSON.stringify(this.state))
     }
 
     /**
@@ -31,9 +39,9 @@ class ScoreCounter extends Component {
     /**
      Appelé après que le composant a été retranscrit pour la première fois dans le DOM réel
      */
-    componentDidMount(props) {
+    componentDidMount() {
         console.log ("ScoreCounter::componentDidMount()")
-        console.log(this.state)
+        console.log("ScoreCounter::State: " + JSON.stringify(this.state))
         //this.state({score: props.score, counter: props.nbTry})
         //this.upDateScore(0)
         //this.upDateClounter(0)
@@ -68,21 +76,23 @@ class ScoreCounter extends Component {
      * @returns {*}
      */
     render() {
-        const playerName = this.playerName
-        const nbPartiesToplay = this.nbPartiesToplay
-        const partyInPlay = this.partyInPlay
+        console.log ("ScoreCounter::render():: state : " + JSON.stringify(this.state))
+        const playerName = this.state.playerName
+        const nbPartiesToPlay = this.state.nbPartiesToPlay
+        const partyInPlay = this.state.partyInPlay
         const score = this.state.score
-        const counter = this.state.counter
+        const nbTry = this.state.nbTry
+        console.log("playerName: " + nbPartiesToPlay)
         return (
             <div className="ScoreCounter">
                 <div className="Player">
                     <span>Joueur : </span>{playerName}
                 </div>
                 <div className="Parties">
-                    <span>partie</span> {partyInPlay}/{nbPartiesToplay}
+                    <span>partie </span>{partyInPlay}/{nbPartiesToPlay}
                 </div>
                 <div className="Counter">
-                    <span>Nombre d'essai : </span>{counter}
+                    <span>Nombre d'essai : </span>{nbTry}
                 </div>
                 <div className="Score">
                     <span>Score : </span>{score}

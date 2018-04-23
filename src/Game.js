@@ -102,6 +102,7 @@ class Game extends Component {
         }
 
         this.computeDisplay = this.computeDisplay.bind(this)
+        this.onReturn = this.onReturn.bind(this)
         //this.handleLetterClick = this.handleLetterClick.bind(this)
         //console.log ("Game::state : " +JSON.stringify(this.state))
     }
@@ -131,32 +132,10 @@ class Game extends Component {
 
     componentDidUpdate(props, nextSate) {
         console.log("Game::componentDidUpdate")
-        console.log ("state : " + JSON.stringify(props))
-        console.log ("nextSate : " + JSON.stringify(nextSate))
-
+        console.log ("Game::State: " + JSON.stringify(this.state))
 
     }
 
-    componentWillUpdate(state, nextSate) {
-        console.log("Game::componentWillUpdate")
-        console.log ("state : " + JSON.stringify(state))
-        console.log ("nextSate : " + JSON.stringify(nextSate))
-        if (this.shouldComponentUpdate(state, nextSate)) {
-            console.log ("Game::componentDidUpdate se met à jour : " + JSON.stringify(this.state))
-        }
-        else {
-            console.log ("Game::componentDidUpdate ne se met pas à jour : " + JSON.stringify(this.state))
-        }
-        //this.setState ({props : nextSate})
-    }
-
-
-    componentWillReceiveProps(props, nextContent){
-        console.log("Game::componentWillReceiveProps")
-        console.log ("nextProps : " + JSON.stringify(props))
-        console.log ("nextContent : " + JSON.stringify(nextContent))
-        this.setState({props : nextContent})
-    }
 
     /**
      * Méthode invoqué avant le rendu
@@ -167,20 +146,36 @@ class Game extends Component {
      *      true => valeur par défaut, permet la mise à jour du composant
      *      false => permet d'empécher la mise à jour du composant (mais pas celle
      */
-    shouldComponentUpdate(nextProps, nextState) {
+    /*
+    shouldComponentUpdate(props, nextState) {
         console.log("Game::shouldComponentUpdate")
-        //console.log ("props : " + JSON.stringify(props))
-        console.log ("nextProps : " + JSON.stringify(nextProps))
-        console.log ("nextState : " + JSON.stringify(nextState))
-        /*if (nextProps.nbTry === nextProps.nbTry) {
-            return false
+        console.log("Game::shouldComponentUpdate::this.state : " +JSON.stringify(this.state))
+        console.log("Game::shouldComponentUpdate::nextState : " +JSON.stringify(nextState))
+        let result = false
+        if(this.state.statue === 'BEGIN')
+        {
+            result = true
+        }
+        else if(this.state.nbTry !== nextState.nbTry) {
+            console.log ("this.state.nbTry !== nextState.nbTry")
+            this.setState({
+                image: nextState.image,
+                motCache: nextState.motCache,
+                score: nextState.score,
+                nbTry: nextState.nbTry,
+                smiley: nextState.smiley,
+                partyInbPlay: nextState.partyInPlay,
+                error: nextState.error,
+                startNewParty: nextState.startNewParty,
+            })
+            result = true
         }
         else {
-            return true
-        }*/
-        return true
+            result = false
+        }
+        return result
     }
-
+*/
     /**
      * Méthode permettant de générer un tableau qui va afficher toutes les lettres de l'halphabet,
      * ainsi que de l'espace et de l'apostrophe
@@ -201,7 +196,7 @@ class Game extends Component {
      * Méthode qui permet de revenir sur la page principale
      * @param index
      */
-    onReturn = index => {
+    onReturn(index)  {
         console.log ("Game::onReturn()")
         this.setState({statue: 'BEGIN'})
     }
@@ -213,6 +208,11 @@ class Game extends Component {
      */
     handleLetterClick(index) {
         const letter = LETTERS[index]
+        this.updateValues(letter)
+
+    }
+
+    updateValues(letter) {
         let image = this.state.image
         let nbTry = this.state.nbTry
         let score = this.state.score
@@ -224,43 +224,42 @@ class Game extends Component {
         let error = this.state.error
         let startNewParty = this.state.startNewParty
 
-
         console.log ("nbTry : " + nbTry)
-        if (wordToFind === motCache){
-            console.log("mot identiques")
-            console.log("state : " + JSON.stringify(this.state))
-            if (nbTry < (nbTotalTry/3)){
-                smiley = smiley_joyeux
-            }
-            else if ((nbTotalTry/3) >= nbTry <((nbTotalTry*2)/3)){
-                smiley = smiley_heureux
-            }
-            else if (((nbTotalTry*2)/3) >= nbTry <nbTotalTry){
-                smiley = smiley_moyen
-            }
-            partyInPlay ++
+        usedLetters.add(letter)
 
-        }
-        else if (nbTry < nbTotalTry) {
+        if (nbTry < nbTotalTry) {
             if(wordToFind.search(letter) !== -1){
                 console.log("lettre trouvé : " + letter)
-                usedLetters.add(letter)
                 motCache = this.computeDisplay(wordToFind, usedLetters)
                 smiley = smiley_content
                 score++
+                startNewParty = false
+                if (motCache === wordToFind){
+                    if (nbTry < (nbTotalTry*2/3)) {
+                        smiley = smiley_joyeux
+                    }
+                    else if ((nbTotalTry*2/3) > nbTry < (nbTotalTry/3)) {
+                        smiley = smiley_heureux
+                    }
+                    else {
+                        smiley = smiley_content
+                    }
+                    startNewParty = true
+                }
             }
             else{
                 console.log("lettre non trouvé : " + letter)
                 image = TAB_IMAGES_PENDU[error]
                 smiley = smiley_surpris
-                usedLetters.add(letter)
                 error++
+                startNewParty = false
             }
             nbTry++
         }
         else {
             // La partie est fini
             partyInPlay ++
+            startNewParty = true
             if (wordToFind === motCache) {
                 smiley = smiley_moyen
             }
@@ -282,7 +281,6 @@ class Game extends Component {
             }), VISUAL_PAUSE_MSECS
         )
         console.log ("state : " + JSON.stringify(this.state))
-
     }
 
 
@@ -393,7 +391,7 @@ class Game extends Component {
                         </div>
                         <div className="Play-zone">
                             <div className="Left">
-                                <div className="Keyboard">
+                                <div className="Keyboard" hidden={startNewParty}>
                                     { letters.map((letter, index) => (
                                         <Button
                                             value={letter}

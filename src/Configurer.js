@@ -1,5 +1,9 @@
 /*
- * Copyright (c) 2018. Sébastien TUAL
+ * Copyright (c) 2018. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
 import React, { Component } from 'react'
@@ -17,12 +21,12 @@ import './Configurer.css'
 class Configurer extends Component{
     state = {
         nbTry: 0,
-        nbTotalParties: 0,
+        nbPartiesToPlay: 0,
         playerOneName: "",
         playerTwoName: "",
         // Pour garder les valeurs initiales
         oldNbTry: 0,
-        oldNbTotalParties: 0,
+        oldNbPartiesToPlay: 0,
         oldplayerOneName: "",
         oldPlayerTwoName: "",
         // Pour savoir si l'appui sur le bouton "Valider" ou "Annuler à été effectué
@@ -40,19 +44,19 @@ class Configurer extends Component{
 
         this.state = ({
             nbTry: props.nbTry,
-            nbTotalParties : props.nbTotalParties,
+            nbPartiesToPlay : props.nbPartiesToPlay,
             playerOneName: props.playerOne,
             playerTwoName: props.playerTwo,
             // Nous sauvegardons les valeurs initiales en cas d'annulation
             oldNbTry: props.nbTry,
-            oldNbTotalParties: props.nbTotalParties,
+            oldNbPartiesToPlay: props.nbPartiesToPlay,
             oldplayerOneName: props.playerOne,
             oldPlayerTwoName: props.playerTwo,
         })
         // Essentielles pour permettre l'utilisation du this dans les méthodes
         // Sinon ce dernier est indéfini
         this.onChangeNbTry = this.onChangeNbTry.bind(this)
-        this.onChangeNbTotalParties = this.onChangeNbTotalParties.bind(this)
+        this.onChangeNbPartiesToPlay = this.onChangeNbPartiesToPlay.bind(this)
         this.onChangePlayerOneName = this.onChangePlayerOneName.bind(this)
         this.onChangePlayerTwoName = this.onChangePlayerTwoName.bind(this)
         this.onValidate = this.onValidate.bind(this)
@@ -105,8 +109,8 @@ class Configurer extends Component{
      * Méthode qui gère la modification du nom de parties
      * @param value
      */
-    onChangeNbTotalParties(value) {
-        this.setState({ nbTotalParties : value.target.value })
+    onChangeNbPartiesToPlay(value) {
+        this.setState({ nbPartiesToPlay : value.target.value })
     }
 
     /**
@@ -127,7 +131,7 @@ class Configurer extends Component{
 
 
     /**
-     * Méthode appelé lorsdque l'on clic sur le bouton valider
+     * Méthode appelé lorsque l'on clic sur le bouton valider
      * Permet de revenir à la page principale en mettant à jour les propriétés avec les nouvelles valeurs
      * @param index
      */
@@ -138,19 +142,23 @@ class Configurer extends Component{
         this.setState({validateCancel : validateCancel})
     }
 
-
+    /**
+     * Méthode appelé lors du clic sur le bouton annuler
+     * Permet de ne pas prendre en compte les changements apportés
+     * @param index
+     */
     onCancel = index => {
         console.log ("Configurer::onCancel()")
         console.log ("Configurer::State: " + JSON.stringify(this.state))
         //Nous allons récupérer les anciennes valeurs
-        const nbTry = this.state.oldnbTry
-        const nbTotalParties = this.state.oldnbTotalParties
+        const nbTry = this.state.oldNbTry
+        const nbPartiesToPlay = this.state.oldNbPartiesToPlay
         const playerOneName = this.state.oldplayerOneName
-        const playerTwoName = this.state.oldplayerTwoName
+        const playerTwoName = this.state.oldPlayerTwoName
         const validateCancel = true
         this.setState({
             nbTry: nbTry,
-            nbTotalParties : nbTotalParties,
+            nbPartiesToPlay : nbPartiesToPlay,
             playerOneName: playerOneName,
             playerTwoName: playerTwoName,
             validateCancel : validateCancel
@@ -163,7 +171,7 @@ class Configurer extends Component{
      */
     render() {
         const nbTry = this.state.nbTry
-        const nbTotalParties = this.state.nbTotalParties
+        const nbPartiesToPlay = this.state.nbPartiesToPlay
         const playerOneName = this.state.playerOneName
         const playerTwoName = this.state.playerTwoName
         const validateCancel = this.state.validateCancel
@@ -175,7 +183,7 @@ class Configurer extends Component{
             return  (
                 <App
                     nbTry = {nbTry}
-                    nbTotalParties = {nbTotalParties}
+                    nbPartiesToPlay = {nbPartiesToPlay}
                     playerOne = {playerOneName}
                     playerTwo = {playerTwoName}
                 />
@@ -197,7 +205,7 @@ class Configurer extends Component{
                             </div>
                             <div className="Data">
                                 <span className="Text"> Nombre de parties : </span>
-                                <input type="text" value={nbTotalParties} onChange={this.onChangeNbTotalParties} />
+                                <input type="text" value={nbPartiesToPlay} onChange={this.onChangeNbPartiesToPlay} />
                                 <br/>
                             </div>
                             <div className="Data">
@@ -213,8 +221,8 @@ class Configurer extends Component{
 
                         </div>
                         <div className="Buttons">
-                            <Button value={"Valider"} index={1} onClick={this.onValidate } />
-                            <Button value={"Annuler"} index={2} onClick={this.onCancel} />
+                            <Button value={"Valider"} index={1} hidden={false} onClick={this.onValidate } />
+                            <Button value={"Annuler"} index={2} hidden={false} onClick={this.onCancel} />
                         </div>
                     </div>
                 </div>

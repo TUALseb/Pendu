@@ -10,8 +10,6 @@
 import React, { Component } from 'react'
 
 //Importation des fichier js que nous aurons besoin
-//import KeyBoard from './KeyBoard.js'
-//import PlayerInfo from './PlayerInfo.js'
 import Button from './Button.js'
 import App from './App.js'
 import Header from './Header.js'
@@ -20,9 +18,9 @@ import OnePlayer from './OnePlayer.js'
 // Importaion des images du pendu que nous allons utiliser
 import img_none from './images/none.png'
 import img_socle from './images/socle.png'
-import img_socle_pied from './images/socle_pied.png'
-import img_poteau from './images/socle_pied_poteau.png'
-import img_traverse from './images/socle_pied_poteau_traverse.png'
+import img_socle_pied from './images/pied.png'
+import img_poteau from './images/poteau.png'
+import img_traverse from './images/traverse.png'
 import img_ajout_corde from './images/ajout_corde.png'
 import img_ajout_tete from './images/ajout_tete.png'
 import img_ajout_corps from './images/ajout_corps.png'
@@ -33,25 +31,54 @@ import img_ajout_bras_gauche from './images/ajout_bras_gauche.png'
 
 
 //Importation des smileys
-import smiley_triste from './images/smiley-triste.png'
-import smiley_content from './images/smiley-cotent.png'
-import smiley_heureux from './images/smiley-heureux.jpg'
-import smiley_etonne from './images/smiley-etonne.png'
+// pour les cas des bonnes réponses
 import smiley_moyen from './images/smiley-moyen.png'
-import smiley_surpris from './images/smiley-surpris.png'
+import smiley_content from './images/smiley-content.png'
+import smiley_content2 from './images/smiley-content2.png'
+import smiley_happy1 from './images/smiley-happy1.png'
+import smiley_happy2 from './images/smiley-happy2.png'
+import smiley_happy3 from './images/smiley-happy3.png'
+import smiley_heureux from './images/smiley-heureux.jpg'
 import smiley_joyeux from './images/smiley_joyeux.png'
+import smiley_vert from './images/smiley-vert.jpg'
+//pour les cas des erreurs
+import smiley_etonne from './images/smiley-etonne.png'
+import smiley_etonne2 from './images/smiley-ettone2.png'
+import smiley_surpris from './images/smiley-surpris.png'
+import smiley_moyen_violet from './images/smiley-moyen-violet.png'
+import smiley_moyen2_violet from './images/smiley-moyen2-violet.png'
+import smiley_ettone_violet from './images/smiley-ettone-violet.png'
+import smiley_etonne2_violet from './images/smiley-etonne2-violet.png'
+import smiley_surpris_violet from './images/smiley-surpris-violet.png'
+import smiley_triste0_violet from './images/smiley-triste0-violet.png'
+import smiley_triste1_violet from './images/smiley-triste1-violet.png'
+import smiley_triste2_violet from './images/smiley-triste2-violet.png'
+import smiley_triste_rouge from './images/smiley-triste-rouge.png'
+
+import smiley_triste from './images/smiley-triste.png'
+
 
 // Importation du fichier de style
 import './Game.css'
-
+// Tableau des lettres à afficher
 const LETTERS = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','à','â','ç','é','è','ï','î','ù','û',' ','\'']
+// Tableau des images du pendu
 const TAB_IMAGES_PENDU =[
     img_none, img_socle, img_socle_pied, img_poteau, img_traverse, img_ajout_corde, img_ajout_tete,
     img_ajout_corps, img_ajout_jambe_gauche, img_ajout_jambe_droite, img_ajout_bras_gauche, img_ajout_bras_droit]
+// Tableaux des smileys
+const TAB_SMILEYS_ERREURS = [smiley_surpris, smiley_etonne, smiley_etonne2, smiley_triste, smiley_moyen_violet,
+    smiley_moyen2_violet, smiley_ettone_violet, smiley_etonne2_violet, smiley_surpris_violet, smiley_triste0_violet,
+    smiley_triste1_violet, smiley_triste2_violet, smiley_triste_rouge]
+const TAB_SMILEY_BONNE_REPONSE = [smiley_moyen, smiley_content, smiley_content2, smiley_happy1, smiley_happy2,
+    smiley_happy3, smiley_heureux, smiley_joyeux, smiley_vert]
+// Pour stocker les lattres qui ont été déjà choisis
 const usedLetters = new Set()
 const VISUAL_PAUSE_MSECS = 750
 
-
+/**
+ *
+ */
 class Game extends Component {
 
     state = {
@@ -69,7 +96,9 @@ class Game extends Component {
         smiley: "",
         motCache: "",
         error : 0,
+        letterFind : 0,
         startNewParty: false,
+        result: "",
     }
 
 
@@ -80,102 +109,68 @@ class Game extends Component {
      * @param props => tableau de propriétés et méthodes passés en paramètres
      */
     constructor(props) {
-        console.log ("Game::constructor()")
+        //console.log ("Game::constructor()")
         super(props)
         //console.log ("props : " +JSON.stringify(props))
         this.state = {
+            // On va créer le tableau avec les lettres de l'alaphabet et de certains caractères (espace, giuillemets, caractères avec accents)
             letters: this.generateTable(),
             statue: props.statue,
-            nbTotalTry: props.wordToFind.length*2,
+            //En fonction de la taille du mot (s'il est < à la valeur par défaut, soit 12) on initialise le nombre total d'essai
+            nbTotalTry: (props.wordToFind.length<props.nbTotalTry)? props.nbTotalTry:(props.wordToFind.length*2),
             nbTry: props.nbTry,
             nbPartiesToPlay: props.nbPartiesToPlay,
             partyInPlay: props.partyInPlay,
             score: props.score,
             playerName: props.playerName,
-            image: TAB_IMAGES_PENDU[0],
+            // On initialise l'image du pendu à none (soit rien du pendu)
+            image: <img src={TAB_IMAGES_PENDU[0]} alt={TAB_IMAGES_PENDU[0]} width="220" height="330" />,
             alt: props.alt,
             wordToFind: props.wordToFind,
-            smiley: smiley_moyen,
+            smiley: TAB_SMILEY_BONNE_REPONSE[0],
+            // On cache le mot à trouver
             motCache: this.computeDisplay(props.wordToFind, usedLetters),
             error : 0,
+            letterFind : 0,
             startNewParty: props.startNewParty,
+            result: "",
         }
-
+        // on déclare les méthodes qui doivent être attaché à this
         this.computeDisplay = this.computeDisplay.bind(this)
         this.onReturn = this.onReturn.bind(this)
+        this.onNewParty = this.onNewParty.bind(this)
+        this.onKeyPress = this.onKeyPress.bind(this)
         //this.handleLetterClick = this.handleLetterClick.bind(this)
-        //console.log ("Game::state : " +JSON.stringify(this.state))
     }
 
     /**
      Appelé en second juste avant le render()
      */
     componontWillMount() {
-        console.log("Game::componentDidUpdate")
-        console.log ("Game::state : " +JSON.stringify(this.state))
+        //console.log("Game::componentDidUpdate")
     }
 
     /**
      Appelé après que le composant a été retranscrit pour la première fois dans le DOM réel
      */
     componentDidMount() {
-        console.log ("Game::componentDidMount()")
+        //console.log ("Game::componentDidMount()")
         //console.log ("Game::State: " + JSON.stringify(this.state))
+        document.addEventListener("keypress", this.onKeyPress)
     }
 
     /**
      Appelé avant que le composant ne quitte complètement le DOM
      */
     componentWillUmount() {
-
+        document.removeEventListener("keypress", this.onKeyPress)
     }
 
     componentDidUpdate(props, nextSate) {
-        console.log("Game::componentDidUpdate")
-        console.log ("Game::State: " + JSON.stringify(this.state))
+        //console.log("Game::componentDidUpdate")
 
     }
 
-
-    /**
-     * Méthode invoqué avant le rendu
-     *
-     * @param props
-     * @param nextProps
-     * @returns {boolean} :
-     *      true => valeur par défaut, permet la mise à jour du composant
-     *      false => permet d'empécher la mise à jour du composant (mais pas celle
-     */
-    /*
-    shouldComponentUpdate(props, nextState) {
-        console.log("Game::shouldComponentUpdate")
-        console.log("Game::shouldComponentUpdate::this.state : " +JSON.stringify(this.state))
-        console.log("Game::shouldComponentUpdate::nextState : " +JSON.stringify(nextState))
-        let result = false
-        if(this.state.statue === 'BEGIN')
-        {
-            result = true
-        }
-        else if(this.state.nbTry !== nextState.nbTry) {
-            console.log ("this.state.nbTry !== nextState.nbTry")
-            this.setState({
-                image: nextState.image,
-                motCache: nextState.motCache,
-                score: nextState.score,
-                nbTry: nextState.nbTry,
-                smiley: nextState.smiley,
-                partyInbPlay: nextState.partyInPlay,
-                error: nextState.error,
-                startNewParty: nextState.startNewParty,
-            })
-            result = true
-        }
-        else {
-            result = false
-        }
-        return result
-    }
-*/
     /**
      * Méthode permettant de générer un tableau qui va afficher toutes les lettres de l'halphabet,
      * ainsi que de l'espace et de l'apostrophe
@@ -197,7 +192,7 @@ class Game extends Component {
      * @param index
      */
     onReturn(index)  {
-        console.log ("Game::onReturn()")
+        //console.log ("Game::onReturn()")
         this.setState({statue: 'BEGIN'})
     }
 
@@ -209,66 +204,95 @@ class Game extends Component {
     handleLetterClick(index) {
         const letter = LETTERS[index]
         this.updateValues(letter)
-
     }
 
+
+    onKeyPress(event) {
+        console.log(event)
+        this.updateValues(event.key)
+    }
+
+    /**
+     * Méthode qui permet de mettre à jour nos paramètres
+     * @param letter
+     */
     updateValues(letter) {
+        // On récupère les valeurs qui ne bougeront pas dans des constantes (const)
+        const nbTotalTry = this.state.nbTotalTry
+        const wordToFind = this.state.wordToFind
+        // On récupère les valeurs qui vont changer dans des variables (let remplace var : déclaration depuis ES5)
         let image = this.state.image
         let nbTry = this.state.nbTry
         let score = this.state.score
         let partyInPlay = this.state.partyInPlay
         let smiley = this.state.smiley
-        const nbTotalTry =this.state.nbTotalTry
-        const wordToFind = this.state.wordToFind
         let motCache = this.state.motCache
         let error = this.state.error
+        let letterFind = this.state.letterFind
         let startNewParty = this.state.startNewParty
+        let result = this.state.result
 
-        console.log ("nbTry : " + nbTry)
+        //console.log ("nbTry : " + nbTry)
         usedLetters.add(letter)
 
         if (nbTry < nbTotalTry) {
-            if(wordToFind.search(letter) !== -1){
-                console.log("lettre trouvé : " + letter)
-                motCache = this.computeDisplay(wordToFind, usedLetters)
-                smiley = smiley_content
-                score++
+            if (wordToFind.search(letter) === -1) {
+                // On est dans le cas où la lettre n'a pas été trouvé
+                console.log("lettre non trouvé : " + letter)
+                //console.log("TAB_IMAGES_PENDU.length :" + TAB_IMAGES_PENDU[error] + " , error : " + error)
+                error += 1
+                // Pour afficher l'image en cours du pendu
+                image = <img src={TAB_IMAGES_PENDU[error]} alt={TAB_IMAGES_PENDU[error]} width="220" height="330" />
+                //TAB_IMAGES_PENDU[error]
+                smiley = TAB_SMILEYS_ERREURS[error]//smiley_surpris
                 startNewParty = false
-                if (motCache === wordToFind){
-                    if (nbTry < (nbTotalTry*2/3)) {
-                        smiley = smiley_joyeux
-                    }
-                    else if ((nbTotalTry*2/3) > nbTry < (nbTotalTry/3)) {
-                        smiley = smiley_heureux
-                    }
-                    else {
-                        smiley = smiley_content
-                    }
+                if (error === TAB_IMAGES_PENDU.length - 1) {
+                    // La partie est perdu
                     startNewParty = true
+                    smiley = TAB_SMILEYS_ERREURS[TAB_SMILEYS_ERREURS.length-1]//smiley_triste
                 }
             }
-            else{
-                console.log("lettre non trouvé : " + letter)
-                image = TAB_IMAGES_PENDU[error]
-                smiley = smiley_surpris
-                error++
+            else {
+                // On est dans le cas où la mettre a été trouvé
+                console.log("lettre trouvé : " + letter)
+                // On récupère le résultat une foisque nous avons cherché à remplacer les lettre sur le mot (ou la phrase à trouver par des "_"
+                motCache = this.computeDisplay(wordToFind, usedLetters)
+                score += 1
+                letterFind += 1
+                smiley = TAB_SMILEY_BONNE_REPONSE[score]
                 startNewParty = false
+                console.log("wordToFind.length : " + wordToFind.length + " , TAB_SMILEY_BONNE_REPONSE.length : " + TAB_SMILEY_BONNE_REPONSE.length )
+                console.log("val : " + TAB_SMILEY_BONNE_REPONSE.length/wordToFind.length)
+                console.log(wordToFind.length/TAB_SMILEY_BONNE_REPONSE.length)
+                if (motCache === wordToFind) {
+                    // On va afficher le smiley en fonction du nombre de tentatives
+
+                    startNewParty = true
+                    if (error === 0) {
+                        // Pour afficher l'animation quand la partie est gagné sans erreur
+                        smiley = TAB_SMILEY_BONNE_REPONSE[TAB_SMILEY_BONNE_REPONSE.length-1]
+                        image = <div className="animation-gagne" width="220" height="330"></div>
+                    }
+                    else {
+                        // Pour afficher l'animation quand la partie est gagné avec des erreurs
+                        smiley = TAB_SMILEY_BONNE_REPONSE[TAB_SMILEY_BONNE_REPONSE.length-error]
+                        image = <div className="animation-sauve" width="220" height="330"></div>
+                    }
+                    result= <div className="Message"> Bravo, vous avez gagné!</div>
+                }
             }
             nbTry++
         }
         else {
-            // La partie est fini
-            partyInPlay ++
+            error = TAB_IMAGES_PENDU.length
+            // Pour afficher l'image en cours du pendu
+            image = <img src={TAB_IMAGES_PENDU[error]} alt={TAB_IMAGES_PENDU[error]} width="220" height="330" /> //
             startNewParty = true
-            if (wordToFind === motCache) {
-                smiley = smiley_moyen
-            }
-            else {
-                smiley = smiley_triste
-            }
-            console.log (" new state : " + JSON.stringify(this.state))
+            smiley = TAB_SMILEYS_ERREURS[TAB_SMILEYS_ERREURS.length-1]//
+            result = <div className="Message"> Dommage, vous avez perdu.<br /> Le mot à trouver était : <br /> <div className="H4">{wordToFind}</div></div>
         }
-
+        // On met à jour de façon asynchrone notre state ainsi que le lancement de la mise à jour de l'affichage eavec un décalage
+        // pour que nos nouvelles valeurs soient prises en compte
         setTimeout(()=>this.setState ({
                 image: image,
                 motCache: motCache,
@@ -277,10 +301,12 @@ class Game extends Component {
                 smiley: smiley,
                 partyInbPlay: partyInPlay,
                 error: error,
+                letterFind: letterFind,
                 startNewParty : startNewParty,
+                result: result,
             }), VISUAL_PAUSE_MSECS
         )
-        console.log ("state : " + JSON.stringify(this.state))
+        //console.log ("state : " + JSON.stringify(this.state))
     }
 
 
@@ -288,9 +314,12 @@ class Game extends Component {
      * Méthode qui permet de lancer une nouvelle partie
      * @param index
      */
-    onNewParty = index => {
+    onNewParty(index){
         console.log ("Game::onReturn()")
-        this.setState({statue: 'NEW_GAME'})
+        //let partyInInPlay = this.state.partyInPlay + 1
+        //const motCache = ""
+        usedLetters.clear()
+        this.setState({statue: 'NEW_GAME', motCache: "", error :0})
     }
 
     /**
@@ -300,7 +329,7 @@ class Game extends Component {
      * @returns {string | void | *}
      */
     computeDisplay(phrase, usedLetters) {
-        console.log("usedLetters : " + JSON.stringify(usedLetters))
+        //console.log("usedLetters : " + JSON.stringify(usedLetters))
         console.log ("Phrase ou mot à trouver : " + phrase)
         //if (phrase != undefined)
         // /(\W+)(\w+)
@@ -327,11 +356,12 @@ class Game extends Component {
         const playerName  = this.state.playerName
         const partyInPlay = this.state.partyInPlay
         const image =  this.state.image
-        const alt = this.state.alt
-        const wordToFind = this.state.wordToFind
+        //const wordToFind = this.state.wordToFind
         const motCache = this.state.motCache//this.computeDisplay(wordToFind, usedLetters)
         const smiley = this.state.smiley
         const startNewParty = this.state.startNewParty
+        const result = this.state.result
+        //const error = this.state.error
         /**
          * On a appuyé sur le bouton "Retour" ==> Nous sommes renvoyé vers la page principale
          */
@@ -341,13 +371,23 @@ class Game extends Component {
                 <App />
             )
         }
+        /**
+         * On relance une nouvelle partie.
+         * Pour cela nous allons intialiser le component OnePlayer avec les valeurs que nous avons besoin.
+         * Certaines de ces valeurs sont récupérées plus haut comme :
+         * playerName = {playerName}
+         * nbPartiesToPlay = {nbPartiesToPlay}
+         * partyInPlay = {partyInPlay+1}
+         * nbTotalTry = {nbTotalTry}
+         * Les autres sont réinitialisées avec les valeurs de bases
+         */
         else if(statue=== 'NEW_GAME')
         {
             return (
                 <OnePlayer
                     playerName = {playerName}
                     nbPartiesToPlay = {nbPartiesToPlay}
-                    partyInPlay = {partyInPlay}
+                    partyInPlay = {partyInPlay+1}
                     nbTry = {0}
                     nbTotalTry = {nbTotalTry}
                     score = {score}
@@ -357,21 +397,24 @@ class Game extends Component {
             )
         }
         /**
-         * Affichage de la partie en cours aec les diverses informations
+         * Affichage de la partie en cours avec les diverses informations
          * playerName : Nom du joueur
          * nbPartiesToPlay : Nombre de parties à joueur
          * partyInPlay partie(s) jouée(s)
          * score : score actuelle
          * nbTotalTry : Nombre total d'essais
          * nbTry : Nombre d'essais déjà effectué ou en cours (démarrant à 0)
-         * image : image à afficher
-         * alt : alternative si image existe pas
+         * image : image à afficher ou l'animation. son afficha ge est créée dans le méthode updateValues
+         * Les lettres qui ont déjà été cliquées sont cachés
+         * Le bouton "Nouvelle partie est caché ou affiché en fonction du résultat de la partie
+         * Un smiley s'affiche en fonction du résultat
+         * Un message s'affiche à la fin
           */
         else {
             return (
-                <div className="App">
+                <div className="App" >
                     <Header />
-                    <div className="Body-game">
+                    <div className="Body-game" >
                         <div className="Top">
                             <div className="ScoreCounter">
                                 <div className="Player">
@@ -391,32 +434,34 @@ class Game extends Component {
                         </div>
                         <div className="Play-zone">
                             <div className="Left">
-                                <div className="Keyboard" hidden={startNewParty}>
+                                <div className="Keyboard" >
                                     { letters.map((letter, index) => (
                                         <Button
                                             value={letter}
                                             index={index}
                                             key={index}
+                                            hidden={usedLetters.has(letter)? true:false}
                                             onClick={(index)=>this.handleLetterClick(index)}
                                         />
                                     ))}
 
-                                    <div className="Btn-button">
-                                    </div>
                                 </div>
                             </div>
                             <div className="Play-party">
                                 <span>Mot à trouver : </span>
-                                <div className="Word-To-Find">
-                                    {wordToFind}   {motCache}
+                                <div className="Word-To-Find" onChange={this.onKeyPress}>
+                                    <span>{motCache}</span>
                                 </div>
                                 <div className="Img-To-Show">
-                                    <img src={image} alt={alt}/>
+                                    {image}
                                 </div>
                             </div>
                             <div className="Right">
                                 <div className="Smiley">
-                                    <img src={smiley} alt={smiley}/>
+                                    <img src={smiley} alt={smiley} width="auto" height="auto"/>
+                                </div>
+                                <div className="Message-To-Show" hidden={!startNewParty}>
+                                    {result}
                                 </div>
                                 <div className="Button" >
                                     <Button value={"Nouvelle partie"} index={0} hidden={!startNewParty} onClick={this.onNewParty }/>
@@ -430,10 +475,12 @@ class Game extends Component {
                         </div>
                     </div>
                 </div>
+
             )
         }
 
     }
 }
+
 
 export default Game

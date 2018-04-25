@@ -1,5 +1,9 @@
 /*
- * Copyright (c) 2018. Sébastien TUAL
+ * Copyright (c) 2018. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
 import React, { Component } from 'react'
@@ -7,7 +11,7 @@ import React, { Component } from 'react'
 //Importation des fichier js que nous aurons besoin
 import Header from './Header.js'
 import Button from './Button.js'
-import Game from './Game.js'
+import OnePlayer from './OnePlayer.js'
 import Configurer from './Configurer.js'
 
 
@@ -18,7 +22,8 @@ import './App.css'
 
 // Déclaration des valeurs par défault
 const DEFAULT_STATUE = 'BEGIN'
-const DEFAULT_NB_TRY = 13
+const DEFAULT_NB_TRY = 0
+const DEFAULT_NB_TOTAL_TRY = 12
 const DEFAULT_NB_PARTY = 3
 const DEFAULT_PLAYER_ONE = "Player One"
 const DEFAULT_PLAYER_TWO = "Player Two"
@@ -30,11 +35,11 @@ const DEFAULT_NB_PLAYER = 0
  */
 class App extends Component {
     state = {
-
         statue: '',
         nbPlayer: 0,
-        nbTotalParties: 0,
-        nbTry: 0,
+        nbPartiesToPlay: 0,
+        nbTry: 1,
+        nbTotalTry: 0,
         playerOne: "",
         playerTwo: "",
     }
@@ -47,14 +52,15 @@ class App extends Component {
      */
     constructor(props) {
         super(props)
-        console.log ("App::constructor()")
-        console.log ("props: " + JSON.stringify(props))
+        //console.log ("App::constructor()")
+        //console.log ("props: " + JSON.stringify(props))
 
         this.state = {
             statue: props.statue,
             nbPlayer: props.nbPlayer,
             nbTry: props.nbTry,
-            nbTotalParties: props.nbTotalParties,
+            nbTotalTry: props.nbTotalTry,
+            nbPartiesToPlay: props.nbPartiesToPlay,
             playerOne: props.playerOne,
             playerTwo : props.playerTwo,
         }
@@ -64,9 +70,8 @@ class App extends Component {
      Appelé en second juste avant le render()
      */
     componontWillMount(statue, nbPlayer) {
-        console.log ("App::componentWillMount()")
-        console.log ("statue: " + statue + " nbPlayer: " + nbPlayer)
-        console.log ("state : " + this.state)
+        //console.log ("App::componentWillMount()")
+        //console.log ("state : " + this.state)
 
     }
 
@@ -74,13 +79,13 @@ class App extends Component {
      Appelé après que le composant a été retranscrit pour la première fois dans le DOM réel
      */
     componentDidMount() {
-        console.log ("App::componentDidMount()")
-        console.log ("App::State: " + JSON.stringify(this.state))
+        //console.log ("App::componentDidMount()")
+        //console.log ("App::State: " + JSON.stringify(this.state))
     }
 
 
     componentWillReceiveProps({ statue='BEGIN', nbPlayer=0 }) {
-        console.log ("App::componentWillReceiveProps()")
+        //console.log ("App::componentWillReceiveProps()")
         //this.setState({ statue, nbPlayer })
     }
 
@@ -102,7 +107,7 @@ class App extends Component {
      * @param index
      */
     onSelectNbPlayer = index => {
-        console.log("App::OnSelectOnePlayer()")
+        console.log("App::onSelectNbPlayer()")
         // On itialise les variables statue et nbPlayer avec les valeurs par défaut
         let statue = this.state.statue
         let nbPlayer = this.state.nbPlayer
@@ -116,7 +121,6 @@ class App extends Component {
             statue = 'TWO_PLAYER'
             nbPlayer = 2
         }
-        console.log ("index : " + index)
         // On let à jour le state de App
         this.setState ({ statue: statue, nbPlayer: nbPlayer})
     }
@@ -143,37 +147,55 @@ class App extends Component {
         this.setState({statue: 'BEGIN', nbPlayer: 0})
     }
 
-
-
-
-
-
     /**
      * Permet l'affichage générale
      * @returns {*}
      */
   render() {
+        /**
+         * statue : Etat de la page 4 valeurs possible
+         *  ONE_PLAYER : mode monojoueur
+         *  TWO_PLAYER : mode 2 joueurs
+         *  CONFIGURER : pour afficher la page de configuyration
+         *  BEGIN : mode par défaut. Affiche la page principale
+         * playerName : Nom du joueur
+         * nbPartiesToPlay : Nombre de parties à joueur
+         * partyInPlay partie(s) jouée(s)
+         * score : score actuelle
+         * nbTotalTry : Nombre total d'essais
+         * nbTry : Nombre d'essais déjà effectué ou en cours (démarrant à 0)
+         * image : image à afficher
+         * alt : alternative si image existe pas
+         */
       const statue = this.state.statue
+      const nbTotalTry = this.state.nbTotalTry
       const nbTry = this.state.nbTry
-      const nbTotalParties = this.state.nbTotalParties
+      const nbPartiesToPlay = this.state.nbPartiesToPlay
       const playerOne = this.state.playerOne
       const playerTwo = this.state.playerTwo
 
       if (statue === 'ONE_PLAYER') {
           /**
            * Gère le cas où le jeu sera en mode monojeur
+           * playerName : Nom du joueur
+           * nbPartiesToPlay : Nombre de parties à joueur
+           * partyInPlay partie(s) jouée(s)
+           * score : score actuelle
+           * nbTotalTry : Nombre total d'essais
+           * nbTry : Nombre d'essais déjà effectué ou en cours (démarrant à 0)
+           * image : image à afficher
+           * alt : alternative si image existe pas
            */
           return (
-              <div className="App">
-                  <Header />
-                  <Game
+                  <OnePlayer
                       playerName = {playerOne}
-                      nbPartiesToPlay = {nbTotalParties}
+                      nbPartiesToPlay = {nbPartiesToPlay}
                       partyInPlay = {1}
                       nbTry = {nbTry}
+                      nbTotalTry = {nbTotalTry}
                       score = {0}
+                      startNexParty = {false}
                   />
-              </div>
           )
       }
       else if (statue === 'TWO_PLAYER') {
@@ -188,7 +210,7 @@ class App extends Component {
                           <span>Cette fonction n'est pas encore implémenté</span>
                       </div>
                       <div className="Buttons">
-                          <Button value={"retour"} index={0} onClick={this.onReturn } />
+                          <Button value={"retour"} index={0} hidden={false} onClick={this.onReturn } />
                       </div>
                   </div>
               </div>
@@ -201,7 +223,7 @@ class App extends Component {
           return(
                   <Configurer
                       nbTry = {nbTry}
-                      nbTotalParties = {nbTotalParties}
+                      nbPartiesToPlay = {nbPartiesToPlay}
                       playerOne = {playerOne}
                       playerTwo = {playerTwo}
                   />
@@ -217,16 +239,16 @@ class App extends Component {
               <div className="App">
                   <Header />
                   <div className="Body">
-                      <div className="H2" align="center">
+                      <article className="H2" align="center">
                           Bienvenue dans le jeu du pendu.
-                      </div>
-                      <div className="H3" align="center">
+                      </article>
+                      <article className="H3" align="center">
                           Pour commencer, veuillez sélectionner si vous jouez à 1 ou 2 joueurs.
-                      </div>
+                      </article>
                       <div className="Btn-App">
-                          <Button value={"1 joueur"} index={1} onClick={this.onSelectNbPlayer } />
-                          <Button value={"2 joueurs"} index={2} onClick={this.onSelectNbPlayer} />
-                          <Button value={"Configurer"} index={9} onClick={this.onConfigurer} />
+                          <Button value={"1 joueur"} index={1} hidden={false} onClick={this.onSelectNbPlayer } />
+                          <Button value={"2 joueurs"} index={2} hidden={false} onClick={this.onSelectNbPlayer} />
+                          <Button value={"Configurer"} index={9} hidden={false} onClick={this.onConfigurer} />
                       </div>
                   </div>
               </div>
@@ -241,8 +263,9 @@ class App extends Component {
 App.defaultProps = {
     statue: DEFAULT_STATUE,
     nbPlayer: DEFAULT_NB_PLAYER,
-    nbTry: DEFAULT_NB_TRY,
-    nbTotalParties: DEFAULT_NB_PARTY,
+    nbTotalTry: DEFAULT_NB_TOTAL_TRY,
+    nbTry : DEFAULT_NB_TRY,
+    nbPartiesToPlay: DEFAULT_NB_PARTY,
     playerOne: DEFAULT_PLAYER_ONE,
     playerTwo : DEFAULT_PLAYER_TWO,
 }

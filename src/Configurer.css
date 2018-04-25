@@ -1,5 +1,9 @@
 /*
- * Copyright (c) 2018. Sébastien TUAL
+ * Copyright (c) 2018. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
 
@@ -17,15 +21,9 @@ Gestion du corps de la page
     align-items: center;
 }
 
-.Values {
-    display: flex;
-    align-content: space-between;
-    flex-direction: row;
-    align-items: center;
-    margin: 0.5em;
-    padding: 0.5em
-}
-
+/*
+Gestion de l'affichage d'un jeu Texte/Valeur
+ */
 .data {
     display: flex;
     align-content: space-between;
@@ -35,11 +33,29 @@ Gestion du corps de la page
     padding: 0.5em
 }
 
+/*
+Gestion de l'affichage du texte
+ */
 .Text {
     font-size: 1em;
     font-family: sans-serif, Verdana, Helvetica;
 }
 
+/*
+Gestion de l'affichage des informations dans les input
+ */
+.Values {
+    display: flex;
+    align-content: space-between;
+    flex-direction: row;
+    align-items: center;
+    margin: 0.5em;
+    padding: 0.5em
+}
+
+/*
+Gestion de l'affichage des boutons
+ */
 .Buttons {
     display: flex;
     align-content: space-between;

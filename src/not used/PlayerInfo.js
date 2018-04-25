@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2018. Sébastien TUAL
+ * Copyright (c) 2018. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
 import React, { Component } from 'react'
 
 import './PlayerInfo.css'
 
-class ScoreCounter extends Component {
+class PlayerInfo extends Component {
     /**
      *
      */
@@ -15,22 +19,24 @@ class ScoreCounter extends Component {
         nbPartiesToPlay: 0,
         partyInPlay: 0,
         nbTry: 0,
+        nbTotalTry: 0,
         score: 0,
     }
 
     constructor(props) {
         super(props)
         //this.state({score: props.score, counter: props.nbTry})
-        console.log ("ScoreCounter::constructor()")
-        console.log("props : " + JSON.stringify(props))
+        console.log ("PlayerInfo::constructor()")
+        //console.log("props : " + JSON.stringify(props))
         this.state = {
             nbTry: props.nbTry,
+            nbTotalTry: props.nbTotalTry,
             nbPartiesToPlay: props.nbPartiesToPlay,
             partyInPlay : props.partyInPlay,
             playerName: props.playerName,
             score: props.score,
         }
-        console.log ("ScoreCounter::constructor():: state : " + JSON.stringify(this.state))
+        //console.log ("PlayerInfo::constructor():: state : " + JSON.stringify(this.state))
     }
 
     /**
@@ -44,8 +50,8 @@ class ScoreCounter extends Component {
      Appelé après que le composant a été retranscrit pour la première fois dans le DOM réel
      */
     componentDidMount() {
-        console.log ("ScoreCounter::componentDidMount()")
-        console.log("ScoreCounter::State: " + JSON.stringify(this.state))
+        console.log ("PlayerInfo::componentDidMount()")
+        //console.log("PlayerInfo::State: " + JSON.stringify(this.state))
         //this.state({score: props.score, counter: props.nbTry})
         //this.upDateScore(0)
         //this.upDateClounter(0)
@@ -58,19 +64,21 @@ class ScoreCounter extends Component {
 
     }
 
+    componentWi
+
     /**
      * Méthode permettant de mettre à jour le score du joueur
      * @param score : Entier
      */
-    upDateScore(score= 0){
+    upDateScore(score){
         this.setState({score : score})
     }
 
     /**
-     * Méthode permettant de mettre à jour le nombre de coup que
+     * Méthode permettant de mettre à jour les informations en haut de page
      * @param counter : Entier
      */
-    upDateClounter(counter= 0) {
+    upDateClounter(counter) {
         this.setState({counter : counter})
     }
 
@@ -80,13 +88,14 @@ class ScoreCounter extends Component {
      * @returns {*}
      */
     render() {
-        console.log ("ScoreCounter::render():: state : " + JSON.stringify(this.state))
+        //console.log ("PlayerInfo::render():: state : " + JSON.stringify(this.state))
         const playerName = this.state.playerName
         const nbPartiesToPlay = this.state.nbPartiesToPlay
         const partyInPlay = this.state.partyInPlay
         const score = this.state.score
         const nbTry = this.state.nbTry
-        console.log("playerName: " + nbPartiesToPlay)
+        const nbTotalTry = this.state.nbTotalTry
+
         return (
             <div className="ScoreCounter">
                 <div className="Player">
@@ -96,7 +105,7 @@ class ScoreCounter extends Component {
                     <span>partie </span>{partyInPlay}/{nbPartiesToPlay}
                 </div>
                 <div className="Counter">
-                    <span>Nombre d'essai : </span>{nbTry}
+                    <span>Nombre d'essai : </span>{nbTry}/{nbTotalTry}
                 </div>
                 <div className="Score">
                     <span>Score : </span>{score}
@@ -109,4 +118,4 @@ class ScoreCounter extends Component {
 }
 
 
-export default ScoreCounter
+export default PlayerInfo

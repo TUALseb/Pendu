@@ -1,5 +1,9 @@
 /*
- * Copyright (c) 2018. Sébastien TUAL
+ * Copyright (c) 2018. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
 import React, { Component } from 'react'
@@ -14,7 +18,7 @@ import Button from './Button.js'
 
 
 // Liste des constante gloabales
-const LETTERS = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','_','\'']
+const LETTERS = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','à','â','ç','é','è','ï','î','ù','û','_','\'']
 
 /**
  * class KeyBoard permet de gérer ce qui se passe sur le "clavier virtuel" affiché à gauche

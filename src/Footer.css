@@ -1,0 +1,33 @@
+/*
+ * Copyright (c) 2018. Sebastien TUAL
+ * date de création :  $today.day-$today.month-2018.
+ * date de modification : $today.day-$today.month-2018.
+ */
+
+/*
+Gestion du pied de page
+ */
+
+.App-footer {
+    text-align: center;
+    background-color: #222;
+    height: 80px;
+    padding: 20px;
+    color: white;
+}
+
+.Copyright {
+    text-align: center;
+    font-family: Helvetica Verdana SansSerif;
+    font-size: 1em;
+}
+
+/*
+Gestion du texte supplémentaire
+ */
+.Text {
+    text-align: center;
+    font-family: Helvetica Verdana SansSerif;
+    font-size: 0.4em;
+}
+

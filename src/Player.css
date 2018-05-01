@@ -1,0 +1,89 @@
+/*
+ * Copyright (c) 2018. Sebastien TUAL
+ * date de création :  $today.day-$today.month-2018.
+ * date de modification : $today.day-$today.month-2018.
+ */
+
+
+.Body-Selection {
+    display: flex;
+    align-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    outline: 0.1em solid #8e8e8e;
+    background: rgba(105, 157, 250, 0.36);
+    margin: 0.2em;
+    padding: 0.2em;
+}
+
+.Selection {
+    display: flex;
+    align-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    outline: 0.1em solid #8e8e8e;
+    background: rgba(142, 142, 142, 0.36);
+    margin: 0.2em;
+    padding: 0.2em;
+}
+
+.Choice {
+    display: flex;
+    align-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    outline: 0.1em solid #8e8e8e;
+    background: rgba(223, 223, 223, 0.36);
+    margin: 0.2em;
+    padding: 0.2em;
+}
+
+.Start {
+    display: flex;
+    align-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    outline: 0.1em solid #8e8e8e;
+    background: rgba(223, 223, 223, 0.36);
+    margin: 0.2em;
+    padding: 0.2em;
+}
+
+.Words-List {
+    display: flex;
+    align-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    outline: 0.1em solid #8e8e8e;
+    background: rgba(223, 223, 223, 0.36);
+    margin: 0.2em;
+    padding: 0.2em;
+}
+
+/*
+Gestion de l'affichage d'un jeu Texte/Valeur
+ */
+.data {
+    display: flex;
+    align-content: space-between;
+    flex-direction: column;
+    align-items: center;
+    margin: 0.5em;
+    padding: 0.5em;
+}
+
+/*
+
+*/
+.H2 {
+    font-size: 2em;
+    align-content: center;
+    align-items: center;
+}
+/*
+
+ */
+.H3 {
+    align-content: center;
+    align-items: center;
+}

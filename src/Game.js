@@ -1,9 +1,7 @@
 /*
- * Copyright (c) 2018. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
- * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
- * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
- * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
- * Vestibulum commodo. Ut rhoncus gravida arcu.
+ * Copyright (c) 2018. Sebastien TUAL
+ * date de création :  $today.day-$today.month-2018.
+ * date de modification : $today.day-$today.month-2018.
  */
 
 
@@ -13,7 +11,8 @@ import React, { Component } from 'react'
 import Button from './Button.js'
 import App from './App.js'
 import Header from './Header.js'
-import OnePlayer from './OnePlayer.js'
+import Footer from './Footer.js'
+//import OnePlayer from './OnePlayer.js'
 
 // Importaion des images du pendu que nous allons utiliser
 import img_none from './images/none.png'
@@ -60,6 +59,9 @@ import smiley_triste from './images/smiley-triste.png'
 
 // Importation du fichier de style
 import './Game.css'
+import Player from "./Player";
+
+
 // Tableau des lettres à afficher
 const LETTERS = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','à','â','ç','é','è','ï','î','ù','û',' ','\'']
 // Tableau des images du pendu
@@ -99,6 +101,9 @@ class Game extends Component {
         letterFind : 0,
         startNewParty: false,
         result: "",
+        tableWordsToFind: [],
+        playerOne: {},
+        playerTwo: {},
     }
 
 
@@ -109,9 +114,9 @@ class Game extends Component {
      * @param props => tableau de propriétés et méthodes passés en paramètres
      */
     constructor(props) {
-        //console.log ("Game::constructor()")
+        console.log ("Game::constructor()")
         super(props)
-        //console.log ("props : " +JSON.stringify(props))
+        console.log ("Game::constructor()::props : " +JSON.stringify(props))
         this.state = {
             // On va créer le tableau avec les lettres de l'alaphabet et de certains caractères (espace, giuillemets, caractères avec accents)
             letters: this.generateTable(),
@@ -133,21 +138,18 @@ class Game extends Component {
             error : 0,
             letterFind : 0,
             startNewParty: props.startNewParty,
+            tableWordsToFind: props.tableWordsToFind,
             result: "",
+
+            playerOne: props.playerOne,
+            playerTwo: props.playerTwo,
         }
         // on déclare les méthodes qui doivent être attaché à this
         this.computeDisplay = this.computeDisplay.bind(this)
         this.onReturn = this.onReturn.bind(this)
-        this.onNewParty = this.onNewParty.bind(this)
+        this.onNext = this.onNext.bind(this)
         this.onKeyPress = this.onKeyPress.bind(this)
         //this.handleLetterClick = this.handleLetterClick.bind(this)
-    }
-
-    /**
-     Appelé en second juste avant le render()
-     */
-    componontWillMount() {
-        //console.log("Game::componentDidUpdate")
     }
 
     /**
@@ -156,20 +158,20 @@ class Game extends Component {
     componentDidMount() {
         //console.log ("Game::componentDidMount()")
         //console.log ("Game::State: " + JSON.stringify(this.state))
+        // Nécessaire pour gérer les évènements liés au clavier
+        // Nous libérons manuellement cet évènement
         document.addEventListener("keypress", this.onKeyPress)
     }
 
     /**
      Appelé avant que le composant ne quitte complètement le DOM
      */
-    componentWillUmount() {
+    componentWillUnmount() {
+        // Nécessaire pour gérer les évènements liés au clavier
+        // Nous déttachons manuellement cet évènement
         document.removeEventListener("keypress", this.onKeyPress)
     }
 
-    componentDidUpdate(props, nextSate) {
-        //console.log("Game::componentDidUpdate")
-
-    }
 
     /**
      * Méthode permettant de générer un tableau qui va afficher toutes les lettres de l'halphabet,
@@ -193,6 +195,7 @@ class Game extends Component {
      */
     onReturn(index)  {
         //console.log ("Game::onReturn()")
+        usedLetters.clear()
         this.setState({statue: 'BEGIN'})
     }
 
@@ -206,20 +209,39 @@ class Game extends Component {
         this.updateValues(letter)
     }
 
-
+    /**
+     * Méthode qui permet de récupérer la valeur de la touche appuyée
+     * @param event
+     */
     onKeyPress(event) {
-        console.log(event)
-        this.updateValues(event.key)
+        //console.log(event)
+        // Nous créons une expression régulière pour tester certaines touuches et les interdires
+        //const regExp = /\d/
+        //|/[&§!$*¥€`@£%=+:;,?∞¿.•…÷ë“{¶«¡ø}—Ø»å±•"|\]/g/i
+
+        //const testRegexp = RegExp(regExp)
+        //if (testRegexp.test(event.key)) {
+        //    alert("Attention ! Lettre interdite")
+        //}
+        //else
+        //if (usedLetters.has(event.key) ) {
+            // On est dans le cas ou la lettre à déjà été choisi et trouvé (ou non)
+        //    alert("Attention ! Vous avez déjà tenté cette lettre")
+        //}
+        //else {
+            this.updateValues(event.key)
+        //}
     }
 
     /**
-     * Méthode qui permet de mettre à jour nos paramètres
+     * Méthode qui permet de mettre à jour nos paramètres et  l'état de la partie en cours
      * @param letter
      */
     updateValues(letter) {
         // On récupère les valeurs qui ne bougeront pas dans des constantes (const)
         const nbTotalTry = this.state.nbTotalTry
         const wordToFind = this.state.wordToFind
+        const statue = this.state.statue
         // On récupère les valeurs qui vont changer dans des variables (let remplace var : déclaration depuis ES5)
         let image = this.state.image
         let nbTry = this.state.nbTry
@@ -234,16 +256,16 @@ class Game extends Component {
 
         //console.log ("nbTry : " + nbTry)
         usedLetters.add(letter)
-
+        /*
+        Le nombre d'essai n'est pas atteint, on continue
+         */
         if (nbTry < nbTotalTry) {
             if (wordToFind.search(letter) === -1) {
                 // On est dans le cas où la lettre n'a pas été trouvé
                 console.log("lettre non trouvé : " + letter)
-                //console.log("TAB_IMAGES_PENDU.length :" + TAB_IMAGES_PENDU[error] + " , error : " + error)
                 error += 1
                 // Pour afficher l'image en cours du pendu
-                image = <img src={TAB_IMAGES_PENDU[error]} alt={TAB_IMAGES_PENDU[error]} width="220" height="330" />
-                //TAB_IMAGES_PENDU[error]
+                image = <img src={TAB_IMAGES_PENDU[error]} alt={TAB_IMAGES_PENDU[error]}  />
                 smiley = TAB_SMILEYS_ERREURS[error]//smiley_surpris
                 startNewParty = false
                 if (error === TAB_IMAGES_PENDU.length - 1) {
@@ -261,9 +283,7 @@ class Game extends Component {
                 letterFind += 1
                 smiley = TAB_SMILEY_BONNE_REPONSE[score]
                 startNewParty = false
-                console.log("wordToFind.length : " + wordToFind.length + " , TAB_SMILEY_BONNE_REPONSE.length : " + TAB_SMILEY_BONNE_REPONSE.length )
-                console.log("val : " + TAB_SMILEY_BONNE_REPONSE.length/wordToFind.length)
-                console.log(wordToFind.length/TAB_SMILEY_BONNE_REPONSE.length)
+
                 if (motCache === wordToFind) {
                     // On va afficher le smiley en fonction du nombre de tentatives
 
@@ -271,12 +291,12 @@ class Game extends Component {
                     if (error === 0) {
                         // Pour afficher l'animation quand la partie est gagné sans erreur
                         smiley = TAB_SMILEY_BONNE_REPONSE[TAB_SMILEY_BONNE_REPONSE.length-1]
-                        image = <div className="animation-gagne" width="220" height="330"></div>
+                        image = <div className="animation-gagne" ></div>
                     }
                     else {
                         // Pour afficher l'animation quand la partie est gagné avec des erreurs
                         smiley = TAB_SMILEY_BONNE_REPONSE[TAB_SMILEY_BONNE_REPONSE.length-error]
-                        image = <div className="animation-sauve" width="220" height="330"></div>
+                        image = <div className="animation-sauve" ></div>
                     }
                     result= <div className="Message"> Bravo, vous avez gagné!</div>
                 }
@@ -288,12 +308,14 @@ class Game extends Component {
             // Pour afficher l'image en cours du pendu
             image = <img src={TAB_IMAGES_PENDU[error]} alt={TAB_IMAGES_PENDU[error]} width="220" height="330" /> //
             startNewParty = true
+            // L.a partie est perdu, on affiche le mot qu'il fallait trouver ainsi qu'un smiley triste
             smiley = TAB_SMILEYS_ERREURS[TAB_SMILEYS_ERREURS.length-1]//
             result = <div className="Message"> Dommage, vous avez perdu.<br /> Le mot à trouver était : <br /> <div className="H4">{wordToFind}</div></div>
         }
         // On met à jour de façon asynchrone notre state ainsi que le lancement de la mise à jour de l'affichage eavec un décalage
         // pour que nos nouvelles valeurs soient prises en compte
         setTimeout(()=>this.setState ({
+                statue: statue,
                 image: image,
                 motCache: motCache,
                 score: score,
@@ -314,12 +336,19 @@ class Game extends Component {
      * Méthode qui permet de lancer une nouvelle partie
      * @param index
      */
-    onNewParty(index){
-        console.log ("Game::onReturn()")
+    onNext(index){
+        console.log ("Game::onNext()")
+        console.log ("Game::onNext():this.state" + JSON.stringify(this.state))
         //let partyInInPlay = this.state.partyInPlay + 1
         //const motCache = ""
         usedLetters.clear()
-        this.setState({statue: 'NEW_GAME', motCache: "", error :0})
+        const tableWordsToFind = this.state.tableWordsToFind
+        this.setState({
+            statue: 'NEXT',
+            motCache: "",
+            error :0,
+            tableWordsToFind: tableWordsToFind,
+        })
     }
 
     /**
@@ -331,7 +360,6 @@ class Game extends Component {
     computeDisplay(phrase, usedLetters) {
         //console.log("usedLetters : " + JSON.stringify(usedLetters))
         console.log ("Phrase ou mot à trouver : " + phrase)
-        //if (phrase != undefined)
         // /(\W+)(\w+)
         // \w
         let regExp = /(\w)|(\W)/g
@@ -341,7 +369,7 @@ class Game extends Component {
     }
 
     /**
-     *
+     * Gère les différents affichages
      * @returns {*}
      */
     render() {
@@ -356,20 +384,19 @@ class Game extends Component {
         const playerName  = this.state.playerName
         const partyInPlay = this.state.partyInPlay
         const image =  this.state.image
-        //const wordToFind = this.state.wordToFind
         const motCache = this.state.motCache//this.computeDisplay(wordToFind, usedLetters)
         const smiley = this.state.smiley
         const startNewParty = this.state.startNewParty
         const result = this.state.result
-        //const error = this.state.error
+        const tableWordsToFind = this.state.tableWordsToFind
+        const playerOne = this.state.playerOne
+        const playerTwo = this.state.playerTwo
+
         /**
          * On a appuyé sur le bouton "Retour" ==> Nous sommes renvoyé vers la page principale
          */
-        if (statue === 'BEGIN')
-        {
-            return (
-                <App />
-            )
+        if (statue === 'BEGIN') {
+            return ( <App /> )
         }
         /**
          * On relance une nouvelle partie.
@@ -381,21 +408,25 @@ class Game extends Component {
          * nbTotalTry = {nbTotalTry}
          * Les autres sont réinitialisées avec les valeurs de bases
          */
-        else if(statue=== 'NEW_GAME')
-        {
+        else if(statue === 'NEXT') {
             return (
-                <OnePlayer
+                <Player
+                    statue = {statue}
                     playerName = {playerName}
                     nbPartiesToPlay = {nbPartiesToPlay}
-                    partyInPlay = {partyInPlay+1}
+                    partyInPlay = {partyInPlay}
                     nbTry = {0}
                     nbTotalTry = {nbTotalTry}
                     score = {score}
                     motCache = {""}
                     startNewParty = {false}
+                    tableWordsToFind = {tableWordsToFind}
+                    playerOne = {playerOne}
+                    playerTwo = {playerTwo}
                 />
             )
         }
+
         /**
          * Affichage de la partie en cours avec les diverses informations
          * playerName : Nom du joueur
@@ -409,7 +440,7 @@ class Game extends Component {
          * Le bouton "Nouvelle partie est caché ou affiché en fonction du résultat de la partie
          * Un smiley s'affiche en fonction du résultat
          * Un message s'affiche à la fin
-          */
+         */
         else {
             return (
                 <div className="App" >
@@ -444,7 +475,6 @@ class Game extends Component {
                                             onClick={(index)=>this.handleLetterClick(index)}
                                         />
                                     ))}
-
                                 </div>
                             </div>
                             <div className="Play-party">
@@ -464,7 +494,7 @@ class Game extends Component {
                                     {result}
                                 </div>
                                 <div className="Button" >
-                                    <Button value={"Nouvelle partie"} index={0} hidden={!startNewParty} onClick={this.onNewParty }/>
+                                    <Button value={"Partie suivante"} index={0} hidden={!startNewParty} onClick={this.onNext }/>
                                 </div>
                             </div>
                         </div>
@@ -474,6 +504,7 @@ class Game extends Component {
                             </div>
                         </div>
                     </div>
+                    <Footer />
                 </div>
 
             )

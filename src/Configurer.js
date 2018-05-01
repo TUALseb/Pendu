@@ -1,15 +1,14 @@
 /*
- * Copyright (c) 2018. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
- * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
- * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
- * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
- * Vestibulum commodo. Ut rhoncus gravida arcu.
+ * Copyright (c) 2018. Sebastien TUAL
+ * date de création :  $today.day-$today.month-2018.
+ * date de modification : $today.day-$today.month-2018.
  */
 
 import React, { Component } from 'react'
 
 //Importation des fichier js que nous aurons besoin
 import Header from './Header.js'
+import Footer from './Footer.js'
 import Button from './Button.js'
 import App from './App.js'
 
@@ -20,12 +19,12 @@ import './Configurer.css'
 
 class Configurer extends Component{
     state = {
-        nbTry: 0,
+        nbTotalTry: 0,
         nbPartiesToPlay: 0,
         playerOneName: "",
         playerTwoName: "",
         // Pour garder les valeurs initiales
-        oldNbTry: 0,
+        oldNbTotalTry: 0,
         oldNbPartiesToPlay: 0,
         oldplayerOneName: "",
         oldPlayerTwoName: "",
@@ -43,15 +42,15 @@ class Configurer extends Component{
         console.log (props)
 
         this.state = ({
-            nbTry: props.nbTry,
+            nbTotalTry: props.nbTotalTry,
             nbPartiesToPlay : props.nbPartiesToPlay,
-            playerOneName: props.playerOne,
-            playerTwoName: props.playerTwo,
+            playerOneName: props.playerOneName,
+            playerTwoName: props.playerTwoName,
             // Nous sauvegardons les valeurs initiales en cas d'annulation
-            oldNbTry: props.nbTry,
+            oldNbTotalTry: props.nbTotalTry,
             oldNbPartiesToPlay: props.nbPartiesToPlay,
-            oldplayerOneName: props.playerOne,
-            oldPlayerTwoName: props.playerTwo,
+            oldplayerOneName: props.playerOneName,
+            oldPlayerTwoName: props.playerTwoName,
         })
         // Essentielles pour permettre l'utilisation du this dans les méthodes
         // Sinon ce dernier est indéfini
@@ -60,6 +59,7 @@ class Configurer extends Component{
         this.onChangePlayerOneName = this.onChangePlayerOneName.bind(this)
         this.onChangePlayerTwoName = this.onChangePlayerTwoName.bind(this)
         this.onValidate = this.onValidate.bind(this)
+        this.onCancel = this.onCancel.bind(this)
         console.log(JSON.stringify(this.state))
     }
 
@@ -71,31 +71,14 @@ class Configurer extends Component{
         console.log ("Configurer::State: " + JSON.stringify(this.state))
     }
 
-    /**
-     *
-     * @param statue
-     * @param nbPlayer
-     */
-    componentWillReceiveProps(props) {
-        console.log ("Configurer::componentWillReceiveProps()")
-        console.log(props)
-    }
 
     /**
      Appelé avant que le composant ne quitte complètement le DOM
      */
-    componentWillUmount() {
+    componentWillUnmount() {
         console.log ("App::componentWillUmount()")
     }
 
-    /**
-     *
-     * @param props
-     */
-    componentDidUnount(props) {
-        console.log ("App::componentDidUnount()")
-        console.log(this.state)
-    }
 
     /**
      * Méthode ui gère la modification du nombre d'essais
@@ -135,7 +118,7 @@ class Configurer extends Component{
      * Permet de revenir à la page principale en mettant à jour les propriétés avec les nouvelles valeurs
      * @param index
      */
-    onValidate = index => {
+    onValidate(index) {
         console.log ("Configurer::onValidate()")
         console.log ("Configurer::State: " + JSON.stringify(this.state))
         const validateCancel = true
@@ -147,17 +130,17 @@ class Configurer extends Component{
      * Permet de ne pas prendre en compte les changements apportés
      * @param index
      */
-    onCancel = index => {
+    onCancel(index){
         console.log ("Configurer::onCancel()")
         console.log ("Configurer::State: " + JSON.stringify(this.state))
         //Nous allons récupérer les anciennes valeurs
-        const nbTry = this.state.oldNbTry
+        const nbTotalTry = this.state.oldNbTotalTry
         const nbPartiesToPlay = this.state.oldNbPartiesToPlay
         const playerOneName = this.state.oldplayerOneName
         const playerTwoName = this.state.oldPlayerTwoName
         const validateCancel = true
         this.setState({
-            nbTry: nbTry,
+            nbTotalTry: nbTotalTry,
             nbPartiesToPlay : nbPartiesToPlay,
             playerOneName: playerOneName,
             playerTwoName: playerTwoName,
@@ -170,7 +153,7 @@ class Configurer extends Component{
      * @returns {*}
      */
     render() {
-        const nbTry = this.state.nbTry
+        const nbTotalTry = this.state.nbTotalTry
         const nbPartiesToPlay = this.state.nbPartiesToPlay
         const playerOneName = this.state.playerOneName
         const playerTwoName = this.state.playerTwoName
@@ -182,7 +165,7 @@ class Configurer extends Component{
         if (validateCancel === true) {
             return  (
                 <App
-                    nbTry = {nbTry}
+                    nbTotalTry = {nbTotalTry}
                     nbPartiesToPlay = {nbPartiesToPlay}
                     playerOne = {playerOneName}
                     playerTwo = {playerTwoName}
@@ -200,7 +183,7 @@ class Configurer extends Component{
                         <div>
                             <div className="Data">
                                 <span className="Text"> Nombre d'essais : </span>
-                                <input type="text" value={nbTry} onChange={this.onChangeNbTry} />
+                                <input type="text" value={nbTotalTry} onChange={this.onChangeNbTry} />
                                 <br/>
                             </div>
                             <div className="Data">
@@ -225,6 +208,7 @@ class Configurer extends Component{
                             <Button value={"Annuler"} index={2} hidden={false} onClick={this.onCancel} />
                         </div>
                     </div>
+                    <Footer />
                 </div>
 
             )

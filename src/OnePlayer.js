@@ -1,17 +1,22 @@
 /*
- * Copyright (c) 2018. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
- * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
- * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
- * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
- * Vestibulum commodo. Ut rhoncus gravida arcu.
+ * Copyright (c) 2018. Sebastien TUAL
+ * date de création :  $today.day-$today.month-2018.
+ * date de modification : $today.day-$today.month-2018.
  */
 
 import React, { Component } from 'react'
 
 import Game from './Game.js'
-import App from './App.js'
+//import App from './App.js'
+//import Header from './Header.js'
+//import Footer from './Footer.js'
+//import Button from './Button.js'
 
-const TABLE_WORDS_TO_FIND = ["hello", "jeu du pendu", "react", "apprivoiser", "voici le célèbre jeu du pendu", "ça marche", "association",]
+
+import './Game.css'
+
+
+//const TABLE_WORDS_TO_FIND = ["hello", "jeu du pendu", "react", "apprivoiser", "voici le célèbre jeu du pendu", "ça marche", "association"]
 
 /**
  * Classe qui gère le jeu de façon monojoueur
@@ -21,17 +26,19 @@ const TABLE_WORDS_TO_FIND = ["hello", "jeu du pendu", "react", "apprivoiser", "v
 class OnePlayer extends Component {
 
     state = {
-        statue: '',
+        statue: 'BEGIN',
         nbPartiesToPlay: 0,
         partyInPlay: 0,
-        nbTry: 1,
+        nbTry: 0,
         nbTotalTry: 0,
         playerName: "",
         score: 0,
         image: "",
         alt: "",
-        wordToFind: "",
+        tableWordsToFind: [],
         startNewParty: false,
+        playerOne: {},
+        playerTwo: {},
     }
 
     /**
@@ -41,14 +48,11 @@ class OnePlayer extends Component {
      */
     constructor(props) {
         super(props)
-        //console.log ("OnePlayer::constructor()")
-        //console.log ("props: " + JSON.stringify(props))
-        // Nous allons créer un index de façon aléatoire, pour ensuite récupérer la valeur correspondante dans notre tableau de mots/phrases
-        const index = Math.round(Math.random()*TABLE_WORDS_TO_FIND.length)
+        console.log ("OnePlayer::constructor()")
+        console.log ("OnePlayer::constructor():props: " + JSON.stringify(props))
 
         this.state = {
             statue: props.statue,
-            nbPlayer: props.nbPlayer,
             nbTry: props.nbTry,
             nbTotalTry: props.nbTotalTry,
             partyInPlay: props.partyInPlay,
@@ -57,45 +61,14 @@ class OnePlayer extends Component {
             playerName: props.playerName,
             image: props.image,
             alt: props.alt,
-            wordToFind: TABLE_WORDS_TO_FIND[index],
+            tableWordsToFind: props.tableWordsToFind,
             startNewParty: props.startNewParty,
+            playerOne: props.playerOne,
+            playerTwo: props.playerTwo,
         }
-    }
-
-    /**
-     Appelé en second juste avant le render()
-     */
-    componontWillMount(statue, nbPlayer) {
-        //console.log ("OnePlayer::componentWillMount()")
-        //console.log ("state : " + this.state)
 
     }
 
-    /**
-     Appelé après que le composant a été retranscrit pour la première fois dans le DOM réel
-     */
-    componentDidMount() {
-        //console.log ("OnePlayer::componentDidMount()")
-        //console.log ("OnePlayer::State: " + JSON.stringify(this.state))
-    }
-
-
-    componentWillReceiveProps({ statue='BEGIN', nbPlayer=0 }) {
-        //console.log ("OnePlayer::componentWillReceiveProps()")
-        //this.setState({ statue, nbPlayer })
-    }
-
-    componentDidUnMount() {
-
-    }
-
-
-    /**
-     Appelé avant que le composant ne quitte complètement le DOM
-     */
-    componentWillUmount() {
-
-    }
 
 
     /**
@@ -104,11 +77,6 @@ class OnePlayer extends Component {
      */
     render() {
         /**
-         * statue : Etat de la page 4 valeurs possible
-         *  ONE_PLAYER : mode monojoueur
-         *  TWO_PLAYER : mode 2 joueurs
-         *  CONFIGURER : pour afficher la page de configuyration
-         *  BEGIN : mode par défaut. Affiche la page principale
          * playerName : Nom du joueur
          * nbPartiesToPlay : Nombre de parties à joueur
          * partyInPlay partie(s) jouée(s) ou en cours
@@ -119,34 +87,33 @@ class OnePlayer extends Component {
          * alt : alternative si image existe pas
          * wordToFind : mot ou phrase à trouver pris de façon aléatoire dans le tableau
          */
+        const statue = this.state.statue
         const nbTotalTry = this.state.nbTotalTry
         const nbTry = this.state.nbTry
-        const nbPartiesToPlay = this.state.nbPartiesToPlay
-        const playerName = this.state.playerName
-        const wordToFind = this.state.wordToFind
         const startNewParty = this.state.startNewParty
         const partyInPlay = this.state.partyInPlay
+        const nbPartiesToPlay = this.state.nbPartiesToPlay
+        const playerName = this.state.playerName
+        const wordToFind = this.state.tableWordsToFind[partyInPlay-1]
         const score = this.state.score
-        //console.log("this.state : " + JSON.stringify(this.state))
-        if (partyInPlay < nbPartiesToPlay) {
-            return (
-                <Game
-                    playerName = {playerName}
-                    nbPartiesToPlay = {nbPartiesToPlay}
-                    partyInPlay = {partyInPlay}
-                    nbTry = {nbTry}
-                    nbTotalTry = {nbTotalTry}
-                    score = {score}
-                    wordToFind = {wordToFind}
-                    startNewParty = {startNewParty}
-                />
-            )
-        }
-        else{
-            return (
-                <App/>
-            )
-        }
+        const tableWordsToFind = this.state.tableWordsToFind
+        console.log("this.state : " + JSON.stringify(this.state))
+
+        return (
+            <Game
+                statue = {statue}
+                playerName = {playerName}
+                nbPartiesToPlay = {nbPartiesToPlay}
+                partyInPlay = {partyInPlay}
+                nbTry = {nbTry}
+                nbTotalTry = {nbTotalTry}
+                score = {score}
+                wordToFind = {wordToFind}
+                startNewParty = {startNewParty}
+                tableWordsToFind = {tableWordsToFind}
+            />
+        )
+
     }
 }
 

@@ -1,15 +1,17 @@
 /*
- * Copyright (c) 2018. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
- * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
- * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
- * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
- * Vestibulum commodo. Ut rhoncus gravida arcu.
+ * Copyright (c) 2018. Sebastien TUAL
+ * date de création :  $today.day-$today.month-2018.
+ * date de modification : $today.day-$today.month-2018.
  */
 
 /*
 gère l'affichage de la page centrale
  */
 .Body-game {
+    display: flex;
+    align-content: space-between;
+    align-items: center;
+    flex-direction: column;
     outline: 0.1em solid #8e8e8e;
     background: rgba(223, 223, 223, 0.36);
     margin: 0.2em;
@@ -160,7 +162,6 @@ Gestion des touches
 
  */
 .Player {
-    width: 30%;
     outline: 0.1em solid silver;
     background: rgba(105, 157, 250, 0.04);
     flex-wrap: wrap;
@@ -169,7 +170,6 @@ Gestion des touches
 }
 
 .Parties {
-    width: 30%;
     outline: 0.1em solid silver;
     background: rgba(105, 157, 250, 0.04);
     flex-wrap: wrap;
@@ -181,7 +181,6 @@ Gestion des touches
 Gestion de l'affichage score
  */
 .Score {
-    width: 30%;
     outline: 0.1em solid silver;
     background: rgba(105, 157, 250, 0.04);
     flex-wrap: wrap;
@@ -194,7 +193,6 @@ Gestion de l'affichage score
 Gestion de l'affichage Nombre d'essai
  */
 .Counter {
-    width: 30%;
     outline: 0.1em solid silver;
     background: rgba(105, 156, 249, 0.04);
     flex-wrap: wrap;

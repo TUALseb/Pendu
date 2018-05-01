@@ -1,9 +1,7 @@
 /*
- * Copyright (c) 2018. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
- * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
- * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
- * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
- * Vestibulum commodo. Ut rhoncus gravida arcu.
+ * Copyright (c) 2018. Sebastien TUAL
+ * date de création :  $today.day-$today.month-2018.
+ * date de modification : $today.day-$today.month-2018.
  */
 
 .App {
@@ -24,8 +22,6 @@ Gestion du corps de la page
   background: rgba(223, 223, 223, 0.36);
   margin: 0.2em;
   padding: 0.2em;
-
-
 }
 
 
@@ -53,6 +49,7 @@ Gestion du texte à afficher de façon générale
   align-content: center;
   align-items: center;
 }
+
 /*
 
  */

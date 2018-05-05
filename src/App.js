@@ -10,7 +10,6 @@ import React, { Component } from 'react'
 import Header from './Header.js'
 import Footer from './Footer.js'
 import Button from './Button.js'
-//import OnePlayer from './OnePlayer.js'
 import Player from './Player.js'
 import Configurer from './Configurer.js'
 
@@ -30,11 +29,12 @@ const DEFAULT_PLAYER_TWO_NAME = "Player Two"
 const DEFAULT_NB_PLAYER = 0
 const DEFAULT_PLAYER_ONE = {
     playerName : "",
+    partyInPlay: 1,
     score: 0,
     TableWordsToFind : [],
 }
-
 const DEFAULT_PLAYER_TWO = {playerName : "",
+    partyInPlay: 1,
     score: 0,
     TableWordsToFind : [],}
 /**
@@ -50,11 +50,13 @@ class App extends Component {
         nbTotalTry: 0,
         playerOne : {
             playerName : "Player One",
+            partyInPlay: 1,
             score: 0,
             TableWordsToFind : [],
         },
         playerTwo : {
             playerName : "Player Two",
+            partyInPlay: 1,
             score: 0,
             TableWordsToFind : [],
         },
@@ -79,11 +81,13 @@ class App extends Component {
             nbPartiesToPlay: props.nbPartiesToPlay,
             playerOne : {
                 playerName : props.playerOneName,
+                partyInPlay: props.partyInPlay,
                 score: props.playerOne.score,
                 TableWordsToFind : [],
             },
             playerTwo : {
                 playerName: props.playerTwoName,
+                partyInPlay: props.partyInPlay,
                 score: props.playerTwo.score,
                 TableWordsToFind : [],
             },
@@ -117,7 +121,7 @@ class App extends Component {
      * @param index
      */
     onSelectNbPlayer (index){
-        console.log("App::onSelectNbPlayer()")
+        //console.log("App::onSelectNbPlayer()")
         // On itialise les variables statue et nbPlayer avec les valeurs par défaut
         let statue = this.state.statue
         let nbPlayer = this.state.nbPlayer
@@ -152,7 +156,7 @@ class App extends Component {
      * @param index
      */
     onReturn(index) {
-        console.log("App::onConfigurer()")
+        console.log("App::onReturn()")
         this.setState({statue: 'BEGIN', nbPlayer: 0})
     }
 
@@ -161,7 +165,7 @@ class App extends Component {
      * @returns {*}
      */
     render() {
-        console.log("App::render::state : " + JSON.stringify(this.state) )
+        //console.log("App::render::state : " + JSON.stringify(this.state) )
         /**
          * statue : Etat de la page 3 valeurs possible
          *  NB_PLAYER_SELECTED : le nombre de joueur a été choisi

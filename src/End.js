@@ -29,15 +29,11 @@ class End extends Component {
             playerName : "",
             score: 0,
             TableWordsToFind : [],
-            image: "",
-            alt: "",
         },
         playerTwo : {
             playerName : "",
             score: 0,
             TableWordsToFind : [],
-            image: "",
-            alt: "",
         },
     }
 
@@ -56,18 +52,14 @@ class End extends Component {
             nbTotalTry: props.nbTotalTry,
             nbPartiesToPlay: props.nbPartiesToPlay,
             playerOne : {
-                playerName : props.playerOneName,
-                score: props.score,
+                playerName : props.playerOne.playerName,
+                score: props.playerOne.score,
                 TableWordsToFind : [],
-                image: props.image,
-                alt: props.alt,
             },
             playerTwo : {
-                playerName: props.playerTwoName,
-                score: props.score,
+                playerName: props.playerTwo.playerName,
+                score: props.playerTwo.score,
                 TableWordsToFind : [],
-                image: props.image,
-                alt: props.alt,
             },
         }
 
@@ -101,6 +93,7 @@ class End extends Component {
     }
 
     render() {
+        console.log("End::render:state :" + JSON.stringify(this.state))
         const nbPlayer = this.state.nbPlayer
         const statue = this.state.statue
         /**
@@ -113,18 +106,18 @@ class End extends Component {
          * Il n'y a qu'un seul joueur de choisi
          */
         else if (nbPlayer === 1) {
-            const PlayerOne = this.state.playerOne
+            const playerOne = this.state.playerOne
 
             return (
                 <div className="App">
                     <Header />
                     <div className="Body">
                         <div className="H3">
-                            Bravo {PlayerOne.playerName}!
+                            Bravo {playerOne.playerName}!
                         </div>
                         <div className="Text">
                             Vous avez terminé la partie. <br/>
-                            Votre score total est de  : {PlayerOne.score}
+                            Votre score total est de  : {playerOne.score}
                         </div>
                         <div className="Btn-Ap">
                             <Button value={"Retour au menu principal"} index={1} hidden={false} onClick={this.onReturn } />
@@ -138,19 +131,37 @@ class End extends Component {
          * Il y a 2 joueurs
          */
         else {
-            const PlayerOne = this.state.playerOne
-            const PlayerTwo =this.state.playerTwo
+            const playerOne = this.state.playerOne
+            const playerTwo =this.state.playerTwo
 
             return (
                 <div className="App">
                     <Header />
                     <div className="Body">
-                        <div className="H3">
-                            Bravo {PlayerOne.playerName}!
+                        <div className="Selection">
+                            <div className="Choice">
+                                <div className="H3">
+                                    Bravo {playerOne.playerName}!
+                                </div>
+                                <div className="Text">
+                                    Vous avez terminé la partie. <br/>
+                                    Votre score total est de  : {playerOne.score}
+                                </div>
+                            </div>
+                            <div className="Choice">
+                                <div className="H3">
+                                    Bravo {playerTwo.playerName}!
+                                </div>
+                                <div className="Text">
+                                    Vous avez terminé la partie. <br/>
+                                    Votre score total est de  : {playerTwo.score}
+                                </div>
+                            </div>
                         </div>
-                        <div className="Text">
-                            Vous avez terminé la partie. <br/>
-                            Votre score total est de  : {PlayerOne.score}
+                        <div  className="Selection">
+                            <div className="H3">
+                                Le gagant est : {(playerOne.score>playerTwo.score)? playerOne.playerName:playerTwo.playerName}
+                            </div>
                         </div>
                         <div className="Btn-Ap">
                             <Button value={"Retour au menu principal"} index={1} hidden={false} onClick={this.onReturn } />

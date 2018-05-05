@@ -4,3 +4,39 @@
  * date de modification : $today.day-$today.month-2018.
  */
 
+.Choice {
+    display: flex;
+    align-content: space-between;
+    align-items: left;
+    flex-direction: column;
+    width: auto;
+    height: auto;
+    font-size: 1em;
+    outline: 0.1em solid #8e8e8e;
+    margin: 0.2em;
+    padding: 0.2em;
+    cursor: pointer;
+    background: rgba(142, 142, 142, 0.04);
+}
+
+.Title {
+    width: auto;
+    height: auto;
+    font-size: 1em;
+    outline: 0.1em solid #c9c9c9;
+    margin: 0.2em;
+    padding: 0.2em;
+    cursor: pointer;
+    background: rgba(142, 142, 142, 0.04);
+}
+
+.Input-Value {
+    width: auto;
+    height: auto;
+    font-size: 1em;
+    outline: 0.1em solid #c9c9c9;
+    margin: 0.2em;
+    padding: 0.2em;
+    cursor: pointer;
+    background: rgba(142, 142, 142, 0.04);
+}

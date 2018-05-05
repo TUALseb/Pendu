@@ -8,8 +8,8 @@
 import React, { Component } from 'react'
 
 
-import App from './App.js'
-import Button from './Button.js'
+import App from '../App.js'
+import Button from '../Button.js'
 
 import './BackToMainPage.css'
 

@@ -4,7 +4,9 @@
  * date de modification : $today.day-$today.month-2018.
  */
 
+/*
 
+ */
 .Body-Selection {
     display: flex;
     align-content: space-between;
@@ -16,6 +18,10 @@
     padding: 0.2em;
 }
 
+
+/*
+
+ */
 .Selection {
     display: flex;
     align-content: space-between;
@@ -27,6 +33,9 @@
     padding: 0.2em;
 }
 
+/*
+
+ */
 .Choice {
     display: flex;
     align-content: space-between;
@@ -37,7 +46,9 @@
     margin: 0.2em;
     padding: 0.2em;
 }
+/*
 
+ */
 .Start {
     display: flex;
     align-content: space-between;
@@ -48,7 +59,9 @@
     margin: 0.2em;
     padding: 0.2em;
 }
+/*
 
+ */
 .Words-List {
     display: flex;
     align-content: space-between;

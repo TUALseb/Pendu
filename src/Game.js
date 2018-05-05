@@ -12,7 +12,6 @@ import Button from './Button.js'
 import App from './App.js'
 import Header from './Header.js'
 import Footer from './Footer.js'
-//import OnePlayer from './OnePlayer.js'
 
 // Importaion des images du pendu que nous allons utiliser
 import img_none from './images/none.png'
@@ -63,7 +62,8 @@ import Player from "./Player";
 
 
 // Tableau des lettres à afficher
-const LETTERS = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','à','â','ç','é','è','ï','î','ù','û',' ','\'']
+const LETTERS = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',' ']
+const EXTEND_LETTERS = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','à','â','ç','é','è','ï','î','ù','û',' ','\'']
 // Tableau des images du pendu
 const TAB_IMAGES_PENDU =[
     img_none, img_socle, img_socle_pied, img_poteau, img_traverse, img_ajout_corde, img_ajout_tete,
@@ -76,7 +76,7 @@ const TAB_SMILEY_BONNE_REPONSE = [smiley_moyen, smiley_content, smiley_content2,
     smiley_happy3, smiley_heureux, smiley_joyeux, smiley_vert]
 // Pour stocker les lattres qui ont été déjà choisis
 const usedLetters = new Set()
-const VISUAL_PAUSE_MSECS = 750
+const VISUAL_PAUSE_MSECS = 250
 
 /**
  *
@@ -86,6 +86,7 @@ class Game extends Component {
     state = {
         letters : {},
         statue: '',
+        nbPlayer: 0,
         nbPartiesToPlay: 0,
         partyInPlay: 0,
         nbTry : 0,
@@ -116,11 +117,13 @@ class Game extends Component {
     constructor(props) {
         console.log ("Game::constructor()")
         super(props)
-        console.log ("Game::constructor()::props : " +JSON.stringify(props))
+        usedLetters.clear()
+        //console.log ("Game::constructor()::props : " +JSON.stringify(props))
         this.state = {
             // On va créer le tableau avec les lettres de l'alaphabet et de certains caractères (espace, giuillemets, caractères avec accents)
             letters: this.generateTable(),
             statue: props.statue,
+            nbPlayer: props.nbPlayer,
             //En fonction de la taille du mot (s'il est < à la valeur par défaut, soit 12) on initialise le nombre total d'essai
             nbTotalTry: (props.wordToFind.length<props.nbTotalTry)? props.nbTotalTry:(props.wordToFind.length*2),
             nbTry: props.nbTry,
@@ -140,7 +143,6 @@ class Game extends Component {
             startNewParty: props.startNewParty,
             tableWordsToFind: props.tableWordsToFind,
             result: "",
-
             playerOne: props.playerOne,
             playerTwo: props.playerTwo,
         }
@@ -210,27 +212,27 @@ class Game extends Component {
     }
 
     /**
-     * Méthode qui permet de récupérer la valeur de la touche appuyée
+     * Méthode qui permet de récupérer la valeur de la touche appuyée et de contrôler si la touche à déjà été appuyé ou est interdite
      * @param event
      */
     onKeyPress(event) {
-        //console.log(event)
-        // Nous créons une expression régulière pour tester certaines touuches et les interdires
-        //const regExp = /\d/
-        //|/[&§!$*¥€`@£%=+:;,?∞¿.•…÷ë“{¶«¡ø}—Ø»å±•"|\]/g/i
-
-        //const testRegexp = RegExp(regExp)
-        //if (testRegexp.test(event.key)) {
-        //    alert("Attention ! Lettre interdite")
-        //}
-        //else
-        //if (usedLetters.has(event.key) ) {
-            // On est dans le cas ou la lettre à déjà été choisi et trouvé (ou non)
-        //    alert("Attention ! Vous avez déjà tenté cette lettre")
-        //}
-        //else {
+        //console.log("Lettre tapé : "  + JSON.stringify(event))
+        console.log("usedLetter : "  + JSON.stringify(usedLetters).toString())
+        // On vérifie que la lettre est déjà utilisé
+        // On interdit toutes les autrtes lettres à part celle de l'alphabet 'a' à 'z'
+        const regExp = new RegExp(/[^a-z]/,'g')//('\(|\)|\\d|\\S','g')
+        if( usedLetters.has(event.key)) {
+            alert("lettre déjà utilisé")
+        }
+        else if (regExp.test(event.key)) {
+            alert("lettre ou caractère interdit")
+        }
+        else {
+            //console.log ("regExp : " + regExp + " =>" )
             this.updateValues(event.key)
-        //}
+        }
+
+
     }
 
     /**
@@ -254,7 +256,7 @@ class Game extends Component {
         let startNewParty = this.state.startNewParty
         let result = this.state.result
 
-        //console.log ("nbTry : " + nbTry)
+        console.log ("nbTry : " + nbTry)
         usedLetters.add(letter)
         /*
         Le nombre d'essai n'est pas atteint, on continue
@@ -262,7 +264,7 @@ class Game extends Component {
         if (nbTry < nbTotalTry) {
             if (wordToFind.search(letter) === -1) {
                 // On est dans le cas où la lettre n'a pas été trouvé
-                console.log("lettre non trouvé : " + letter)
+                //console.log("lettre non trouvé : " + letter)
                 error += 1
                 // Pour afficher l'image en cours du pendu
                 image = <img src={TAB_IMAGES_PENDU[error]} alt={TAB_IMAGES_PENDU[error]}  />
@@ -275,18 +277,17 @@ class Game extends Component {
                 }
             }
             else {
-                // On est dans le cas où la mettre a été trouvé
-                console.log("lettre trouvé : " + letter)
-                // On récupère le résultat une foisque nous avons cherché à remplacer les lettre sur le mot (ou la phrase à trouver par des "_"
+                // On est dans le cas où la lettre a été trouvé
+                //console.log("lettre trouvé : " + letter)
+                // On récupère le résultat une fois que nous avons cherché à remplacer les lettre sur le mot (ou la phrase à trouver par des "_"
                 motCache = this.computeDisplay(wordToFind, usedLetters)
                 score += 1
                 letterFind += 1
-                smiley = TAB_SMILEY_BONNE_REPONSE[score]
+                smiley = (score<TAB_SMILEY_BONNE_REPONSE.length)?TAB_SMILEY_BONNE_REPONSE[score]:TAB_SMILEY_BONNE_REPONSE[TAB_SMILEY_BONNE_REPONSE.length-1]
                 startNewParty = false
 
                 if (motCache === wordToFind) {
                     // On va afficher le smiley en fonction du nombre de tentatives
-
                     startNewParty = true
                     if (error === 0) {
                         // Pour afficher l'animation quand la partie est gagné sans erreur
@@ -314,6 +315,7 @@ class Game extends Component {
         }
         // On met à jour de façon asynchrone notre state ainsi que le lancement de la mise à jour de l'affichage eavec un décalage
         // pour que nos nouvelles valeurs soient prises en compte
+        //console.log ("Game::updateValues::state : " + JSON.stringify(this.state))
         setTimeout(()=>this.setState ({
                 statue: statue,
                 image: image,
@@ -338,14 +340,21 @@ class Game extends Component {
      */
     onNext(index){
         console.log ("Game::onNext()")
-        console.log ("Game::onNext():this.state" + JSON.stringify(this.state))
+        //console.log ("Game::onNext():this.state" + JSON.stringify(this.state))
         //let partyInInPlay = this.state.partyInPlay + 1
         //const motCache = ""
         usedLetters.clear()
+
+        const partyInPlay = this.state.partyInPlay
         const tableWordsToFind = this.state.tableWordsToFind
+        const nbPlayer = this.state.nbPlayer
+        let statue = 'NEXT'
+
         this.setState({
-            statue: 'NEXT',
+            statue: statue,
+            nbPlayer : nbPlayer,
             motCache: "",
+            partyInPlay: partyInPlay,
             error :0,
             tableWordsToFind: tableWordsToFind,
         })
@@ -360,9 +369,8 @@ class Game extends Component {
     computeDisplay(phrase, usedLetters) {
         //console.log("usedLetters : " + JSON.stringify(usedLetters))
         console.log ("Phrase ou mot à trouver : " + phrase)
-        // /(\W+)(\w+)
-        // \w
-        let regExp = /(\w)|(\W)/g
+        //  |(\W)/g
+        let regExp = /(\w)|(\s)/g
         return phrase.replace(regExp,
             (letter) => (usedLetters.has(letter) ? letter : '_')
         )
@@ -375,11 +383,12 @@ class Game extends Component {
     render() {
         //console.log ("Game::render")
         //console.log("Game::render::state" + JSON.stringify(this.state))
+        const statue = this.state.statue
+        const nbPlayer = this.state.nbPlayer
         const letters = this.state.letters
         const score = this.state.score
         const nbTotalTry = this.state.nbTotalTry
         const nbTry = this.state.nbTry
-        const statue = this.state.statue
         const nbPartiesToPlay = this.state.nbPartiesToPlay
         const playerName  = this.state.playerName
         const partyInPlay = this.state.partyInPlay
@@ -409,9 +418,11 @@ class Game extends Component {
          * Les autres sont réinitialisées avec les valeurs de bases
          */
         else if(statue === 'NEXT') {
+            //console.log("Game::render::state => NEXT" + JSON.stringify(this.state))
             return (
                 <Player
                     statue = {statue}
+                    nbPlayer = {nbPlayer}
                     playerName = {playerName}
                     nbPartiesToPlay = {nbPartiesToPlay}
                     partyInPlay = {partyInPlay}
@@ -426,6 +437,7 @@ class Game extends Component {
                 />
             )
         }
+
 
         /**
          * Affichage de la partie en cours avec les diverses informations
@@ -464,7 +476,7 @@ class Game extends Component {
                             </div>
                         </div>
                         <div className="Play-zone">
-                            <div className="Left">
+                            <div className="Left" hidden={!startNewParty}>
                                 <div className="Keyboard" >
                                     { letters.map((letter, index) => (
                                         <Button

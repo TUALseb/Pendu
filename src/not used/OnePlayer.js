@@ -6,14 +6,14 @@
 
 import React, { Component } from 'react'
 
-import Game from './Game.js'
+import Game from '../Game.js'
 //import App from './App.js'
 //import Header from './Header.js'
 //import Footer from './Footer.js'
 //import Button from './Button.js'
 
 
-import './Game.css'
+import '../Game.css'
 
 
 //const TABLE_WORDS_TO_FIND = ["hello", "jeu du pendu", "react", "apprivoiser", "voici le célèbre jeu du pendu", "ça marche", "association"]

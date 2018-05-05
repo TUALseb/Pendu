@@ -11,16 +11,15 @@ import React, { Component } from 'react'
 import Game from './Game.js'
 import App from './App.js'
 import Header from './Header.js'
-//import BackToMainPage from './BackToMainPage.js'
 import Footer from './Footer.js'
 import Button from './Button.js'
+import SelectWord from './SelectWords.js'
 import End from './End.js'
 
 
 import './Player.css'
-import OnePlayer from "./OnePlayer";
 
-const TABLE_WORDS_TO_FIND = ["hello", "jeu du pendu", "react", "apprivoiser", "voici le célèbre jeu du pendu", "ça marche", "association",]
+const TABLE_WORDS_TO_FIND = ["hello", "pendu", "react", "apprivoiser", "jeu du pendu", "jouer au pendu", "association", "apprivoiser react", "exercices", "consignes"]
 
 
 class Player extends Component{
@@ -32,11 +31,13 @@ class Player extends Component{
         nbTotalTry: 0,
         playerOne : {
             playerName : "",
+            partyInPlay: 1,
             score: 0,
             tableWordsToFind : [],
         },
         playerTwo : {
             playerName : "",
+            partyInPlay: 1,
             score: 0,
             tableWordsToFind : [],
         },
@@ -51,31 +52,59 @@ class Player extends Component{
     constructor(props) {
         super(props)
         console.log ("Player::constructor()")
-        console.log ("Player::constructor::props: " + JSON.stringify(props))
-        console.log ("Player::constructor::state: " + JSON.stringify(this.state))
 
+        //console.log ("Player::constructor::state: " + JSON.stringify(this.state))
+        let statue = props.statue
         let tableWordsToFindPlayerOne = []
         let tableWordsToFindPlayerTwo = []
-        let scorePlayerOne = 0
-        let scorePlayerTwo = 0
-        let partyInPlay = 1
-        if (props.statue === 'NEXT') {
+        let scorePlayerOne = props.playerOne.score
+        let scorePlayerTwo = props.playerTwo.score
+        let partyInPlay = props.partyInPlay
+        let partyInPlayPlayerOne = props.playerOne.partyInPlay
+        let partyInPlayPlayerTwo = props.playerTwo.partyInPlay
+        if (statue === 'NEXT') {
             // Nous récupérons le tableau de mot déjà crée
             tableWordsToFindPlayerOne = props.playerOne.tableWordsToFind
-            tableWordsToFindPlayerTwo = props.playerTwo.TableWordsToFind
+            tableWordsToFindPlayerTwo = props.playerTwo.tableWordsToFind
+            //partyInPlay = props.partyInPlay + 1
+
         }
-        if (props.playerName === props.playerOne.playerName) {
-            scorePlayerOne = props.playerOne.score + props.score
+
+        if (props.nbPlayer === 1) {
+            //console.log ("Player::Constructor => " + JSON.stringify(props))
+            partyInPlay = statue === 'NEXT'?  props.partyInPlay + 1 : props.partyInPlay
+            partyInPlayPlayerOne = props.partyInPlay + 1
         }
-        else {
-            scorePlayerTwo = props.playerTwo.score + props.score
+        else if (props.playerOne.playerName === props.playerName) {
+            //console.log("nbPlayer : " + props.nbPlayer + "Partie en cours : " + props.partyInPlay + "statue = NEXT_PLAYER")
+            partyInPlayPlayerOne = props.partyInPlay + 1
+            statue = 'NEXT_PLAYER'
         }
-        if (props.nbPlayer===1) {
-            partyInPlay = props.partyInPlay
+        else if (props.playerTwo.playerName === props.playerName) {
+            //console.log("nbPlayer : " + props.nbPlayer + "Partie en cours : " + props.partyInPlay + "statue = NEXT")
+            partyInPlayPlayerTwo = props.partyInPlay + 1
+            partyInPlay = props.partyInPlay + 1
+            statue = 'NEXT'
+        }
+
+        // Gérons ici les scores
+        if (props.playerOne.playerName === props.playerName) {
+            scorePlayerOne =  props.score //scorePlayerOne +
+        }
+        else if (props.playerTwo.playerName === props.playerName) {
+
+            scorePlayerTwo =  props.score //scorePlayerTwo +
+        }
+
+
+        if (partyInPlay === props.nbPartiesToPlay) {
+            //console.log ("Player::constructor::props: " + JSON.stringify(props))
+            scorePlayerOne = props.playerOne.score
+            scorePlayerTwo = props.playerTwo.score
         }
 
         this.state = {
-            statue: props.statue,
+            statue: statue,
             nbPlayer: props.nbPlayer,
             nbTry: props.nbTry,
             nbTotalTry: props.nbTotalTry,
@@ -83,44 +112,44 @@ class Player extends Component{
             partyInPlay: partyInPlay,
             playerOne : {
                 playerName : props.playerOne.playerName,
+                partyInPlay: partyInPlayPlayerOne,
                 score: scorePlayerOne,
                 tableWordsToFind : tableWordsToFindPlayerOne,
             },
             playerTwo : {
                 playerName : props.playerTwo.playerName,
+                partyInPlay: partyInPlayPlayerTwo,
                 score: scorePlayerTwo,
                 tableWordsToFind : tableWordsToFindPlayerTwo,
             },
             startNewParty: props.startNewParty,
         }
         // on déclare les méthodes qui doivent être attaché à this, sinon les données de la classe ne sera pas accessible
-        // (this aura changé à l'intérioeur des méthodes)
         this.onReturn = this.onReturn.bind(this)
-        //this.onKeyPress = this.onKeyPress.bind(this)
         this.onChoice = this.onChoice.bind(this)
-        //this.onChangeWordToFind = this.onChangeWordToFind.bind(this)
         this.onStart = this.onStart.bind(this)
+        this.onChangeText =this.onChangeText.bind(this)
     }
 
+
     /**
-     * Appelé après que le composant a été retranscrit pour la première fois dans le DOM réel
+     Appelé après que le composant a été retranscrit pour la première fois dans le DOM réel
      */
     componentDidMount() {
-        //console.log ("Player::componentDidMount()")
-        //console.log ("Player::componentDidMount()::State: " + JSON.stringify(this.state))
-
-    }
-
-    componentWillMount(props){
-        //console.log ("Player::componentWillMount()::State: " + JSON.stringify(this.state))
-        //console.log ("Player::componentWillMount()::State: " + JSON.stringify(props))
+        //console.log ("Game::componentDidMount()")
+        //console.log ("Game::State: " + JSON.stringify(this.state))
+        // Nécessaire pour gérer les évènements liés au clavier
+        // Nous libérons manuellement cet évènement
+        //document.addEventListener("keypress", this.onChangeText)
     }
 
     /**
-     *  Appelé avant que le composant ne quitte complètement le DOM
+     Appelé avant que le composant ne quitte complètement le DOM
      */
     componentWillUnmount() {
-
+        // Nécessaire pour gérer les évènements liés au clavier
+        // Nous déttachons manuellement cet évènement
+        //document.removeEventListener("keypress", this.onChangeText)
     }
 
     /**
@@ -131,32 +160,106 @@ class Player extends Component{
         console.log ("Game::onReturn()")
         this.setState({statue: 'MAIN_PAGE'})
     }
-
-
     /**
-     *
+     * Méthode qui permet de choisir des mots (ou phrase) de façon aléatoire et unique pour les joueurs
      * @param index
      */
     onChoice(index) {
-        //console.log ("Game::onChoice()")
+        //console.log ("Player::onChoice()")
+        const playerOneName = this.state.playerOne.playerName
+        const playerTwoName = this.state.playerTwo.playerName
+        const nbPartiesToPlay = this.state.nbPartiesToPlay
+        //const scorePlayerOne = 0//this.state.playerOne.score
+        //const scorePlayerTwo = 0//this.state.playerTwo.score
+        //let tableWordsToFindForPlayerOne = []
+        //let tableWordsToFindForPlayerTwo = []
+        const scorePlayerOne = this.state.playerOne.score
+        const scorePlayerTwo = this.state.playerTwo.score
+        let tableWordsToFindForPlayerOne = this.state.playerOne.tableWordsToFind
+        let tableWordsToFindForPlayerTwo = this.state.playerTwo.tableWordsToFind
+
+        switch (index) {
+            case 1:
+                for (let pos = 0 ; pos < nbPartiesToPlay ; pos++) {
+                    let posInTableWord = Math.round(Math.random()*TABLE_WORDS_TO_FIND.length)
+                    tableWordsToFindForPlayerOne.push(this.getRandomWord (tableWordsToFindForPlayerOne, tableWordsToFindForPlayerTwo, posInTableWord))
+                    tableWordsToFindForPlayerTwo.push(this.getRandomWord (tableWordsToFindForPlayerOne, tableWordsToFindForPlayerTwo, posInTableWord))
+
+                }
+                console.log (tableWordsToFindForPlayerOne)
+                console.log (tableWordsToFindForPlayerTwo)
+                this.setState({
+                    statue: 'PLAY',
+                    playerOne: {
+                        playerName : playerOneName,
+                        score: scorePlayerOne,
+                        tableWordsToFind: tableWordsToFindForPlayerOne,
+                    },
+                    playerTwo: {
+                        playerName : playerTwoName,
+                        score: scorePlayerTwo,
+                        tableWordsToFind: tableWordsToFindForPlayerTwo,
+                    },
+                })
+                break
+            case 2:
+                for (let nbParties=0 ; nbParties<nbPartiesToPlay; nbParties++) {
+                    tableWordsToFindForPlayerOne.push(" ")
+                    tableWordsToFindForPlayerTwo.push(" ")
+                }
+                console.log(nbPartiesToPlay)
+                console.log (tableWordsToFindForPlayerOne)
+                console.log (tableWordsToFindForPlayerTwo)
+                this.setState({
+                    statue: 'ENTER_WORDS',
+                    playerOne: {
+                        playerName : playerOneName,
+                        tableWordsToFind: tableWordsToFindForPlayerOne,
+                    },
+                    playerTwo: {
+                        playerName : playerTwoName,
+                        tableWordsToFind: tableWordsToFindForPlayerTwo,
+                    },
+                })
+                break
+            case 3:
+                this.setState({
+                    statue: 'START',
+                    playerOne: {
+                        playerName : playerOneName,
+                        score: scorePlayerOne,
+                        tableWordsToFind: tableWordsToFindForPlayerOne,
+                    },
+                    playerTwo: {
+                        playerName : playerTwoName,
+                        score: scorePlayerTwo,
+                        tableWordsToFind: tableWordsToFindForPlayerTwo,
+                    },
+
+                })
+                break
+            default:
+                this.setState({statue: 'MAIN_PAGE'})
+
+        }
+ /*
         if (index === 1){
-            console.log ("PlayerTwo::state : " + JSON.stringify(this.state))
+            //console.log ("Player::onChoice::state : " + JSON.stringify(this.state))
             const playerOneName = this.state.playerOne.playerName
             const playerTwoName = this.state.playerTwo.playerName
-            const scorePlayerOne = this.state.playerOne.score
-            const scorePlayerTwo = this.state.playerTwo.score
+            const scorePlayerOne = 0//this.state.playerOne.score
+            const scorePlayerTwo = 0//this.state.playerTwo.score
             let tableWordsToFindForPlayerOne = []
             let tableWordsToFindForPlayerTwo = []
 
             // Pour chaque joueur, on va choisir les mots (ou phrases) de façon aléatoire
 
-                for (let pos = 0 ; pos < this.state.nbPartiesToPlay ; pos++) {
-                    let posInTableWord = Math.round(Math.random()*TABLE_WORDS_TO_FIND.length)
-                    //if (posInTableWord === TABLE_WORDS_TO_FIND.length) { posInTableWord = TABLE_WORDS_TO_FIND.length -1 }
-                    tableWordsToFindForPlayerOne.push(this.getRandomWord (tableWordsToFindForPlayerOne, tableWordsToFindForPlayerTwo, posInTableWord))
-                    tableWordsToFindForPlayerTwo.push(this.getRandomWord (tableWordsToFindForPlayerOne, tableWordsToFindForPlayerTwo, posInTableWord))
+            for (let pos = 0 ; pos < this.state.nbPartiesToPlay ; pos++) {
+                let posInTableWord = Math.round(Math.random()*TABLE_WORDS_TO_FIND.length)
+                tableWordsToFindForPlayerOne.push(this.getRandomWord (tableWordsToFindForPlayerOne, tableWordsToFindForPlayerTwo, posInTableWord))
+                tableWordsToFindForPlayerTwo.push(this.getRandomWord (tableWordsToFindForPlayerOne, tableWordsToFindForPlayerTwo, posInTableWord))
 
-                }
+            }
             console.log (tableWordsToFindForPlayerOne)
             console.log (tableWordsToFindForPlayerTwo)
             this.setState({
@@ -174,16 +277,41 @@ class Player extends Component{
             })
         }
         else {
-            this.setState({statue: 'ENTER_WORDS'})
+            console.log ("Player::onChoice::state : " + JSON.stringify(this.state))
+            const playerOneName = this.state.playerOne.playerName
+            const playerTwoName = this.state.playerTwo.playerName
+            const nbPartiesToPlay = this.state.nbPartiesToPlay
+            let tableWordsToFindForPlayerOne = []
+            let tableWordsToFindForPlayerTwo = []
+
+            for (let nbParties=0 ; nbParties<nbPartiesToPlay; nbParties++) {
+                tableWordsToFindForPlayerOne.push(" ")
+                tableWordsToFindForPlayerTwo.push(" ")
+            }
+            console.log(nbPartiesToPlay)
+            console.log (tableWordsToFindForPlayerOne)
+            console.log (tableWordsToFindForPlayerTwo)
+            this.setState({
+                statue: 'ENTER_WORDS',
+                playerOne: {
+                    playerName : playerOneName,
+                    tableWordsToFind: tableWordsToFindForPlayerOne,
+                },
+                playerTwo: {
+                    playerName : playerTwoName,
+                    tableWordsToFind: tableWordsToFindForPlayerTwo,
+                },
+            })
         }
+*/
     }
     /**
      *
      * @param index
      */
     onStart(index) {
-        //console.log("PlayerTwo::onStart()")
-        //console.log("PlayerTwo::onStart()::state : " + JSON.stringify(this.state))
+        //console.log("Player::onStart()")
+        //console.log("Player::onStart()::state : " + JSON.stringify(this.state))
         const playerOneName = this.state.playerOne.playerName
         const playerTwoName = this.state.playerTwo.playerName
         const scorePlayerOne = this.state.playerOne.score
@@ -238,6 +366,7 @@ class Player extends Component{
         else {
             //console.log ("Le mot est déjà dans l'un des tableaux : On en cherche un autre")
             //console.log ( "tableWordsToFind : " + tableWordsToFindForPlayerOne + " , tableWordsToFindForPlayerTwo : " + tableWordsToFindForPlayerTwo)
+            // On boucle tant que le mot est présent dans l'un des 2 tableaux afin que sa présence soit unique
             while ((indexInTableWordsToFindPlayerOne !== -1) || (indexInTableWordsToFindPlayerTwo !== -1)) {
                 let newIndex = Math.round(Math.random()*TABLE_WORDS_TO_FIND.length)
                 if (newIndex === TABLE_WORDS_TO_FIND.length) { newIndex = TABLE_WORDS_TO_FIND.length-1}
@@ -251,12 +380,23 @@ class Player extends Component{
         return wordToAdd
     }
 
+
+    onChangeText(value) {
+        console.log ("value.target.value : " + JSON.stringify(value))
+        this.setState({wordToFind : value.target.value})
+    }
+
+
+    onBlur(event) {
+        console.log ("onBLur:: event : " + event)//JSON.stringify(event))
+    }
+
     /**
      *
      * @returns {*}
      */
     render() {
-        console.log("Player::render()::state :" + JSON.stringify(this.state) )
+        //console.log("Player::render()::state :" + JSON.stringify(this.state) )
         /**
          * 3 cas possibles :
          *  statue === 'BEGIN' : retour à la page principale
@@ -270,14 +410,12 @@ class Player extends Component{
          */
         const statue = this.state.statue
         const nbPlayer = this.state.nbPlayer
-        const nbTotalTry = this.state.nbTotalTry
+        //const nbTotalTry = this.state.nbTotalTry
         const nbTry = this.state.nbTry
         const startNewParty = this.state.startNewParty
         let partyInPlay = this.state.partyInPlay
         const nbPartiesToPlay = this.state.nbPartiesToPlay
-        const playerOne = this.state.playerOne
-        const playerTwo =this.state.playerTwo
-        console.log(JSON.stringify(playerOne))
+
         /**
          * On a appuyé sur le bouton "Retour" ==> Nous sommes renvoyé vers la page principale
          */
@@ -304,7 +442,7 @@ class Player extends Component{
                             </div>
                         </div>
                         <div className="Btn-Ap">
-                            <Button value={"Retour au menu principal"} index={0} hidden={false} onClick={this.onReturn } />
+                            <Button value={"Retour au menu principal"} index={0} hidden={false} onClick={this.onChoice } />
                         </div>
                     </div>
                     <Footer />
@@ -315,7 +453,7 @@ class Player extends Component{
          * Les mots ont été choisis au hasard pour les deux joueurs, nous affichons le boutons qui permet de lancer la partie
          */
         else if (statue === 'PLAY')  {
-            console.log (JSON.stringify(this.state))
+            //console.log (JSON.stringify(this.state))
             return (
                 <div className="App">
                     <Header/>
@@ -324,11 +462,11 @@ class Player extends Component{
                         <div className="Start">
                             <div className="H3">
                                 <h3> Lancer le jeu</h3>
-                                <Button value={"Démarrer"} index={2} hidden={false} onClick={this.onStart } />
+                                <Button value={"Démarrer"} index={3} hidden={false} onClick={this.onChoice } />
                             </div>
                         </div>
                         <div className="Btn-Ap">
-                            <Button value={"Retour au menu principal"} index={0} hidden={false} onClick={this.onReturn } />
+                            <Button value={"Retour au menu principal"} index={0} hidden={false} onClick={this.onChoice } />
                         </div>
                     </div>
                     <Footer />
@@ -339,82 +477,117 @@ class Player extends Component{
          * Nous affichons les champs qui vont permettre d'entrer les mot à choisir
          */
         else if (statue === 'ENTER_WORDS') {
-            const wordsToFind = this.state.playerOne.wordsToFind
-            return (
-                <div className="App">
-                    <Header/>
-                    <div className="Body-Selection">
 
-                        <div className="Btn-Ap">
-                            <Button value={"Retour au menu principal"} index={0} hidden={false} onClick={this.onReturn } />
+            //let wordToFind = this.state.playerOne.wordToFind
+            const nbPlayer = this.state.nbPlayer
+            let tableWordsToFinPlayerOne = this.state.playerOne.tableWordsToFind
+            let tableWordsToFinPlayerTwo = this.state.playerTwo.tableWordsToFind
+            let player = 1
+            //console.log(wordToFind)
+            for (let player = 1 ; player <= nbPlayer ; player ++) {
+            //if (player<= nbPlayer) {
+                return (
+                    <div className="App">
+                        <Header/>
+                        <div className="Body-Selection">
+                            <div>
+                                {
+                                    tableWordsToFinPlayerOne.map((wordToFind, index)  =>(
+                                        <SelectWord
+                                            index={index}
+                                            word={wordToFind}
+                                            onChange={this.onChangeText}
+                                            onBlur={this.onBlur}
+                                        />
+                                    ))
+                                }
+                            </div>
+                            <div>
+                                <div className="Btn-Ap">
+                                    <Button value={"Valider"} index={player} hidden={false}  onClick={this.onReturn } />
+                                </div>
+                                <div className="Btn-Ap">
+                                    <Button value={"Annuler"} index={99} hidden={false} onClick={this.onReturn } />
+                                </div>
+                            </div>
+                            <div className="Btn-Ap">
+                                <Button value={"Retour au menu principal"} index={0} hidden={false} onClick={this.onReturn } />
+                            </div>
                         </div>
+                        <Footer />
                     </div>
-                    <Footer />
-                </div>
-            )
+                )
+            }
+
         }
         /**
          * On lance l'affichage du jeu
          *
          */
-        else //if (statue === 'START'){
-            if(partyInPlay <= nbPartiesToPlay){
-                console.log ("Player::render:: affiche Game")
-                console.log (JSON.stringify(this.state))
-                let playerName = this.state.playerOne.playerName
-                let wordToFind = this.state.playerOne.tableWordsToFind[partyInPlay-1]
-                let tableWordsToFind = this.state.playerOne.TableWordsToFind
-                let score = this.state.playerOne.score
-                /**
-                 * Le jeu est pas fini on continue jusqu'au nombre de partie
-                 */
-                /**
-                 * Selon on change de joueur ou
-                 */
-                if (statue === 'START') {
-                    playerName = this.state.playerOne.playerName
-                    wordToFind = this.state.playerOne.tableWordsToFind[partyInPlay-1]
-                    tableWordsToFind = this.state.playerOne.tableWordsToFind
-                    score = this.state.playerOne.score
-                    partyInPlay = this.state.partyInPlay
+        else if(partyInPlay <= nbPartiesToPlay){
+            //console.log ("Player::render:: affiche Game")
+            //console.log (JSON.stringify(this.state))
+            const playerOne = this.state.playerOne
+            const playerTwo = this.state.playerTwo
+            let playerName = this.state.playerOne.playerName
+            let wordToFind = this.state.playerOne.tableWordsToFind[partyInPlay-1]
+            let tableWordsToFind = this.state.playerOne.TableWordsToFind
+            let score = this.state.playerOne.score
+            /**
+             * Le jeu est pas fini on continue jusqu'au nombre de partie
+             */
+            /**
+             * Selon on change de joueur ou
+             */
+            if (statue === 'START') {
+                playerName = this.state.playerOne.playerName
+                wordToFind = this.state.playerOne.tableWordsToFind[partyInPlay-1]
+                tableWordsToFind = this.state.playerOne.tableWordsToFind
+                score = this.state.playerOne.score
+                partyInPlay = this.state.partyInPlay
 
-                }
-                else if (nbPlayer === 2){
-                    playerName = this.state.playerTwo.playerName
-                    wordToFind = this.state.playerTwo.TableWordsToFind[partyInPlay-1]
-                    tableWordsToFind = this.state.playerTwo.tableWordsToFind
-                    score = this.state.playerTwo.score
-                    partyInPlay = this.state.partyInPlay
-                }
-                else {
-                    playerName = this.state.playerOne.playerName
-                    wordToFind = this.state.playerOne.tableWordsToFind[partyInPlay-1]
-                    tableWordsToFind = this.state.playerOne.tableWordsToFind
-                    score = this.state.playerOne.score
-                    partyInPlay = this.state.partyInPlay
-                }
-                return (
-                    <Game
-                        playerName = {playerName}
-                        nbPartiesToPlay = {nbPartiesToPlay}
-                        partyInPlay = {partyInPlay}
-                        nbTry = {nbTry}
-                        nbTotalTry = {nbTotalTry}
-                        score = {score}
-                        wordToFind = {wordToFind}
-                        startNewParty = {startNewParty}
-                        tableWordsToFind = {tableWordsToFind}
-                        playerOne = {playerOne}
-                        playerTwo = {playerTwo}
-                    />
-                )
-            //}
+            }
+            else if (statue === 'NEXT_PLAYER'){
+                playerName = this.state.playerTwo.playerName
+                wordToFind = this.state.playerTwo.tableWordsToFind[partyInPlay-1]
+                tableWordsToFind = this.state.playerTwo.tableWordsToFind
+                score = this.state.playerTwo.score
+                partyInPlay = this.state.partyInPlay
+
+            }
+            else {
+                playerName = this.state.playerOne.playerName
+                wordToFind = this.state.playerOne.tableWordsToFind[partyInPlay-1]
+                tableWordsToFind = this.state.playerOne.tableWordsToFind
+                score = this.state.playerOne.score
+                partyInPlay = this.state.partyInPlay
+            }
+            const nbTotalTry = wordToFind.length
+            return (
+                <Game
+                    nbPlayer = {nbPlayer}
+                    playerName = {playerName}
+                    nbPartiesToPlay = {nbPartiesToPlay}
+                    partyInPlay = {partyInPlay}
+                    nbTry = {nbTry}
+                    nbTotalTry = {nbTotalTry}
+                    score = {score}
+                    wordToFind = {wordToFind}
+                    startNewParty = {startNewParty}
+                    tableWordsToFind = {tableWordsToFind}
+                    playerOne = {playerOne}
+                    playerTwo = {playerTwo}
+                />
+            )
         }
 
         /**
          * Affichage par défaut (celui qui se produt à la fin de la partie)
          */
         else {
+            console.log("Player::render::end =>" + JSON.stringify(this.state))
+            let playerOne = this.state.playerOne
+            let playerTwo =this.state.playerTwo
             return (
                 <End
                     statue = {statue}

@@ -1,5 +1,7 @@
 <component name="CopyrightManager">
   <copyright>
+    <option name="allowReplaceRegexp" value="Copyright" />
+    <option name="notice" value="Copyright (c) &amp;#36;today.year. Sebastien TUAL                 &#10;date de création :  &amp;#36;today.day-&amp;#36;today.month-&amp;#36;today.year.&#10;date de modification : &amp;#36;today.day-&amp;#36;today.month-&amp;#36;today.year." />
     <option name="myName" value="Sébastien TUAL @ 2018" />
   </copyright>
 </component>

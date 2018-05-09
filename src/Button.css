@@ -16,3 +16,25 @@
     background: rgba(105, 157, 250, 0.04);
 }
 
+.Btn-Disable {
+    width: auto;
+    height: auto;
+    font-size: 1.5em;
+    outline: 0.1em solid silver;
+    margin: 0.2em;
+    padding: 0.2em;
+    cursor: pointer;
+    background: rgba(192, 34, 37, 0.04);
+}
+
+.Btn-Enabled {
+    /* flex: 1 1 calc(100% / 6 - 0.4em); */
+    width: auto;
+    height: auto;
+    font-size: 1.5em;
+    outline: 0.1em solid silver;
+    margin: 0.2em;
+    padding: 0.2em;
+    cursor: pointer;
+    background: rgba(105, 156, 249, 0.04);
+}

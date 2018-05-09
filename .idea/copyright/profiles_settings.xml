@@ -1,3 +1,7 @@
 <component name="CopyrightManager">
-  <settings default="Sébastien TUAL @ 2018" />
+  <settings default="Sébastien TUAL @ 2018">
+    <module2copyright>
+      <element module="Project Files" copyright="Sébastien TUAL @ 2018" />
+    </module2copyright>
+  </settings>
 </component>

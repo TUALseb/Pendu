@@ -13,8 +13,8 @@ import './Button.css'
  * Nous allons à ce niveau gérer le texte à afficher
  */
 
-const Button = ({value, index, hidden, onClick }) => (
-    <div className="Btn-Property" hidden={hidden} onClick={() => onClick(index)}>
+const Button = ({value, index, className, onClick }) => (
+    <div className={className} onClick={() => onClick(index)}>
         <span>
             {value}
         </span>
@@ -30,6 +30,7 @@ Button.propTypes = {
     value: PropTypes.string.isRequired,
     index: PropTypes.number.isRequired,
     onClick: PropTypes.func.isRequired,
+    className:PropTypes.string.isRequired,
 }
 
 

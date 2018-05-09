@@ -22,10 +22,10 @@ const KeyBoard = ({letters, usedLetters, onClick}) => (
 
             { letters.map((letter, index) => (
                 <Button
+                    className={(!!usedLetters.has(letter))?"Btn-Enabled":"Btn-Disable"}
                     value={letter}
                     index={index}
                     key={index}
-                    hidden={!!usedLetters.has(letter)}
                     onClick={() => onClick(index)}
                 />
             ))}

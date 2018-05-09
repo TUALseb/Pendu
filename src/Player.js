@@ -298,7 +298,7 @@ class Player extends Component{
         if ((indexInTableWordsToFindPlayerOne === -1) && (indexInTableWordsToFindPlayerTwo === -1)){
             //console.log ( "tableWordsToFindForPlayerOne : " + tableWordsToFindForPlayerOne + " , tableWordsToFindForPlayerTwo : " + tableWordsToFindForPlayerTwo)
             // Il n'est pas présent dans les deux tableaux : on le retourne
-            return wordToAdd
+            return wordToAdd.toUpperCase()
         }
         else {
             //console.log ("Le mot est déjà dans l'un des tableaux : On en cherche un autre")
@@ -314,7 +314,7 @@ class Player extends Component{
             }
 
         }
-        return wordToAdd
+        return wordToAdd.toUpperCase()
     }
 
     /**
@@ -357,7 +357,7 @@ class Player extends Component{
                 alert("il ne peut y avoir que " + nbPossibleLetters + " lettres différentes. Merci de modifier votre mot (ou phrase)")
             }
             else {
-                tableWordsToFind[index] = event.target.value
+                tableWordsToFind[index] = event.target.value.toUpperCase()
             }
 
             this.setState({ tableWordsToFind: tableWordsToFind })
@@ -544,7 +544,7 @@ class Player extends Component{
                         <div className="Start">
                             <div className="H3">
                                 <h3> Lancer le jeu</h3>
-                                <Button value={"Démarrer"} index={3} hidden={false} onClick={this.onChoice } />
+                                <Button className={"Btn-Property"} value={"Démarrer"} index={3} onClick={this.onChoice } />
                             </div>
                         </div>
                         <BackToMainPage onClick = {this.onChoice}/>
@@ -586,10 +586,10 @@ class Player extends Component{
                                 </div>
                                 <div className="Btn-Cancel-Valid">
                                     <div className="Btn-Ap">
-                                        <Button value={"Annuler"} index={99} hidden={false} onClick={this.onCancel } />
+                                        <Button className={"Btn-Property"} value={"Annuler"} index={99} onClick={this.onCancel } />
                                     </div>
                                     <div className="Btn-Ap">
-                                        <Button value={"Valider"} index={player} hidden={false}  onClick={this.onValid } />
+                                        <Button className={"Btn-Property"} value={"Valider"} index={player} onClick={this.onValid } />
                                     </div>
                                 </div>
                             </div>

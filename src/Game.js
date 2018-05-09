@@ -65,7 +65,7 @@ import Player from "./Player";
 
 
 // Tableau des lettres à afficher
-const LETTERS = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',' ']
+const LETTERS = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',' ']
 //const EXTEND_LETTERS = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','à','â','ç','é','è','ï','î','ù','û',' ','\'']
 // Tableau des images du pendu
 const TAB_IMAGES_PENDU =[
@@ -219,7 +219,7 @@ class Game extends Component {
     handleLetterClick(index) {
         //console.log("Game::handleLetterClick : "  + index)
         const letter = LETTERS[index]
-        this.updateValues(letter)
+        this.updateValues(letter.toUpperCase())
     }
 
     /**
@@ -240,7 +240,7 @@ class Game extends Component {
             }
             else {
                 //console.log ("regExp : " + regExp + " =>" )
-                this.updateValues(event.key.toLowerCase())
+                this.updateValues(event.key.toUpperCase())
             }
         }
     }
@@ -380,7 +380,7 @@ class Game extends Component {
         //  |(\W)/g
         let regExp = /(\w)|(\s)/g
         return phrase.replace(regExp,
-            (letter) => (usedLetters.has(letter) ? letter : '_')
+            (letter) => (usedLetters.has(letter) ? letter : '_ ')
         )
     }
 
@@ -491,13 +491,12 @@ class Game extends Component {
                                         {result}
                                     </div>
                                     <div className="Button" >
-                                        <Button value={"Partie suivante"} index={0} hidden={!startNewParty} onClick={this.onNext }/>
+                                        <Button className={"Btn-Property"} value={"Partie suivante"} index={0} hidden={!startNewParty} onClick={this.onNext }/>
                                     </div>
                                 </div>
                             </div>
                             <BackToMainPage onClick = {this.onReturn}/>
                         </div>
-
                     </div>
                     <Footer />
                 </div>

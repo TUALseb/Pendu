@@ -16,7 +16,7 @@ import './BackToMainPage.css'
 
 const BackToMainPage = ({onClick}) =>(
     <div className="Btn-Ap">
-        <Button value={"Retour au menu principal"} index={0} hidden={false} onClick={() => onClick(0)} />
+        <Button className={"Btn-Property"} value={"Retour au menu principal"} index={0} onClick={() => onClick(0)} />
     </div>
 )
 

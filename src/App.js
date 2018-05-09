@@ -231,9 +231,9 @@ class App extends Component {
                             Pour commencer, veuillez sélectionner si vous jouez à 1 ou 2 joueurs.
                         </article>
                         <div className="Btn-App">
-                            <Button value={"1 joueur"} index={1} hidden={false} onClick={this.onSelectNbPlayer } />
-                            <Button value={"2 joueurs"} index={2} hidden={false} onClick={this.onSelectNbPlayer} />
-                            <Button value={"Configurer"} index={9} hidden={false} onClick={this.onConfigurer} />
+                            <Button className={"Btn-Property"} value={"1 joueur"} index={1} onClick={this.onSelectNbPlayer } />
+                            <Button className={"Btn-Property"} value={"2 joueurs"} index={2} onClick={this.onSelectNbPlayer} />
+                            <Button className={"Btn-Property"} value={"Configurer"} index={9} onClick={this.onConfigurer} />
                         </div>
                     </div>
                     <Footer />

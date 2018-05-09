@@ -21,14 +21,14 @@ const Begin = ({onClick}) => (
         <div className="Selection">
             <div className="Choice">
                 <h3> Les mots (ou phrase) à trouver sont pris au hasard</h3>
-                <Button value={"Sélectionner"} index={1} hidden={false} onClick={() => onClick(1) } />
+                <Button className={"Btn-Property"} value={"Sélectionner"} index={1} onClick={() => onClick(1) } />
             </div>
             <div className="Choice">
                 <h3> Vous décidez et entrez les mot (ou phrase) à trouver</h3>
-                <Button value={"Sélectionner"} index={2} hidden={false} onClick={() => onClick(2)  } />
+                <Button className={"Btn-Property"} value={"Sélectionner"} index={2} onClick={() => onClick(2)  } />
             </div>
         </div>
-        <BackToMainPage onClick = {() => onClick(0)}/>
+        <BackToMainPage onClick={()=>onClick(0)}/>
     </div>
 )
 

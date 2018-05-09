@@ -121,7 +121,7 @@ class End extends Component {
                             Votre score total est de  : {playerOne.score}
                         </div>
                         <div className="Btn-Ap">
-                            <Button value={"Retour au menu principal"} index={1} hidden={false} onClick={this.onReturn } />
+                            <Button className={"Btn-Property"} value={"Retour au menu principal"} index={0} onClick={this.onReturn } />
                         </div>
                     </div>
                     <Footer />
@@ -164,7 +164,7 @@ class End extends Component {
                             </div>
                         </div>
                         <div className="Btn-Ap">
-                            <Button value={"Retour au menu principal"} index={1} hidden={false} onClick={this.onReturn } />
+                            <Button className={"Btn-Property"} value={"Retour au menu principal"} index={0} onClick={this.onReturn } />
                         </div>
                     </div>
                     <Footer />

@@ -15,7 +15,7 @@ Gestion du corps de la page
  */
 .Body {
   display: flex;
-  align-content: space-between;
+  align-content: center;
   align-items: center;
   flex-direction: column;
   outline: 0.1em solid #000000;

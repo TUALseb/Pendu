@@ -9,6 +9,9 @@ import React, { Component } from 'react'
 
 //Importation des fichier js que nous aurons besoin
 import Button from './Button.js'
+import BackToMainPage from './BackToMainPage.js'
+import PlayerInfo from './PlayerInfo.js'
+import KeyBoard from './KeyBoard.js'
 import App from './App.js'
 import Header from './Header.js'
 import Footer from './Footer.js'
@@ -63,7 +66,7 @@ import Player from "./Player";
 
 // Tableau des lettres à afficher
 const LETTERS = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',' ']
-const EXTEND_LETTERS = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','à','â','ç','é','è','ï','î','ù','û',' ','\'']
+//const EXTEND_LETTERS = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','à','â','ç','é','è','ï','î','ù','û',' ','\'']
 // Tableau des images du pendu
 const TAB_IMAGES_PENDU =[
     img_none, img_socle, img_socle_pied, img_poteau, img_traverse, img_ajout_corde, img_ajout_tete,
@@ -75,7 +78,7 @@ const TAB_SMILEYS_ERREURS = [smiley_surpris, smiley_etonne, smiley_etonne2, smil
 const TAB_SMILEY_BONNE_REPONSE = [smiley_moyen, smiley_content, smiley_content2, smiley_happy1, smiley_happy2,
     smiley_happy3, smiley_heureux, smiley_joyeux, smiley_vert]
 // Pour stocker les lattres qui ont été déjà choisis
-const usedLetters = new Set()
+//let usedLetters = new Set()
 const VISUAL_PAUSE_MSECS = 250
 
 /**
@@ -107,6 +110,7 @@ class Game extends Component {
         playerTwo: {},
     }
 
+    usedLetters = new Set()
 
     /**
      * Constructeur
@@ -117,7 +121,7 @@ class Game extends Component {
     constructor(props) {
         console.log ("Game::constructor()")
         super(props)
-        usedLetters.clear()
+        this.usedLetters.clear()
         //console.log ("Game::constructor()::props : " +JSON.stringify(props))
         this.state = {
             // On va créer le tableau avec les lettres de l'alaphabet et de certains caractères (espace, giuillemets, caractères avec accents)
@@ -125,7 +129,7 @@ class Game extends Component {
             statue: props.statue,
             nbPlayer: props.nbPlayer,
             //En fonction de la taille du mot (s'il est < à la valeur par défaut, soit 12) on initialise le nombre total d'essai
-            nbTotalTry: (props.wordToFind.length<props.nbTotalTry)? props.nbTotalTry:(props.wordToFind.length*2),
+            nbTotalTry: props.nbTotalTry,//(props.wordToFind.length<props.nbTotalTry)? props.nbTotalTry:(props.wordToFind.length*2),
             nbTry: props.nbTry,
             nbPartiesToPlay: props.nbPartiesToPlay,
             partyInPlay: props.partyInPlay,
@@ -137,7 +141,7 @@ class Game extends Component {
             wordToFind: props.wordToFind,
             smiley: TAB_SMILEY_BONNE_REPONSE[0],
             // On cache le mot à trouver
-            motCache: this.computeDisplay(props.wordToFind, usedLetters),
+            motCache: this.computeDisplay(props.wordToFind, this.usedLetters),
             error : 0,
             letterFind : 0,
             startNewParty: props.startNewParty,
@@ -169,9 +173,15 @@ class Game extends Component {
      Appelé avant que le composant ne quitte complètement le DOM
      */
     componentWillUnmount() {
+        console.log ("Game::componentWillUnmount()")
         // Nécessaire pour gérer les évènements liés au clavier
         // Nous déttachons manuellement cet évènement
         document.removeEventListener("keypress", this.onKeyPress)
+    }
+
+
+    componentDidCatch(error, info) {
+        alert(error + " " + info)
     }
 
 
@@ -197,7 +207,7 @@ class Game extends Component {
      */
     onReturn(index)  {
         //console.log ("Game::onReturn()")
-        usedLetters.clear()
+        //usedLetters.clear()
         this.setState({statue: 'BEGIN'})
     }
 
@@ -207,6 +217,7 @@ class Game extends Component {
      * @returns {String}
      */
     handleLetterClick(index) {
+        //console.log("Game::handleLetterClick : "  + index)
         const letter = LETTERS[index]
         this.updateValues(letter)
     }
@@ -216,23 +227,22 @@ class Game extends Component {
      * @param event
      */
     onKeyPress(event) {
-        //console.log("Lettre tapé : "  + JSON.stringify(event))
-        console.log("usedLetter : "  + JSON.stringify(usedLetters).toString())
+        //console.log("Game::onKeyPress : "  + JSON.stringify(event.key) + " usedLetter : "  + JSON.stringify(this.usedLetters).toString())
         // On vérifie que la lettre est déjà utilisé
-        // On interdit toutes les autrtes lettres à part celle de l'alphabet 'a' à 'z'
-        const regExp = new RegExp(/[^a-z]/,'g')//('\(|\)|\\d|\\S','g')
-        if( usedLetters.has(event.key)) {
-            alert("lettre déjà utilisé")
-        }
-        else if (regExp.test(event.key)) {
+        // On interdit toutes les autres lettres à part celle de l'alphabet 'a' à 'z' et espace
+        const regExp = new RegExp(/[^a-z\s]/,'uig')//('\(|\)|\\d|\\S','g')
+        if (regExp.test(event.key)) {
             alert("lettre ou caractère interdit")
         }
         else {
-            //console.log ("regExp : " + regExp + " =>" )
-            this.updateValues(event.key)
+            if( this.usedLetters.has(event.key)) {
+                alert("lettre déjà utilisé")
+            }
+            else {
+                //console.log ("regExp : " + regExp + " =>" )
+                this.updateValues(event.key.toLowerCase())
+            }
         }
-
-
     }
 
     /**
@@ -240,6 +250,7 @@ class Game extends Component {
      * @param letter
      */
     updateValues(letter) {
+        //console.log ("Game::updateValues()" )
         // On récupère les valeurs qui ne bougeront pas dans des constantes (const)
         const nbTotalTry = this.state.nbTotalTry
         const wordToFind = this.state.wordToFind
@@ -256,8 +267,8 @@ class Game extends Component {
         let startNewParty = this.state.startNewParty
         let result = this.state.result
 
-        console.log ("nbTry : " + nbTry)
-        usedLetters.add(letter)
+        //console.log ("nbTry : " + nbTry)
+        this.usedLetters.add(letter)
         /*
         Le nombre d'essai n'est pas atteint, on continue
          */
@@ -270,17 +281,13 @@ class Game extends Component {
                 image = <img src={TAB_IMAGES_PENDU[error]} alt={TAB_IMAGES_PENDU[error]}  />
                 smiley = TAB_SMILEYS_ERREURS[error]//smiley_surpris
                 startNewParty = false
-                if (error === TAB_IMAGES_PENDU.length - 1) {
-                    // La partie est perdu
-                    startNewParty = true
-                    smiley = TAB_SMILEYS_ERREURS[TAB_SMILEYS_ERREURS.length-1]//smiley_triste
-                }
+
             }
             else {
                 // On est dans le cas où la lettre a été trouvé
                 //console.log("lettre trouvé : " + letter)
                 // On récupère le résultat une fois que nous avons cherché à remplacer les lettre sur le mot (ou la phrase à trouver par des "_"
-                motCache = this.computeDisplay(wordToFind, usedLetters)
+                motCache = this.computeDisplay(wordToFind, this.usedLetters)
                 score += 1
                 letterFind += 1
                 smiley = (score<TAB_SMILEY_BONNE_REPONSE.length)?TAB_SMILEY_BONNE_REPONSE[score]:TAB_SMILEY_BONNE_REPONSE[TAB_SMILEY_BONNE_REPONSE.length-1]
@@ -305,7 +312,7 @@ class Game extends Component {
             nbTry++
         }
         else {
-            error = TAB_IMAGES_PENDU.length
+            error = TAB_IMAGES_PENDU.length-1
             // Pour afficher l'image en cours du pendu
             image = <img src={TAB_IMAGES_PENDU[error]} alt={TAB_IMAGES_PENDU[error]} width="220" height="330" /> //
             startNewParty = true
@@ -329,6 +336,7 @@ class Game extends Component {
                 startNewParty : startNewParty,
                 result: result,
             }), VISUAL_PAUSE_MSECS
+
         )
         //console.log ("state : " + JSON.stringify(this.state))
     }
@@ -343,7 +351,7 @@ class Game extends Component {
         //console.log ("Game::onNext():this.state" + JSON.stringify(this.state))
         //let partyInInPlay = this.state.partyInPlay + 1
         //const motCache = ""
-        usedLetters.clear()
+        this.usedLetters.clear()
 
         const partyInPlay = this.state.partyInPlay
         const tableWordsToFind = this.state.tableWordsToFind
@@ -367,7 +375,7 @@ class Game extends Component {
      * @returns {string | void | *}
      */
     computeDisplay(phrase, usedLetters) {
-        //console.log("usedLetters : " + JSON.stringify(usedLetters))
+        //console.log("Game::computeDisplay : " + JSON.stringify(usedLetters))
         console.log ("Phrase ou mot à trouver : " + phrase)
         //  |(\W)/g
         let regExp = /(\w)|(\s)/g
@@ -437,8 +445,64 @@ class Game extends Component {
                 />
             )
         }
+        /**
+         * Affichage lorsque le nombre d'essaie est atteint ou le mot trouvé
+         * On affiche pas le clavier virtuel et ne prennons pas en compte l'appuie sur une touche du clavier
+         * playerName : Nom du joueur
+         * nbPartiesToPlay : Nombre de parties à joueur
+         * partyInPlay partie(s) jouée(s)
+         * score : score actuelle
+         * nbTotalTry : Nombre total d'essais
+         * nbTry : Nombre d'essais déjà effectué ou en cours (démarrant à 0)
+         * image : image à afficher ou l'animation. son afficha ge est créée dans le méthode updateValues
+         * Le bouton "Nouvelle partie est affiché
+         * Un smiley s'affiche en fonction du résultat
+         * Un message s'affiche à la fin
+         */
+        else if (startNewParty === true || nbTry===nbTotalTry) {   //nbTry===nbTotalTry
+            return (
+                <div className="App" >
+                    <Header />
+                    <div className="Body" >
+                        <PlayerInfo
+                            playerName={playerName}
+                            partyInPlay={partyInPlay}
+                            nbPartiesToPlay={nbPartiesToPlay}
+                            nbTry={nbTry}
+                            nbTotalTry={nbTotalTry}
+                            score={score}
+                        />
+                        <div className="Center">
+                            <div className="Play-zone">
+                                <div className="Play-party">
+                                    <span>Mot à trouver : </span>
+                                    <div className="Word-To-Find" >
+                                        <span>{motCache}</span>
+                                    </div>
+                                    <div className="Img-To-Show">
+                                        {image}
+                                    </div>
+                                </div>
+                                <div className="Right">
+                                    <div className="Smiley">
+                                        <img src={smiley} alt={smiley} width="auto" height="auto"/>
+                                    </div>
+                                    <div className="Message-To-Show" hidden={!startNewParty}>
+                                        {result}
+                                    </div>
+                                    <div className="Button" >
+                                        <Button value={"Partie suivante"} index={0} hidden={!startNewParty} onClick={this.onNext }/>
+                                    </div>
+                                </div>
+                            </div>
+                            <BackToMainPage onClick = {this.onReturn}/>
+                        </div>
 
-
+                    </div>
+                    <Footer />
+                </div>
+            )
+        }
         /**
          * Affichage de la partie en cours avec les diverses informations
          * playerName : Nom du joueur
@@ -449,71 +513,44 @@ class Game extends Component {
          * nbTry : Nombre d'essais déjà effectué ou en cours (démarrant à 0)
          * image : image à afficher ou l'animation. son afficha ge est créée dans le méthode updateValues
          * Les lettres qui ont déjà été cliquées sont cachés
-         * Le bouton "Nouvelle partie est caché ou affiché en fonction du résultat de la partie
          * Un smiley s'affiche en fonction du résultat
-         * Un message s'affiche à la fin
          */
         else {
             return (
                 <div className="App" >
                     <Header />
-                    <div className="Body-game" >
-                        <div className="Top">
-                            <div className="ScoreCounter">
-                                <div className="Player">
-                                    <span>Joueur : </span>{playerName}
+                    <div className="Body" >
+                        <PlayerInfo
+                            playerName={playerName}
+                            partyInPlay={partyInPlay}
+                            nbPartiesToPlay={nbPartiesToPlay}
+                            nbTry={nbTry}
+                            nbTotalTry={nbTotalTry}
+                            score={score}
+                        />
+                        <div className="Center">
+                            <KeyBoard
+                                letters={letters}
+                                usedLetters={this.usedLetters}
+                                onClick={(index)=>this.handleLetterClick(index)}
+                            />
+                            <div className="Play-zone">
+                                <div className="Play-party">
+                                    <span>Mot à trouver : </span>
+                                    <div className="Word-To-Find" onChange={this.onKeyPress}>
+                                        <span>{motCache}</span>
+                                    </div>
+                                    <div className="Img-To-Show">
+                                        {image}
+                                    </div>
                                 </div>
-                                <div className="Parties">
-                                    <span>partie </span>{partyInPlay}/{nbPartiesToPlay}
-                                </div>
-                                <div className="Counter">
-                                    <span>Nombre d'essai : </span>{nbTry}/{nbTotalTry}
-                                </div>
-                                <div className="Score">
-                                    <span>Score : </span>{score}
-                                </div>
-
-                            </div>
-                        </div>
-                        <div className="Play-zone">
-                            <div className="Left" hidden={!startNewParty}>
-                                <div className="Keyboard" >
-                                    { letters.map((letter, index) => (
-                                        <Button
-                                            value={letter}
-                                            index={index}
-                                            key={index}
-                                            hidden={usedLetters.has(letter)? true:false}
-                                            onClick={(index)=>this.handleLetterClick(index)}
-                                        />
-                                    ))}
-                                </div>
-                            </div>
-                            <div className="Play-party">
-                                <span>Mot à trouver : </span>
-                                <div className="Word-To-Find" onChange={this.onKeyPress}>
-                                    <span>{motCache}</span>
-                                </div>
-                                <div className="Img-To-Show">
-                                    {image}
+                                <div className="Right">
+                                    <div className="Smiley">
+                                        <img src={smiley} alt={smiley} width="auto" height="auto"/>
+                                    </div>
                                 </div>
                             </div>
-                            <div className="Right">
-                                <div className="Smiley">
-                                    <img src={smiley} alt={smiley} width="auto" height="auto"/>
-                                </div>
-                                <div className="Message-To-Show" hidden={!startNewParty}>
-                                    {result}
-                                </div>
-                                <div className="Button" >
-                                    <Button value={"Partie suivante"} index={0} hidden={!startNewParty} onClick={this.onNext }/>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="Bottom">
-                            <div className="Button">
-                                <Button value={"Retour"} index={0} hidden={false} onClick={this.onReturn }/>
-                            </div>
+                            <BackToMainPage onClick = {this.onReturn}/>
                         </div>
                     </div>
                     <Footer />

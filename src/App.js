@@ -13,20 +13,18 @@ import Button from './Button.js'
 import Player from './Player.js'
 import Configurer from './Configurer.js'
 
-
-
 // Importation du fichier de style
 import './App.css'
 
 
 // Déclaration des valeurs par défault
 const DEFAULT_STATUE = 'BEGIN'
-const DEFAULT_NB_TRY = 0
+const DEFAULT_NB_TRY = 1
 const DEFAULT_NB_TOTAL_TRY = 12
 const DEFAULT_NB_PARTY = 3
 const DEFAULT_PLAYER_ONE_NAME = "Player One"
 const DEFAULT_PLAYER_TWO_NAME = "Player Two"
-const DEFAULT_NB_PLAYER = 0
+const DEFAULT_NB_PLAYER = 1
 const DEFAULT_PLAYER_ONE = {
     playerName : "",
     partyInPlay: 1,
@@ -44,10 +42,10 @@ const DEFAULT_PLAYER_TWO = {playerName : "",
 class App extends Component {
     state = {
         statue: 'MAIN_PAGE',
-        nbPlayer: 0,
-        nbPartiesToPlay: 0,
-        nbTry: 1,
-        nbTotalTry: 0,
+        nbPlayer: DEFAULT_NB_PLAYER,
+        nbPartiesToPlay: DEFAULT_NB_PARTY,
+        nbTry: DEFAULT_NB_TRY,
+        nbTotalTry: DEFAULT_NB_TOTAL_TRY,
         playerOne : {
             playerName : "Player One",
             partyInPlay: 1,
@@ -58,7 +56,6 @@ class App extends Component {
             playerName : "Player Two",
             partyInPlay: 1,
             score: 0,
-            TableWordsToFind : [],
         },
     }
 
@@ -103,7 +100,7 @@ class App extends Component {
      Appelé après que le composant a été retranscrit pour la première fois dans le DOM réel
      */
     componentDidMount() {
-        //console.log ("App::componentDidMount()")
+        console.log ("App::componentDidMount()")
         //console.log ("App::State: " + JSON.stringify(this.state))
     }
 
@@ -112,7 +109,8 @@ class App extends Component {
      Appelé avant que le composant ne quitte complètement le DOM
      */
     componentWillUnmount() {
-
+        console.log ("App::componentWillUnmount()")
+        document.removeEventListener("keypress", this.onKeyPress)
     }
 
 
@@ -199,6 +197,7 @@ class App extends Component {
                     playerOne = {playerOne}
                     playerTwo = {playerTwo}
                     startNexParty = {false}
+                    player = {1}
                 />
             )
         }

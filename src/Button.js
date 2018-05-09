@@ -14,7 +14,6 @@ import './Button.css'
  */
 
 const Button = ({value, index, hidden, onClick }) => (
-
     <div className="Btn-Property" hidden={hidden} onClick={() => onClick(index)}>
         <span>
             {value}

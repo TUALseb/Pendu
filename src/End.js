@@ -72,7 +72,7 @@ class End extends Component {
      Appelé après que le composant a été retranscrit pour la première fois dans le DOM réel
      */
     componentDidMount() {
-        //console.log ("App::componentDidMount()")
+        //console.log ("End::componentDidMount()")
         //console.log ("App::State: " + JSON.stringify(this.state))
     }
 
@@ -81,7 +81,8 @@ class End extends Component {
      Appelé avant que le composant ne quitte complètement le DOM
      */
     componentWillUnmount() {
-
+        console.log ("End::componentDidMount()")
+        document.removeEventListener("keypress", this.onKeyPress)
     }
 
     /**
@@ -133,7 +134,6 @@ class End extends Component {
         else {
             const playerOne = this.state.playerOne
             const playerTwo =this.state.playerTwo
-
             return (
                 <div className="App">
                     <Header />

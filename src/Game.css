@@ -9,7 +9,8 @@ gère l'affichage de la page centrale
  */
 .Body-game {
     display: flex;
-    align-content: space-between;
+    flex-wrap: wrap;
+    align-content: center;
     align-items: center;
     flex-direction: column;
     outline: 0.1em solid #8e8e8e;
@@ -17,16 +18,8 @@ gère l'affichage de la page centrale
     margin: 0.2em;
     padding: 0.2em;
 }
-/*
-Pour le partie où sera affiché les informations relatives au joueur
- */
-.Top {
-    display: flex;
-    flex-wrap: wrap;
-    margin: 0.2em;
-    padding: 0.2em;
 
-}
+
 /*
 gère la zone où sera affiché le clavier, le mot à tropuver, les images du pendu, les smileys et le bouton pour relancer une partie
  */
@@ -34,6 +27,7 @@ gère la zone où sera affiché le clavier, le mot à tropuver, les images du pe
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
+    align-content: center;
     outline: 0.1em solid #8e8e8e;
     margin: 0.2em;
     padding: 0.2em;
@@ -42,10 +36,11 @@ gère la zone où sera affiché le clavier, le mot à tropuver, les images du pe
 /*
 partie gauche de l'écran (où sera le clavier)
  */
-.Left {
+.Keyboard {
     display: flex;
+    flex: content;
     flex-wrap: wrap;
-    width: 30%;
+    flex-direction: column;
     margin: 0.2em;
     padding: 0.2em;
 }
@@ -53,9 +48,13 @@ partie gauche de l'écran (où sera le clavier)
 /*
 Gestion du clavier affiché
  */
-.Keyboard {
+.Letters {
     display: flex;
+    flex: 1 1 calc(100% / 6 - 0.4em);
     flex-wrap: wrap;
+    align-content: center;
+    align-items: center;
+    flex-direction: row;
     outline: 0.1em solid #8e8e8e;
     background: rgba(142, 142, 142, 0.36);
     text-align: center;
@@ -63,11 +62,21 @@ Gestion du clavier affiché
     padding: 0.2em;
 }
 
+.Center {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+}
+
 /*
 partie centrale de la zone de jeu
  */
 .Play-party {
     background: rgba(255, 255, 255, 0);
+    align-content: center;
+    align-items: center;
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
@@ -80,6 +89,8 @@ gère comment sera affiché la zone du mot à trouver
  */
 .Word-To-Find {
     outline: 0.1em solid #8e8e8e;
+    align-content: center;
+    align-items: center;
     text-align: left;
     font-size: 1.2em;
     font-family: Helvetica, SansSerif, Verdana;
@@ -107,7 +118,6 @@ Pour la partie située à droite
 .Right {
     outline: 0.1em solid #8e8e8e;
     align-content: center;
-    align-items: center;
     margin: 0.2em;
     padding: 0.2em;
     flex-direction: column;
@@ -143,67 +153,10 @@ Gestion des touches
 }
 
 
-/*
-
- */
-.ScoreCounter {
-    display: flex;
-    justify-content: space-between;
-    width: 60%;
-    height: 10%;
-    outline: 0.1em solid #8e8e8e;
-    background: rgba(105, 157, 250, 0.36);
-    text-align: left;
-    margin: 0.2em;
-    padding: 0.2em;
-}
-
-/*
-
- */
-.Player {
-    outline: 0.1em solid silver;
-    background: rgba(105, 157, 250, 0.04);
-    flex-wrap: wrap;
-    margin: 0.2em;
-    padding: 0.2em;
-}
-
-.Parties {
-    outline: 0.1em solid silver;
-    background: rgba(105, 157, 250, 0.04);
-    flex-wrap: wrap;
-    margin: 0.2em;
-    padding: 0.2em;
-}
-
-/*
-Gestion de l'affichage score
- */
-.Score {
-    outline: 0.1em solid silver;
-    background: rgba(105, 157, 250, 0.04);
-    flex-wrap: wrap;
-    margin: 0.2em;
-    padding: 0.2em;
-
-}
-
-/*
-Gestion de l'affichage Nombre d'essai
- */
-.Counter {
-    outline: 0.1em solid silver;
-    background: rgba(105, 156, 249, 0.04);
-    flex-wrap: wrap;
-    margin: 0.2em;
-    padding: 0.2em;
-}
-
 .Message-To-Show {
     align-content: center;
     align-items: center;
-    outline: 0.1em solid #c02225;
+    outline: 0.3em solid #c02225;
     flex-wrap: wrap;
     margin: 0.2em;
     padding: 0.2em;
@@ -211,7 +164,7 @@ Gestion de l'affichage Nombre d'essai
 
 .Message {
     text-align: center;
-    font-size: 0.8em;
+    font-size: 1em;
     font-family: Verdana SansSerif Helvetica;
     text-decoration-color: #c02225;
     margin: 0.2em;
@@ -220,7 +173,7 @@ Gestion de l'affichage Nombre d'essai
 
 .H4 {
     text-align: center;
-    font-size: 1em;
+    font-size: 1.5em;
     font-family: Verdana SansSerif Helvetica;
     text-decoration-color: #c02225;
     margin: 0.2em;

@@ -3,11 +3,26 @@
  * date de création :  $today.day-$today.month-2018.
  * date de modification : $today.day-$today.month-2018.
  */
+
+/*
+Pour le partie où sera affiché les informations relatives au joueur
+ */
+.Top {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-content: center;
+    margin: 0.2em;
+    padding: 0.2em;
+
+}
+
+
+/*
+
+ */
 .ScoreCounter {
     display: flex;
-    justify-content: space-between;
-    width: 60%;
-    height: 10%;
     outline: 0.1em solid #8e8e8e;
     background: rgba(105, 157, 250, 0.36);
     text-align: left;
@@ -15,9 +30,11 @@
     padding: 0.2em;
 }
 
-
+/*
+Gestion de l'affichage du nom du joueur
+ */
 .Player {
-    width: 30%;
+    display: flex;
     outline: 0.1em solid silver;
     background: rgba(105, 157, 250, 0.04);
     flex-wrap: wrap;
@@ -25,8 +42,11 @@
     padding: 0.2em;
 }
 
+/*
+Gestion de l'affichage de la partie en cour
+ */
 .Parties {
-    width: 30%;
+    display: flex;
     outline: 0.1em solid silver;
     background: rgba(105, 157, 250, 0.04);
     flex-wrap: wrap;
@@ -38,7 +58,7 @@
 Gestion de l'affichage score
  */
 .Score {
-    width: 30%;
+    display: flex;
     outline: 0.1em solid silver;
     background: rgba(105, 157, 250, 0.04);
     flex-wrap: wrap;
@@ -51,7 +71,6 @@ Gestion de l'affichage score
 Gestion de l'affichage Nombre d'essai
  */
 .Counter {
-    width: 30%;
     outline: 0.1em solid silver;
     background: rgba(105, 156, 249, 0.04);
     flex-wrap: wrap;

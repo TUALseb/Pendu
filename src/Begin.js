@@ -5,32 +5,36 @@
  */
 
 
-import React from 'react'
-//import PropTypes from 'prop-types'
+import React from 'react';
+import PropTypes from 'prop-types'
 
 
-import Button from './Button.js'
+import Button from './Button.js';
+import BackToMainPage from './BackToMainPage.js'
 
-import './Begin.css'
+import './Begin.css';
 
 
-const Begin = ({text, index, onClick}) => {
-    <div className="Body-Selection">
+const Begin = ({onClick}) => (
+    <div className="Body">
         <h2> Vous avez deux choix : </h2>
         <div className="Selection">
             <div className="Choice">
                 <h3> Les mots (ou phrase) à trouver sont pris au hasard</h3>
-                <Button value={"Sélectionner"} index={1} hidden={false} onClick={() => onClick(index) } />
+                <Button value={"Sélectionner"} index={1} hidden={false} onClick={() => onClick(1) } />
             </div>
             <div className="Choice">
                 <h3> Vous décidez et entrez les mot (ou phrase) à trouver</h3>
-                <Button value={"Sélectionner"} index={2} hidden={false} onClick={() => onClick(index) } />
+                <Button value={"Sélectionner"} index={2} hidden={false} onClick={() => onClick(2)  } />
             </div>
         </div>
-        <div className="Btn-Ap">
-            <Button value={"Retour au menu principal"} index={0} hidden={false} onClick={() => onClick(index) } />
-        </div>
+        <BackToMainPage onClick = {() => onClick(0)}/>
     </div>
+)
+
+Begin.propTypes = {
+    onClick: PropTypes.func.isRequired,
 }
 
-export default Begin
+
+export default Begin;

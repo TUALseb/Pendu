@@ -39,7 +39,7 @@ class Configurer extends Component{
      */
     constructor(props) {
         super(props)
-        console.log (props)
+        //console.log (props)
 
         this.state = ({
             nbTotalTry: props.nbTotalTry,
@@ -60,7 +60,7 @@ class Configurer extends Component{
         this.onChangePlayerTwoName = this.onChangePlayerTwoName.bind(this)
         this.onValidate = this.onValidate.bind(this)
         this.onCancel = this.onCancel.bind(this)
-        console.log(JSON.stringify(this.state))
+        //console.log(JSON.stringify(this.state))
     }
 
     /**
@@ -93,7 +93,8 @@ class Configurer extends Component{
      * @param value
      */
     onChangeNbPartiesToPlay(value) {
-        this.setState({ nbPartiesToPlay : value.target.value })
+        let val = this.testValue(value.target.value)
+        this.setState({ nbPartiesToPlay : (val!== -1)? val:"" })
     }
 
     /**
@@ -101,7 +102,8 @@ class Configurer extends Component{
      * @param value
      */
     onChangePlayerOneName(value) {
-        this.setState({ playerOneName : value.target.value })
+        let val = this.testName(value.target.value)
+        this.setState({ playerOneName : (val!== -1)? val:"" })
     }
 
     /**
@@ -109,9 +111,41 @@ class Configurer extends Component{
      * @param value
      */
     onChangePlayerTwoName(value) {
-        this.setState({ playerTwoName : value.target.value })
+        let val = this.testName(value.target.value)
+        this.setState({ playerTwoName : (val!== -1)? val:"" })
     }
 
+    /**
+     * Méthode qui permet de tester les caractères tappés et interdit ceux qui ne sont pas des chiffres
+     * @param val
+     * @returns {*}
+     */
+    testValue(val) {
+        const regExp = new RegExp(/\D/,'g')
+        if (regExp.test(val)) {
+            alert("lettre ou caractère interdit")
+            return -1
+        }
+        else {
+            return val
+        }
+    }
+
+    /**
+     * Méthode qui permet de tester les caractères tappés et interdit ceux qui ne sont pas alphanumériques (le tirets bas, haut et espace sont autorisés)
+     * @param val
+     * @returns {*}
+     */
+    testName(val) {
+        const regExp = new RegExp(/\w\s]/,'g')
+        if (regExp.test(val)) {
+            alert("lettre ou caractère interdit")
+            return -1
+        }
+        else {
+            return val
+        }
+    }
 
     /**
      * Méthode appelé lorsque l'on clic sur le bouton valider
@@ -153,7 +187,7 @@ class Configurer extends Component{
      * @returns {*}
      */
     render() {
-        const nbTotalTry = this.state.nbTotalTry
+        //const nbTotalTry = this.state.nbTotalTry
         const nbPartiesToPlay = this.state.nbPartiesToPlay
         const playerOneName = this.state.playerOneName
         const playerTwoName = this.state.playerTwoName
@@ -165,7 +199,6 @@ class Configurer extends Component{
         if (validateCancel === true) {
             return  (
                 <App
-                    nbTotalTry = {nbTotalTry}
                     nbPartiesToPlay = {nbPartiesToPlay}
                     playerOne = {playerOneName}
                     playerTwo = {playerTwoName}
@@ -182,13 +215,8 @@ class Configurer extends Component{
                     <div className="Configue">
                         <div>
                             <div className="Data">
-                                <span className="Text"> Nombre d'essais : </span>
-                                <input type="text" value={nbTotalTry} onChange={this.onChangeNbTry} />
-                                <br/>
-                            </div>
-                            <div className="Data">
                                 <span className="Text"> Nombre de parties : </span>
-                                <input type="text" value={nbPartiesToPlay} onChange={this.onChangeNbPartiesToPlay} />
+                                <input className="Values" type="text" value={nbPartiesToPlay} onChange={this.onChangeNbPartiesToPlay} />
                                 <br/>
                             </div>
                             <div className="Data">
@@ -198,7 +226,7 @@ class Configurer extends Component{
                             </div>
                             <div className="Data">
                                 <span className="Text"> Nom du second joueur : </span>
-                                <input type="text" value={playerTwoName} onChange={this.onChangePlayerTwoName} />
+                                <input className="Values" type="text" value={playerTwoName} onChange={this.onChangePlayerTwoName} />
                                 <br/>
                             </div>
 

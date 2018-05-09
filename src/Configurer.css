@@ -27,7 +27,7 @@ Gestion de l'affichage d'un jeu Texte/Valeur
     align-content: space-between;
     flex-direction: column;
     align-items: center;
-    margin: 0.5em;
+    margin: 0.2em;
     padding: 0.5em;
 }
 
@@ -47,7 +47,7 @@ Gestion de l'affichage des informations dans les input
     align-content: space-between;
     flex-direction: row;
     align-items: center;
-    margin: 0.5em;
+    margin: 0.2em;
     padding: 0.5em;
 }
 

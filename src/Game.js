@@ -125,8 +125,8 @@ class Game extends Component {
         console.log ("Game::constructor()")
         super(props)
         this.usedLetters.clear()
-        console.log ("Game::constructor() => props : " +JSON.stringify(props))
-        console.log ("Game::constructor() => this.state : " +JSON.stringify(this.state))
+        //console.log ("Game::constructor() => props : " +JSON.stringify(props))
+        //console.log ("Game::constructor() => this.state : " +JSON.stringify(this.state))
         this.state = {
             // On va créer le tableau avec les lettres de l'alaphabet et de certains caractères (espace, giuillemets, caractères avec accents)
             letters: this.generateTable(),
@@ -178,7 +178,7 @@ class Game extends Component {
      */
     componentDidMount() {
         console.log ("Game::componentDidMount()")
-        console.log ("Game::componentDidMount() => State:statue : " + this.state.statue)
+        //console.log ("Game::componentDidMount() => State:statue : " + this.state.statue)
         // Nécessaire pour gérer les évènements liés au clavier
         // Nous libérons manuellement cet évènement
         document.addEventListener("keypress", this.onKeyPress)
@@ -211,18 +211,17 @@ class Game extends Component {
         //const playerTwo = nextState.playerTwo
         return true
     }
-*/
 
     componentDidUpdate(prevProps, prevState) {
         console.log ("Game::componentDidUpdate() : prevProps => " + prevProps.statue + " ; prevState.statue => " + prevState.statue )
-        console.log (this.state)
+        //console.log (this.state)
     }
-
+*/
 
     /**
      * Méthode permettant de générer un tableau qui va afficher toutes les lettres de l'halphabet,
      * ainsi que de l'espace et de l'apostrophe
-     * @returns {Array}
+     * @returns {Array} le tableau de lettres utilisables ainsi quie l'espace
      */
     generateTable() {
         const result = []
@@ -251,15 +250,29 @@ class Game extends Component {
         )
     }
 
+    /**
+     * Méthode qui permet de gérer l'affichage des smileys
+     * @param score
+     * @param error
+     * @param trueLetter
+     * @returns {*}
+     */
     drawSmiley(score, error, trueLetter = true) {
         //console.log ("Game::drawSmiley => error : " + error + " , => score :" + score + " , => trueLetter : "+ trueLetter)
         let smiley = TAB_SMILEY_BONNE_REPONSE[0]
         if (trueLetter === true) {
-            console.log ("Game::drawSmiley => TAB_SMILEY_BONNE_REPONSE : ")
-            smiley = (score<TAB_SMILEY_BONNE_REPONSE.length)?TAB_SMILEY_BONNE_REPONSE[score-error]:TAB_SMILEY_BONNE_REPONSE[(TAB_SMILEY_BONNE_REPONSE.length-1)-error]
+            if (error <= score) {
+                //console.log ("Game::drawSmiley => TAB_SMILEY_BONNE_REPONSE : ")
+                smiley = (score<TAB_SMILEY_BONNE_REPONSE.length)?TAB_SMILEY_BONNE_REPONSE[score-error]:TAB_SMILEY_BONNE_REPONSE[(TAB_SMILEY_BONNE_REPONSE.length-1)-error]
+            }
+            else {
+                //console.log ("Game::drawSmiley => TAB_SMILEYS_ERREURS : ")
+                smiley =  TAB_SMILEYS_ERREURS[error-score]
+            }
+
         }
         else {
-            console.log ("Game::drawSmiley => TAB_SMILEYS_ERREURS : ")
+            //console.log ("Game::drawSmiley => TAB_SMILEYS_ERREURS : ")
             smiley =  TAB_SMILEYS_ERREURS[error]
         }
 
@@ -268,8 +281,16 @@ class Game extends Component {
         return smileyToShow
     }
 
+    /**
+     * Méthode qui permet de gérer l'affichage du pendu
+     * @param error
+     * @param nbTry
+     * @param nbTotalTry
+     * @param gagne
+     * @returns {*|string}
+     */
     drawPendu(error, nbTry, nbTotalTry, gagne=false) {
-        console.log ("Game::drawPendu => error : " + error  + " , => nbTry :" + nbTry)
+        //console.log ("Game::drawPendu => error : " + error  + " , => nbTry :" + nbTry)
         let imageToShow = ""//<img src={TAB_IMAGES_PENDU[0]} alt={TAB_IMAGES_PENDU[0]}/>
         if (gagne && error===0) {
             imageToShow = <div className="animation-gagne" />
@@ -284,12 +305,16 @@ class Game extends Component {
         else {
             imageToShow = <img src={TAB_IMAGES_PENDU[0]} alt={TAB_IMAGES_PENDU[0]}/>
         }
-
-        console.log("Game::drawPendu => imageToShow : " + JSON.stringify(imageToShow))
-
+        //console.log("Game::drawPendu => imageToShow : " + JSON.stringify(imageToShow))
         return imageToShow
     }
 
+    /**
+     *  Méthode qui permet de gérer l'affichage du message que nous souhaitons
+     * @param gagne boolean : booléen
+     * @param wordToFind string : chaîne de caractère contenant le mot à trouver
+     * @returns {*|string}
+     */
     showResult(gagne, wordToFind) {
         let result = ""
         if (gagne===true) {
@@ -331,10 +356,10 @@ class Game extends Component {
          */
         nbTry++
         if (nbTry < nbTotalTry) {
-            console.log("Game::UpDateValues => nbtry : " + nbTry + " / " + nbTotalTry)
+            //console.log("Game::UpDateValues => nbtry : " + nbTry + " / " + nbTotalTry)
             if (wordToFind.search(letter) === -1) {
                 // On est dans le cas où la lettre n'a pas été trouvé
-                console.log("lettre non trouvé : " + letter)
+                //console.log("lettre non trouvé : " + letter)
                 error += 1
                 // Pour afficher l'image en cours du pendu
                 image = this.drawPendu(error, nbTry, nbTotalTry)//<img src={TAB_IMAGES_PENDU[error]} alt={TAB_IMAGES_PENDU[error]}  />
@@ -344,7 +369,7 @@ class Game extends Component {
             }
             else {
                 // On est dans le cas où la lettre a été trouvé
-                console.log("lettre trouvé : " + letter)
+                //console.log("lettre trouvé : " + letter)
                 // On récupère le résultat une fois que nous avons cherché à remplacer les lettre sur le mot (ou la phrase à trouver par des "_"
                 motCache = this.computeDisplay(wordToFind, this.usedLetters)
                 score += 1
@@ -354,7 +379,7 @@ class Game extends Component {
 
                 if (motCache === wordToFind) {
                     // On va afficher le smiley en fonction du nombre de tentatives
-                    console.log("Game::UpDateValues => nbtry : " + nbTry + " / " + nbTotalTry + " Mot trouvé")
+                    //console.log("Game::UpDateValues => nbtry : " + nbTry + " / " + nbTotalTry + " Mot trouvé")
                     startNewParty = true
                     if (error === 0) {
                         // Pour afficher l'animation quand la partie est gagné sans erreur
@@ -372,7 +397,7 @@ class Game extends Component {
 
         }
         else {
-            console.log("Game::UpDateValues => nbtry : " + nbTry + " / " + nbTotalTry + " Mot non trouvé")
+            //console.log("Game::UpDateValues => nbtry : " + nbTry + " / " + nbTotalTry + " Mot non trouvé")
             error = TAB_IMAGES_PENDU.length-1
             // Pour afficher l'image en cours du pendu
             image = this.drawPendu(error, nbTry, nbTotalTry)//<img src={TAB_IMAGES_PENDU[error]} alt={TAB_IMAGES_PENDU[error]} width="220" height="330" /> //
@@ -418,7 +443,7 @@ class Game extends Component {
      * @param event
      */
     onKeyPress(event) {
-        console.log("Game::onKeyPress : "  + JSON.stringify(event.key) + " usedLetter : "  + JSON.stringify(this.usedLetters).toString())
+        //console.log("Game::onKeyPress : "  + JSON.stringify(event.key) + " usedLetter : "  + JSON.stringify(this.usedLetters).toString())
         // On vérifie que la lettre est déjà utilisé
         // On interdit toutes les autres lettres à part celle de l'alphabet 'a' à 'z' et espace
         const regExp = new RegExp(/[^a-zA-Z\s]/,'uig')//('\(|\)|\\d|\\S','g')
@@ -444,65 +469,80 @@ class Game extends Component {
      */
     onNext(index){
         console.log ("Game::onNext()")
+
         // Ici les constantes (les valeurs qui ne changent pas)
         const nbPlayer = this.state.nbPlayer
         const nbPartiesToPlay = this.state.nbPartiesToPlay
         const playerOne = this.state.playerOne
         const playerTwo = this.state.playerTwo
-
         // Ici les valeurs qui vont changer
         let partyInPlay = this.state.partyInPlay
         let playerNumber = this.state.playerNumber
-
         let statue = this.state.statue//(nbPlayer === 2)?'NEXT_PLAYER':'NEXT'
         //console.log("Game::onNext() => statue : " + statue + " , => nbPlayer : " + nbPlayer)
-        //playerNumber = (nbPlayer === 2)?2:1
         let score = this.state.score
-
         let scorePlayerOne = this.state.playerOne.score
         let scorePlayerTwo = this.state.playerTwo.score
+        let partyInPlayForPlayerOne =  this.state.playerOne.partyInPlay
+        let partyInPlayForPlayerTwo =  this.state.playerTwo.partyInPlay
+        console.log("Game::onNext() => statue " + statue + " , partyInPlay => " + partyInPlay)
+        this.usedLetters.clear()
 
 
-        if (partyInPlay < nbPartiesToPlay ) {
-            this.usedLetters.clear()
-            if (playerNumber === nbPlayer && statue === 'NEXT_PLAYER') {
-                scorePlayerTwo = score
+
+        if (partyInPlay < nbPartiesToPlay) {
+            if (nbPlayer===1) {
+                // Nous sommes dans le cas où nous avons qu'un seul joueur sa partie est fini, on passe à la suivante
+                console.log("Game::onNext() => nbPlayer : " + nbPlayer + " , => statue : " + statue)
                 statue = 'NEXT'
                 playerNumber = 1
-                partyInPlay ++
+                partyInPlayForPlayerOne ++
+                scorePlayerOne = score
             }
             else if (statue === 'NEXT_PLAYER' ) {
-                scorePlayerOne = score//this.state.playerOne.score
+                // Nous sommes dans le cas où nous avons 2 joueurs et les 2 ont fini leur partie
+                console.log("Game::onNext() => nbPlayer : " + nbPlayer + " , => statue : " + statue)
+                statue = 'NEXT'
+                scorePlayerTwo = score//this.state.playerOne.score
                 //tableWordsToFind = playerTwo.tableWordsToFind
-                playerNumber = 2
+                playerNumber = 1
+                partyInPlayForPlayerTwo ++
                 //score = playerTwo.score
             }
             else {
-                //console.log("Game::onNext() => score : " + score + " , => scorePlayerOne : " + scorePlayerOne + " , => statue : " + statue)
-                statue = 'NEXT'
-                playerNumber = 1
-                partyInPlay ++
+                console.log("Game::onNext() => nbPlayer : " + nbPlayer + " , => statue : " + statue)
+                statue = 'NEXT_PLAYER'
+                partyInPlayForPlayerOne ++
+                playerNumber = 2
                 scorePlayerOne = score
+
             }
+            partyInPlay = (statue === 'NEXT')?partyInPlayForPlayerOne:partyInPlayForPlayerTwo
+            // Lignes de Code pour éviter des répétitions inutiles
             //console.log("playerNumber===nbPlayer : " + playerNumber===nbPlayer + " , => playerNumber : " + playerNumber)
-
-
+            // Test ternaire pour retrouver les score qui nous sera utile après lors des  mises à jour
             score = (statue === 'NEXT')?scorePlayerOne:scorePlayerTwo
             //console.log("Game::onNext() => statue === 'NEXT' : " + statue + " === " +  statue + " result : " + (statue === 'NEXT'))
+            // On récupère les noims des joueurs pour retourner celui dont nous aurons besoin d'utiliser à l'affichage
             const playerOneName = playerOne.playerName
             const playerTwoName = playerTwo.playerName
+            // Test ternaire pour avoir le nom du joueur à afficher
             const playerName = (statue === 'NEXT')?playerOneName:playerTwoName
             //console.log("Game::onNext() => playerName : " + playerName + " , => playerNumber : " + playerNumber + " , => nbPlayer : " + nbPlayer)
+            // On récupère les tableaux des mots à trouver pour retourner celui dont nous aurons besoin d'utiliser
             const tableWordsToFindForPlayerOne = playerOne.tableWordsToFind
             const tableWordsToFindForPlayerTwo = playerTwo.tableWordsToFind
-            const tableWordsToFind = (playerNumber===nbPlayer)?tableWordsToFindForPlayerOne:tableWordsToFindForPlayerTwo
+            console.log ("Game::onNext() =>tableWordsToFindForPlayerOne : " + tableWordsToFindForPlayerOne)
+            console.log ("Game::onNext() =>tableWordsToFindForPlayerTwo : " + tableWordsToFindForPlayerTwo)
+            // Test ternaire pour avoir le bon tableau de mots à trouver
+            const tableWordsToFind = (statue === 'NEXT')?tableWordsToFindForPlayerOne:tableWordsToFindForPlayerTwo
             //console.log("Game::onNext() => tableWordsToFind : " + tableWordsToFind)
             const wordToFind = tableWordsToFind[partyInPlay-1]
             const image = this.drawPendu(0, 0,0)
             const smiley = this.drawSmiley(0, 0)
             const motCache= this.computeDisplay(wordToFind, this.usedLetters)
             const startNewParty = false
-
+            // On met à jour le state pour que le render se lance
             this.setState({
                 statue: statue,
                 nbPlayer : nbPlayer,
@@ -523,16 +563,19 @@ class Game extends Component {
                 playerOne: {
                     playerName : playerOneName,
                     score: scorePlayerOne,
+                    partyInPlayForPlayerOne: partyInPlayForPlayerOne,
                     tableWordsToFind: tableWordsToFindForPlayerOne,
                 },
                 playerTwo: {
                     playerName : playerTwoName,
                     score: scorePlayerTwo,
+                    partyInPlayForPlayerTwo: partyInPlayForPlayerTwo,
                     tableWordsToFind: tableWordsToFindForPlayerTwo,
                 },
             })
         }
         else {
+            // Toutes les parties ont été jouéés on veux savoir qui a gagné, on demande le render final
             const nbPlayer = this.state.nbPlayer
             const playerOne = this.state.playerOne
             const playerTwo = this.state.playerTwo
@@ -562,7 +605,7 @@ class Game extends Component {
     render() {
         //console.log ("Game::render")
         //console.log("Game::render => state : " + JSON.stringify(this.state))
-        console.log("Game::render => state:statue : " + this.state.statue)
+        //console.log("Game::render => state:statue : " + this.state.statue)
         const statue = this.state.statue
         const nbPlayer = this.state.nbPlayer
         const letters = this.state.letters
@@ -615,7 +658,7 @@ class Game extends Component {
          * Un smiley s'affiche en fonction du résultat
          */
         else {
-            console.log("Game::render => state::startNewParty : " + this.state.startNewParty + " ; this.state.motCache : " + this.state.motCache + " ; this.state.wordToFind :" + this.state.wordToFind)
+            //console.log("Game::render => state::startNewParty : " + this.state.startNewParty + " ; this.state.motCache : " + this.state.motCache + " ; this.state.wordToFind :" + this.state.wordToFind)
             return (
                 <div className="App" >
                     <Header />

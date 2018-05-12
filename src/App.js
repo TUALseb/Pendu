@@ -114,12 +114,6 @@ class App extends Component {
         //document.removeEventListener("keypress", this.onKeyPress)
     }
 
-
-
-/*
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        console.log ("App::componentDidUpdate() : " + prevProps.statue + " =>" + prevState.statue )
-    }*/
     /**
      * Méthode qui permet en, fonction de la valeur de index de savoir combien de joueurs participent
      * @param index

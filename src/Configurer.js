@@ -218,19 +218,15 @@ class Configurer extends Component{
                             <div className="Data">
                                 <span className="Text"> Nombre de parties : </span>
                                 <input className="Values" type="number" value={nbPartiesToPlay} onChange={this.onChangeNbPartiesToPlay} />
-                                <br/>
                             </div>
                             <div className="Data">
                                 <span className="Text"> Nom du prermier joueur : </span>
-                                <input type="text" value={playerOneName} onChange={this.onChangePlayerOneName} />
-                                <br/>
+                                <input className="Values" type="text" value={playerOneName} onChange={this.onChangePlayerOneName} />
                             </div>
                             <div className="Data">
                                 <span className="Text"> Nom du second joueur : </span>
                                 <input className="Values" type="text" value={playerTwoName} onChange={this.onChangePlayerTwoName} />
-                                <br/>
                             </div>
-
                         </div>
                         <div className="Buttons">
                             <Button className={"Btn-Property"} value={"Valider"} index={1} onClick={this.onValidate } />

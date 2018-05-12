@@ -16,7 +16,7 @@ import Button from './Button.js'
 import './End.css'
 
 /**
- * Classe qui ve gérer l'affrichage à le fin du jeu
+ * Classe qui ve gérer l'affichage à le fin du jeu
  */
 class End extends Component {
     state = {
@@ -39,7 +39,7 @@ class End extends Component {
 
     /**
      * Constructeur
-     * Permet d'initialiser les propriétéds avec des valeurs par défaut de la class End
+     * Permet d'initialiser les propriétés avec des valeurs par défaut de la class End
      * @param props
      */
     constructor(props){
@@ -94,7 +94,8 @@ class End extends Component {
     }
 
     render() {
-        console.log("End::render:state :" + JSON.stringify(this.state))
+        console.log ("End::render()")
+        //console.log("End::render:state :" + JSON.stringify(this.state))
         const nbPlayer = this.state.nbPlayer
         const statue = this.state.statue
         /**

@@ -30,7 +30,7 @@ class Player extends Component{
         statue: 'BEGIN',
         nbPartiesToPlay: 0,
         partyInPlay: 1,
-        nbTry: 1,
+        nbTry: 0,
         nbTotalTry: 0,
         playerOne : {
             playerName : "",
@@ -150,7 +150,7 @@ class Player extends Component{
      */
     componentDidMount() {
         console.log ("Player::componentDidMount()")
-        console.log ("Player::State =>statue : " + this.state.statue)
+        //console.log ("Player::State =>statue : " + this.state.statue)
         // Nécessaire pour gérer les évènements liés au clavier
         // Nous libérons manuellement cet évènement
         //document.addEventListener("keypress", this.onChangeText)
@@ -202,21 +202,25 @@ class Player extends Component{
                     tableWordsToFindForPlayerTwo.push(this.getRandomWord (tableWordsToFindForPlayerOne, tableWordsToFindForPlayerTwo, posInTableWord))
 
                 }
-                //console.log ("Player::OnChoice => tableWordsToFindForPlayerOne :" + tableWordsToFindForPlayerOne)
-                //console.log ("Player::OnChoice => tableWordsToFindForPlayerTwo :" + tableWordsToFindForPlayerTwo)
+                console.log ("Player::OnChoice => tableWordsToFindForPlayerOne :" + tableWordsToFindForPlayerOne)
+                console.log ("Player::OnChoice => tableWordsToFindForPlayerTwo :" + tableWordsToFindForPlayerTwo)
                 // Mises à jour du state avec les valeurs utiles
                 this.setState({
                     statue: 'PLAY',
+        /*
                     playerOne: {
                         playerName : playerOneName,
                         score: scorePlayerOne,
+                        partyInPlay: 1,
                         tableWordsToFind: tableWordsToFindForPlayerOne,
                     },
                     playerTwo: {
                         playerName : playerTwoName,
                         score: scorePlayerTwo,
+                        partyInPlay: 1,
                         tableWordsToFind: tableWordsToFindForPlayerTwo,
                     },
+        */
                 })
                 break
             case 2:
@@ -231,16 +235,20 @@ class Player extends Component{
                 // Mises à jour du state avec les valeurs utiles
                 setTimeout( ()=> this.setState({
                         statue: 'ENTER_WORDS',
+        /*
                         playerOne: {
                             playerName : playerOneName,
                             score: scorePlayerOne,
+                            partyInPlay: 1,
                             tableWordsToFind: tableWordsToFindForPlayerOne,
                         },
                         playerTwo: {
                             playerName : playerTwoName,
                             score: scorePlayerTwo,
+                            partyInPlay: 1,
                             tableWordsToFind: tableWordsToFindForPlayerTwo,
                         },
+        */
                     }), VISUAL_PAUSE_MSECS
                 )
                 break
@@ -253,17 +261,20 @@ class Player extends Component{
                 // Mises à jour du state avec les valeurs utiles
                 setTimeout( ()=> this.setState({
                         statue: 'START',
+        /*
                         playerOne: {
                             playerName : playerOneName,
                             score: scorePlayerOne,
+                            partyInPlay: 1,
                             tableWordsToFind: tableWordsToFindForPlayerOne,
                         },
                         playerTwo: {
                             playerName : playerTwoName,
                             score: scorePlayerTwo,
+                            partyInPlay: 1,
                             tableWordsToFind: tableWordsToFindForPlayerTwo,
                         },
-
+        */
                     }), VISUAL_PAUSE_MSECS
                 )
                 break
@@ -348,7 +359,7 @@ class Player extends Component{
             const nbPossibleLetters = this.state.nbTotalTry
             let wordInUse = tableWordsToFind[index]
             //console.log ("Mot à contrôler : " + wordInUse)
-            let letter = event.target.value.substr(event.target.value.length-1, 1)
+            let letter = event.target.value.substr(event.target.value.length-1, 1).toUpperCase()
             let nbUsedLetters = 0
             for (let pos=0 ;  pos <=wordInUse.length; pos++) {
                 if (wordInUse.indexOf(letter) === -1 && nbUsedLetters<=nbPossibleLetters){
@@ -358,10 +369,10 @@ class Player extends Component{
                     //    alert("il ne peut y avoir que " + nbPossibleLetters + " lettres différentes. Merci de modifier votre mot (ou phrase)")
                     //}
                 }
-                else {
+                //else {
                     //console.log("lettre présente : " + letter + " à la position " + wordInUse.lastIndexOf(letter) + " dans " + wordInUse)
-                    nbUsedLetters = wordInUse.length
-                }
+                //    nbUsedLetters = wordInUse.length
+                //}
             }
             //console.log ("nombre de lettres : " + nbUsedLetters)
             if (nbUsedLetters === nbPossibleLetters) {
@@ -370,7 +381,7 @@ class Player extends Component{
             else {
                 tableWordsToFind[index] = event.target.value.toUpperCase()
             }
-
+            console.log(" Player::onChangeText() => nbUsedLetters : " + nbUsedLetters)
             this.setState({ tableWordsToFind: tableWordsToFind })
         }
 
@@ -415,11 +426,13 @@ class Player extends Component{
                 playerOne: {
                     playerName : playerOneName,
                     score: scorePlayerOne,
+                    partyInPlay: 1,
                     tableWordsToFind: tableWordsToFindForPlayerOne,
                 },
                 playerTwo: {
                     playerName : playerTwoName,
                     score: scorePlayerTwo,
+                    partyInPlay: 1,
                     tableWordsToFind: tableWordsToFindForPlayerTwo,
                 },
                 tableWordsToFind:tableWordsToFind,
@@ -443,20 +456,27 @@ class Player extends Component{
         const tableWordsToFindForPlayerTwo = this.state.playerTwo.tableWordsToFind
         const nbPlayer = parseInt(this.state.nbPlayer, 10)
         const tableWordsToFind = this.state.tableWordsToFind
+        console.log ("Player::onValid => tableWordsToFindForPlayerOne :" + tableWordsToFindForPlayerOne)
+        console.log ("Player::onValid => tableWordsToFindForPlayerTwo :" + tableWordsToFindForPlayerTwo)
         if (player === 1 &&  nbPlayer === 2) {
             setTimeout( ()=> this.setState({
                     statue : 'ENTER_WORDS',
                     nbPartiesToPlay: nbPartiesToPlay,
+                    tableWordsToFind: ["","",""],
                     playerOne: {
                         playerName : playerOneName,
                         score: scorePlayerOne,
+                        partyInPlay: 1,
                         tableWordsToFind: tableWordsToFind,
                     },
+    /*
                     playerTwo: {
                         playerName : playerTwoName,
                         score: scorePlayerTwo,
+                        partyInPlay: 1,
                         tableWordsToFind: tableWordsToFindForPlayerTwo,
                     },
+    */
                     player: 2,
                 }), VISUAL_PAUSE_MSECS
             )
@@ -465,14 +485,19 @@ class Player extends Component{
             setTimeout( ()=> this.setState({
                     statue : 'PLAY',
                     nbPartiesToPlay: nbPartiesToPlay,
+                    tableWordsToFind: ["","",""],
+    /*
                     playerOne: {
                         playerName : playerOneName,
                         score: scorePlayerOne,
+                        partyInPlay: 1,
                         tableWordsToFind: tableWordsToFindForPlayerOne,
                     },
+    */
                     playerTwo: {
                         playerName : playerTwoName,
                         score: scorePlayerTwo,
+                        partyInPlay: 1,
                         tableWordsToFind: tableWordsToFind,
                     },
                     player: 2,
@@ -484,16 +509,21 @@ class Player extends Component{
             //console.log ("mots à trouver : " + tableWordsToFind + " placés dans : " + tableWordsToFindForPlayerOne)
             setTimeout( ()=> this.setState({
                     statue: 'PLAY',
+                    tableWordsToFind: ["","",""],
                     playerOne: {
                         playerName : playerOneName,
                         score: scorePlayerOne,
+                        partyInPlay: 1,
                         tableWordsToFind: tableWordsToFind,
                     },
+    /*
                     playerTwo: {
                         playerName : playerTwoName,
                         score: scorePlayerTwo,
+                        partyInPlay: 1,
                         tableWordsToFind: tableWordsToFindForPlayerTwo,
                     },
+    */
                     player: 1,
                 }), VISUAL_PAUSE_MSECS
             )
@@ -637,8 +667,6 @@ class Player extends Component{
                     playerTwo = {playerTwo}
                     startNewParty = {startNewParty}
                     playerName = {playerName}
-
-
                 />
             )
         }

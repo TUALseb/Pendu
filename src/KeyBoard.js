@@ -8,6 +8,7 @@ import React from 'react'
 
 // Importation du fichier de style
 import './KeyBoard.css'
+import './Button.css'
 //Importation des fichier js que nous aurons besoin
 import Button from './Button.js'
 import PropTypes from "prop-types";
@@ -16,13 +17,12 @@ import PropTypes from "prop-types";
 // Liste des constante gloabales
 //const LETTERS = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','à','â','ç','é','è','ï','î','ù','û','_','\'']
 
-const KeyBoard = ({letters, usedLetters, onClick}) => (
-    <div className="Keyboard">
-        <div className="Letters">
-
+const KeyBoard = ({letters, usedLetters, hidden, onClick}) => (
+    <div className="Keyboard" hidden={hidden}>
+        <div className="Letters" hidden={hidden}>
             { letters.map((letter, index) => (
                 <Button
-                    className={(!!usedLetters.has(letter))?"Btn-Enabled":"Btn-Disable"}
+                    className={(!!usedLetters.has(letter)) ? "Btn-Enabled":"Btn-Disable"}
                     value={letter}
                     index={index}
                     key={index}
@@ -41,6 +41,7 @@ const KeyBoard = ({letters, usedLetters, onClick}) => (
 KeyBoard.propTypes = {
     letters: PropTypes.array.isRequired,
     usedLetters: PropTypes.object.isRequired,
+    hidden: PropTypes.bool.isRequired,
     onClick: PropTypes.func.isRequired,
 }
 

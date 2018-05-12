@@ -9,7 +9,7 @@
     width: auto;
     height: auto;
     font-size: 1.5em;
-    outline: 0.1em solid silver;
+    outline: 0.1em solid #b1b1b1;
     margin: 0.2em;
     padding: 0.2em;
     cursor: pointer;
@@ -20,7 +20,7 @@
     width: auto;
     height: auto;
     font-size: 1.5em;
-    outline: 0.1em solid silver;
+    outline: 0.1em solid #b6b6b6;
     margin: 0.2em;
     padding: 0.2em;
     cursor: pointer;
@@ -32,9 +32,9 @@
     width: auto;
     height: auto;
     font-size: 1.5em;
-    outline: 0.1em solid silver;
+    outline: 0.1em solid #c02225;
     margin: 0.2em;
     padding: 0.2em;
     cursor: pointer;
-    background: rgba(105, 156, 249, 0.04);
+    background: #c02225;
 }

@@ -39,7 +39,7 @@ class Configurer extends Component{
      */
     constructor(props) {
         super(props)
-        //console.log (props)
+        //console.log ("Configurer::constructor : " + JSON.stringify(props))
 
         this.state = ({
             nbTotalTry: props.nbTotalTry,
@@ -68,7 +68,7 @@ class Configurer extends Component{
      */
     componentDidMount() {
         console.log ("Configurer::componentDidMount()")
-        console.log ("Configurer::State: " + JSON.stringify(this.state))
+        //console.log ("Configurer::State: " + JSON.stringify(this.state))
     }
 
 
@@ -94,7 +94,7 @@ class Configurer extends Component{
      */
     onChangeNbPartiesToPlay(value) {
         let val = this.testValue(value.target.value)
-        this.setState({ nbPartiesToPlay : (val!== -1)? val:"" })
+        this.setState({ nbPartiesToPlay : (val!== -1)? parseInt(val, 10):parseInt(0, 10) })
     }
 
     /**
@@ -153,8 +153,8 @@ class Configurer extends Component{
      * @param index
      */
     onValidate(index) {
-        console.log ("Configurer::onValidate()")
-        console.log ("Configurer::State: " + JSON.stringify(this.state))
+        //console.log ("Configurer::onValidate()")
+        //console.log ("Configurer::State: " + JSON.stringify(this.state))
         const validateCancel = true
         this.setState({validateCancel : validateCancel})
     }
@@ -165,8 +165,8 @@ class Configurer extends Component{
      * @param index
      */
     onCancel(index){
-        console.log ("Configurer::onCancel()")
-        console.log ("Configurer::State: " + JSON.stringify(this.state))
+        //console.log ("Configurer::onCancel()")
+        //console.log ("Configurer::State: " + JSON.stringify(this.state))
         //Nous allons récupérer les anciennes valeurs
         const nbTotalTry = this.state.oldNbTotalTry
         const nbPartiesToPlay = this.state.oldNbPartiesToPlay
@@ -197,6 +197,7 @@ class Configurer extends Component{
          * nous retournons les valeurs prise en compte sur le component App pour qu'il les prennent en compte
          */
         if (validateCancel === true) {
+            //console.log(JSON.stringify(this.state))
             return  (
                 <App
                     nbPartiesToPlay = {nbPartiesToPlay}
@@ -216,7 +217,7 @@ class Configurer extends Component{
                         <div>
                             <div className="Data">
                                 <span className="Text"> Nombre de parties : </span>
-                                <input className="Values" type="text" value={nbPartiesToPlay} onChange={this.onChangeNbPartiesToPlay} />
+                                <input className="Values" type="number" value={nbPartiesToPlay} onChange={this.onChangeNbPartiesToPlay} />
                                 <br/>
                             </div>
                             <div className="Data">

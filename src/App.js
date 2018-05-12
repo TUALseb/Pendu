@@ -18,8 +18,8 @@ import './App.css'
 
 
 // Déclaration des valeurs par défault
-const DEFAULT_STATUE = 'BEGIN'
-const DEFAULT_NB_TRY = 1
+const DEFAULT_STATUE = 'MAIN_PAGE'
+const DEFAULT_NB_TRY = 0
 const DEFAULT_NB_TOTAL_TRY = 12
 const DEFAULT_NB_PARTY = 3
 const DEFAULT_PLAYER_ONE_NAME = "Player One"
@@ -31,7 +31,8 @@ const DEFAULT_PLAYER_ONE = {
     score: 0,
     TableWordsToFind : [],
 }
-const DEFAULT_PLAYER_TWO = {playerName : "",
+const DEFAULT_PLAYER_TWO = {
+    playerName : "",
     partyInPlay: 1,
     score: 0,
     TableWordsToFind : [],}
@@ -56,6 +57,7 @@ class App extends Component {
             playerName : "Player Two",
             partyInPlay: 1,
             score: 0,
+            TableWordsToFind : [],
         },
     }
 
@@ -67,9 +69,8 @@ class App extends Component {
      */
     constructor(props) {
         super(props)
-        //console.log ("App::constructor()")
+        console.log ("App::constructor()")
         //console.log ("App::constructor()::props: " + JSON.stringify(props))
-
         this.state = {
             statue: props.statue,
             nbPlayer: props.nbPlayer,
@@ -78,14 +79,14 @@ class App extends Component {
             nbPartiesToPlay: props.nbPartiesToPlay,
             playerOne : {
                 playerName : props.playerOneName,
-                partyInPlay: props.partyInPlay,
-                score: props.playerOne.score,
+                partyInPlay: 1,
+                score: 0,
                 TableWordsToFind : [],
             },
             playerTwo : {
                 playerName: props.playerTwoName,
-                partyInPlay: props.partyInPlay,
-                score: props.playerTwo.score,
+                partyInPlay: 1,
+                score: 0,
                 TableWordsToFind : [],
             },
         }
@@ -110,10 +111,15 @@ class App extends Component {
      */
     componentWillUnmount() {
         console.log ("App::componentWillUnmount()")
-        document.removeEventListener("keypress", this.onKeyPress)
+        //document.removeEventListener("keypress", this.onKeyPress)
     }
 
 
+
+/*
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        console.log ("App::componentDidUpdate() : " + prevProps.statue + " =>" + prevState.statue )
+    }*/
     /**
      * Méthode qui permet en, fonction de la valeur de index de savoir combien de joueurs participent
      * @param index
@@ -155,7 +161,7 @@ class App extends Component {
      */
     onReturn(index) {
         console.log("App::onReturn()")
-        this.setState({statue: 'BEGIN', nbPlayer: 0})
+        this.setState({statue: 'MAIN_PAGE', nbPlayer: 0})
     }
 
     /**
@@ -196,7 +202,7 @@ class App extends Component {
                     nbPartiesToPlay = {nbPartiesToPlay}
                     playerOne = {playerOne}
                     playerTwo = {playerTwo}
-                    startNexParty = {false}
+                    startNewParty = {false}
                     player = {1}
                 />
             )

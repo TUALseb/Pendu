@@ -26,8 +26,8 @@ Gestion du clavier affiché
     align-content: center;
     align-items: center;
     flex-direction: row;
-    outline: 0.1em solid #8e8e8e;
-    background: rgba(142, 142, 142, 0.36);
+    outline: 0.1em solid #699dfa;
+    background: rgba(201, 201, 201, 0.36);
     text-align: center;
     margin: 0.2em;
     padding: 0.2em;

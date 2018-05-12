@@ -33,34 +33,6 @@ gère la zone où sera affiché le clavier, le mot à tropuver, les images du pe
     padding: 0.2em;
 }
 
-/*
-partie gauche de l'écran (où sera le clavier)
- */
-.Keyboard {
-    display: flex;
-    flex: content;
-    flex-wrap: wrap;
-    flex-direction: column;
-    margin: 0.2em;
-    padding: 0.2em;
-}
-
-/*
-Gestion du clavier affiché
- */
-.Letters {
-    display: flex;
-    flex: 1 1 calc(100% / 6 - 0.4em);
-    flex-wrap: wrap;
-    align-content: center;
-    align-items: center;
-    flex-direction: row;
-    outline: 0.1em solid #8e8e8e;
-    background: rgba(142, 142, 142, 0.36);
-    text-align: center;
-    margin: 0.2em;
-    padding: 0.2em;
-}
 
 .Center {
     display: flex;

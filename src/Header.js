@@ -4,11 +4,12 @@
  * date de modification : $today.day-$today.month-2018.
  */
 
-import React, { Component } from 'react'
+//import React, { Component } from 'react'
+import React from 'react'
 // Importation du fichier de style
 import './Header.css'
 //Importation des fichier js que nous aurons besoin
-
+/*
 class Header extends Component {
     render () {
         return (
@@ -18,5 +19,12 @@ class Header extends Component {
         )
     }
 }
+*/
+const Header =() => (
+    <header className="App-header">
+        <h1 className="App-title">Bienvenue au jeu du pendu</h1>
+    </header>
+)
+
 
 export default Header

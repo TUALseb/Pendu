@@ -23,7 +23,7 @@ import './Player.css'
 const TABLE_WORDS_TO_FIND = ["hello", "pendu", "react", "apprivoiser", "jeu du pendu", "jouer au pendu", "association", "apprivoiser react", "exercices", "consignes"]
 
 
-const VISUAL_PAUSE_MSECS = 100
+//const VISUAL_PAUSE_MSECS = 100
 
 class Player extends Component{
     state = {
@@ -179,12 +179,7 @@ class Player extends Component{
      */
     onChoice(index) {
         //console.log ("Player::onChoice()")
-        const playerOneName = this.state.playerOne.playerName
-        const playerTwoName = this.state.playerTwo.playerName
         const nbPartiesToPlay = this.state.nbPartiesToPlay
-
-        const scorePlayerOne = this.state.playerOne.score
-        const scorePlayerTwo = this.state.playerTwo.score
         let tableWordsToFindForPlayerOne = this.state.playerOne.tableWordsToFind
         let tableWordsToFindForPlayerTwo = this.state.playerTwo.tableWordsToFind
 
@@ -205,23 +200,7 @@ class Player extends Component{
                 console.log ("Player::OnChoice => tableWordsToFindForPlayerOne :" + tableWordsToFindForPlayerOne)
                 console.log ("Player::OnChoice => tableWordsToFindForPlayerTwo :" + tableWordsToFindForPlayerTwo)
                 // Mises à jour du state avec les valeurs utiles
-                this.setState({
-                    statue: 'PLAY',
-        /*
-                    playerOne: {
-                        playerName : playerOneName,
-                        score: scorePlayerOne,
-                        partyInPlay: 1,
-                        tableWordsToFind: tableWordsToFindForPlayerOne,
-                    },
-                    playerTwo: {
-                        playerName : playerTwoName,
-                        score: scorePlayerTwo,
-                        partyInPlay: 1,
-                        tableWordsToFind: tableWordsToFindForPlayerTwo,
-                    },
-        */
-                })
+                this.setState({ statue: 'PLAY', })
                 break
             case 2:
                 /**
@@ -229,28 +208,8 @@ class Player extends Component{
                  * Un mini formulaire va alors s'afficher
                  * Par défaut les tableaux sont vides
                  */
-                //console.log(nbPartiesToPlay)
-                //console.log ("Player::OnChoice => tableWordsToFindForPlayerOne :" + tableWordsToFindForPlayerOne)
-                //console.log ("Player::OnChoice => tableWordsToFindForPlayerTwo :" + tableWordsToFindForPlayerTwo)
                 // Mises à jour du state avec les valeurs utiles
-                setTimeout( ()=> this.setState({
-                        statue: 'ENTER_WORDS',
-        /*
-                        playerOne: {
-                            playerName : playerOneName,
-                            score: scorePlayerOne,
-                            partyInPlay: 1,
-                            tableWordsToFind: tableWordsToFindForPlayerOne,
-                        },
-                        playerTwo: {
-                            playerName : playerTwoName,
-                            score: scorePlayerTwo,
-                            partyInPlay: 1,
-                            tableWordsToFind: tableWordsToFindForPlayerTwo,
-                        },
-        */
-                    }), VISUAL_PAUSE_MSECS
-                )
+                this.setState({ statue: 'ENTER_WORDS', })
                 break
             case 3:
                 /**
@@ -259,24 +218,7 @@ class Player extends Component{
                  */
                 //console.log("statue: START, state : " + this.state)
                 // Mises à jour du state avec les valeurs utiles
-                setTimeout( ()=> this.setState({
-                        statue: 'START',
-        /*
-                        playerOne: {
-                            playerName : playerOneName,
-                            score: scorePlayerOne,
-                            partyInPlay: 1,
-                            tableWordsToFind: tableWordsToFindForPlayerOne,
-                        },
-                        playerTwo: {
-                            playerName : playerTwoName,
-                            score: scorePlayerTwo,
-                            partyInPlay: 1,
-                            tableWordsToFind: tableWordsToFindForPlayerTwo,
-                        },
-        */
-                    }), VISUAL_PAUSE_MSECS
-                )
+                this.setState({  statue: 'START', })
                 break
             default:
                 /**
@@ -284,7 +226,6 @@ class Player extends Component{
                  * Permet de renvoyer à la page principale
                  */
                 this.setState({statue: 'MAIN_PAGE'})
-
         }
 
     }
@@ -332,8 +273,6 @@ class Player extends Component{
             }
             //console.log ( "getRandomWord => wordToAdd : " + wordToAdd)
         }
-
-
         // On retourne en mettant tout en majuscule
         return wordToAdd.toUpperCase()
 
@@ -365,14 +304,7 @@ class Player extends Component{
                 if (wordInUse.indexOf(letter) === -1 && nbUsedLetters<=nbPossibleLetters){
                     //console.log("lettre non présente : " + letter + " à la position " + wordInUse.lastIndexOf(letter) + " dans " + wordInUse)
                     nbUsedLetters++
-                    //if (nbUsedLetters === nbPossibleLetters) {
-                    //    alert("il ne peut y avoir que " + nbPossibleLetters + " lettres différentes. Merci de modifier votre mot (ou phrase)")
-                    //}
                 }
-                //else {
-                    //console.log("lettre présente : " + letter + " à la position " + wordInUse.lastIndexOf(letter) + " dans " + wordInUse)
-                //    nbUsedLetters = wordInUse.length
-                //}
             }
             //console.log ("nombre de lettres : " + nbUsedLetters)
             if (nbUsedLetters === nbPossibleLetters) {
@@ -381,7 +313,7 @@ class Player extends Component{
             else {
                 tableWordsToFind[index] = event.target.value.toUpperCase()
             }
-            console.log(" Player::onChangeText() => nbUsedLetters : " + nbUsedLetters)
+            //console.log(" Player::onChangeText() => nbUsedLetters : " + nbUsedLetters)
             this.setState({ tableWordsToFind: tableWordsToFind })
         }
 
@@ -420,7 +352,8 @@ class Player extends Component{
         const tableWordsToFindForPlayerOne = []
         const tableWordsToFindForPlayerTwo = []
         const tableWordsToFind = ["","",""]
-        setTimeout( ()=> this.setState({
+
+        this.setState({
                 statue: 'BEGIN',
                 nbPartiesToPlay: nbPartiesToPlay,
                 playerOne: {
@@ -437,8 +370,7 @@ class Player extends Component{
                 },
                 tableWordsToFind:tableWordsToFind,
                 player: 1,
-            }), VISUAL_PAUSE_MSECS
-        )
+            })
     }
 
     /**
@@ -459,74 +391,47 @@ class Player extends Component{
         console.log ("Player::onValid => tableWordsToFindForPlayerOne :" + tableWordsToFindForPlayerOne)
         console.log ("Player::onValid => tableWordsToFindForPlayerTwo :" + tableWordsToFindForPlayerTwo)
         if (player === 1 &&  nbPlayer === 2) {
-            setTimeout( ()=> this.setState({
-                    statue : 'ENTER_WORDS',
-                    nbPartiesToPlay: nbPartiesToPlay,
-                    tableWordsToFind: ["","",""],
-                    playerOne: {
-                        playerName : playerOneName,
-                        score: scorePlayerOne,
-                        partyInPlay: 1,
-                        tableWordsToFind: tableWordsToFind,
-                    },
-    /*
-                    playerTwo: {
-                        playerName : playerTwoName,
-                        score: scorePlayerTwo,
-                        partyInPlay: 1,
-                        tableWordsToFind: tableWordsToFindForPlayerTwo,
-                    },
-    */
-                    player: 2,
-                }), VISUAL_PAUSE_MSECS
-            )
+            this.setState({
+                statue : 'ENTER_WORDS',
+                nbPartiesToPlay: nbPartiesToPlay,
+                tableWordsToFind: ["","",""],
+                playerOne: {
+                    playerName : playerOneName,
+                    score: scorePlayerOne,
+                    partyInPlay: 1,
+                    tableWordsToFind: tableWordsToFind,
+                },
+                player: 2,
+            })
         }
         else if (player === 2 &&  nbPlayer === 2){
-            setTimeout( ()=> this.setState({
-                    statue : 'PLAY',
-                    nbPartiesToPlay: nbPartiesToPlay,
-                    tableWordsToFind: ["","",""],
-    /*
-                    playerOne: {
-                        playerName : playerOneName,
-                        score: scorePlayerOne,
-                        partyInPlay: 1,
-                        tableWordsToFind: tableWordsToFindForPlayerOne,
-                    },
-    */
-                    playerTwo: {
-                        playerName : playerTwoName,
-                        score: scorePlayerTwo,
-                        partyInPlay: 1,
-                        tableWordsToFind: tableWordsToFind,
-                    },
-                    player: 2,
-                }), VISUAL_PAUSE_MSECS
-            )
+            this.setState({
+                statue : 'PLAY',
+                nbPartiesToPlay: nbPartiesToPlay,
+                tableWordsToFind: ["","",""],
+                playerTwo: {
+                    playerName : playerTwoName,
+                    score: scorePlayerTwo,
+                    partyInPlay: 1,
+                    tableWordsToFind: tableWordsToFind,
+                },
+                player: 2,
+            })
         }
         else {
+            // Cas où on a que un joueur
             //console.log ("player : " + player + " nbplayer : " + this.state.nbPlayer + " state : " + JSON.stringify(this.state))
-            //console.log ("mots à trouver : " + tableWordsToFind + " placés dans : " + tableWordsToFindForPlayerOne)
-            setTimeout( ()=> this.setState({
-                    statue: 'PLAY',
-                    tableWordsToFind: ["","",""],
-                    playerOne: {
-                        playerName : playerOneName,
-                        score: scorePlayerOne,
-                        partyInPlay: 1,
-                        tableWordsToFind: tableWordsToFind,
-                    },
-    /*
-                    playerTwo: {
-                        playerName : playerTwoName,
-                        score: scorePlayerTwo,
-                        partyInPlay: 1,
-                        tableWordsToFind: tableWordsToFindForPlayerTwo,
-                    },
-    */
-                    player: 1,
-                }), VISUAL_PAUSE_MSECS
-            )
+            this.setState({
+                statue: 'PLAY',
+                tableWordsToFind: ["","",""],
+                playerOne: {
+                    playerName : playerOneName,
+                    score: scorePlayerOne,
+                    partyInPlay: 1,
+                    tableWordsToFind: tableWordsToFind,
+                },
+                player: 1,
+            })
         }
     }
 
@@ -587,10 +492,8 @@ class Player extends Component{
             const nbPlayer = this.state.nbPlayer
             let tableWordsToFind = this.state.tableWordsToFind
             let player = this.state.player
-            //for (let player = 1 ; player <= nbPlayer ; player ++) {
             if (player<= nbPlayer) {
                 //console.log("tableWordsToFind : " + tableWordsToFind)
-                //let index = 0
                 return (
                     <div className="App">
                         <Header/>
@@ -625,7 +528,6 @@ class Player extends Component{
                     </div>
                 )
             }
-
         }
         /**
          * Les mots ont été choisis au hasard pour les deux joueurs, nous affichons le boutons qui permet de lancer la partie

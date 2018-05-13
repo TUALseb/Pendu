@@ -229,8 +229,8 @@ class Configurer extends Component{
                             </div>
                         </div>
                         <div className="Buttons">
-                            <Button className={"Btn-Property"} value={"Valider"} index={1} onClick={this.onValidate } />
                             <Button className={"Btn-Property"} value={"Annuler"} index={2} onClick={this.onCancel} />
+                            <Button className={"Btn-Property"} value={"Valider"} index={1} onClick={this.onValidate } />
                         </div>
                     </div>
                     <Footer />

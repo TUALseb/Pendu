@@ -30,6 +30,7 @@ import img_ajout_jambe_droite from './images/ajout_jambe_droite.png'
 import img_ajout_jambe_gauche from './images/ajout_jambe_gauche.png'
 import img_ajout_bras_droit from './images/ajout_bras_droit.png'
 import img_ajout_bras_gauche from './images/ajout_bras_gauche.png'
+import img_perdu from './images/perdu.png'
 
 
 //Importation des smileys
@@ -71,7 +72,7 @@ const LETTERS = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P'
 // Tableau des images du pendu
 const TAB_IMAGES_PENDU =[
     img_none, img_socle, img_socle_pied, img_poteau, img_traverse, img_ajout_corde, img_ajout_tete,
-    img_ajout_corps, img_ajout_jambe_gauche, img_ajout_jambe_droite, img_ajout_bras_gauche, img_ajout_bras_droit]
+    img_ajout_corps, img_ajout_jambe_droite, img_ajout_jambe_gauche, img_ajout_bras_droit, img_ajout_bras_gauche, img_perdu]
 // Tableaux des smileys
 const TAB_SMILEYS_ERREURS = [smiley_surpris, smiley_etonne, smiley_etonne2, smiley_triste, smiley_moyen_violet,
     smiley_moyen2_violet, smiley_ettone_violet, smiley_etonne2_violet, smiley_surpris_violet, smiley_triste0_violet,
@@ -177,7 +178,7 @@ class Game extends Component {
      Appelé après que le composant a été retranscrit pour la première fois dans le DOM réel
      */
     componentDidMount() {
-        console.log ("Game::componentDidMount()")
+        //console.log ("Game::componentDidMount()")
         //console.log ("Game::componentDidMount() => State:statue : " + this.state.statue)
         // Nécessaire pour gérer les évènements liés au clavier
         // Nous libérons manuellement cet évènement
@@ -277,7 +278,7 @@ class Game extends Component {
         }
 
         //console.log ("Game::drawSmiley => smiley : " + smiley)
-        const smileyToShow = <img src={smiley} alt={smiley} width="auto" height="auto"/>
+        const smileyToShow = smiley//<img src={smiley} alt={smiley} />
         return smileyToShow
     }
 
@@ -300,10 +301,10 @@ class Game extends Component {
         }
         else if (error > 0 && (nbTry <= nbTotalTry)) {
             //console.log("Game::drawPendu => TAB_IMAGES_PENDU[error] : " + TAB_IMAGES_PENDU[error])
-            imageToShow = <img src={TAB_IMAGES_PENDU[error]} alt={TAB_IMAGES_PENDU[error]}/>
+            imageToShow = <img src={TAB_IMAGES_PENDU[error]} alt={TAB_IMAGES_PENDU[error]} />
         }
         else {
-            imageToShow = <img src={TAB_IMAGES_PENDU[0]} alt={TAB_IMAGES_PENDU[0]}/>
+            imageToShow = <img src={TAB_IMAGES_PENDU[0]} alt={TAB_IMAGES_PENDU[0]} />
         }
         //console.log("Game::drawPendu => imageToShow : " + JSON.stringify(imageToShow))
         return imageToShow
@@ -331,7 +332,7 @@ class Game extends Component {
      * @param letter
      */
     updateValues(letter) {
-        console.log ("Game::updateValues()" )
+        //console.log ("Game::updateValues()" )
         // On récupère les valeurs qui ne bougeront pas dans des constantes (const)
         const nbTotalTry = this.state.nbTotalTry
         const wordToFind = this.state.wordToFind
@@ -360,6 +361,7 @@ class Game extends Component {
             if (wordToFind.search(letter) === -1) {
                 // On est dans le cas où la lettre n'a pas été trouvé
                 //console.log("lettre non trouvé : " + letter)
+                //nbTry++
                 error += 1
                 // Pour afficher l'image en cours du pendu
                 image = this.drawPendu(error, nbTry, nbTotalTry)//<img src={TAB_IMAGES_PENDU[error]} alt={TAB_IMAGES_PENDU[error]}  />
@@ -487,13 +489,13 @@ class Game extends Component {
         let partyInPlayForPlayerTwo =  this.state.playerTwo.partyInPlay
         console.log("Game::onNext() => statue " + statue + " , partyInPlay => " + partyInPlay)
         this.usedLetters.clear()
+        //console.log(JSON.stringify(this.state))
+        partyInPlay = (statue === 'NEXT')?partyInPlayForPlayerOne:partyInPlayForPlayerTwo
 
-
-
-        if (partyInPlay < nbPartiesToPlay) {
+        if ((((partyInPlay < nbPartiesToPlay))||((partyInPlay === nbPartiesToPlay) && (partyInPlayForPlayerTwo === partyInPlayForPlayerOne)))) {//partyInPlay < nbPartiesToPlay
             if (nbPlayer===1) {
                 // Nous sommes dans le cas où nous avons qu'un seul joueur sa partie est fini, on passe à la suivante
-                console.log("Game::onNext() => nbPlayer : " + nbPlayer + " , => statue : " + statue)
+                //console.log("Game::onNext() => nbPlayer : " + nbPlayer + " , => statue : " + statue + " partyInPlayForPlayerOne =>" + partyInPlayForPlayerOne )
                 statue = 'NEXT'
                 playerNumber = 1
                 partyInPlayForPlayerOne ++
@@ -501,7 +503,7 @@ class Game extends Component {
             }
             else if (statue === 'NEXT_PLAYER' ) {
                 // Nous sommes dans le cas où nous avons 2 joueurs et les 2 ont fini leur partie
-                console.log("Game::onNext() => nbPlayer : " + nbPlayer + " , => statue : " + statue)
+                //console.log("Game::onNext() => nbPlayer : " + nbPlayer + " , => statue : " + statue + " partyInPlayForPlayerOne =>" + partyInPlayForPlayerOne )
                 statue = 'NEXT'
                 scorePlayerTwo = score//this.state.playerOne.score
                 //tableWordsToFind = playerTwo.tableWordsToFind
@@ -510,7 +512,7 @@ class Game extends Component {
                 //score = playerTwo.score
             }
             else {
-                console.log("Game::onNext() => nbPlayer : " + nbPlayer + " , => statue : " + statue)
+                //console.log("Game::onNext() => nbPlayer : " + nbPlayer + " , => statue : " + statue + " partyInPlayForPlayerOne =>" + partyInPlayForPlayerOne )
                 statue = 'NEXT_PLAYER'
                 partyInPlayForPlayerOne ++
                 playerNumber = 2
@@ -518,6 +520,7 @@ class Game extends Component {
 
             }
             partyInPlay = (statue === 'NEXT')?partyInPlayForPlayerOne:partyInPlayForPlayerTwo
+            //console.log("Game::onNext() => partyInPlay : " + partyInPlay )
             // Lignes de Code pour éviter des répétitions inutiles
             //console.log("playerNumber===nbPlayer : " + playerNumber===nbPlayer + " , => playerNumber : " + playerNumber)
             // Test ternaire pour retrouver les score qui nous sera utile après lors des  mises à jour
@@ -532,8 +535,8 @@ class Game extends Component {
             // On récupère les tableaux des mots à trouver pour retourner celui dont nous aurons besoin d'utiliser
             const tableWordsToFindForPlayerOne = playerOne.tableWordsToFind
             const tableWordsToFindForPlayerTwo = playerTwo.tableWordsToFind
-            console.log ("Game::onNext() =>tableWordsToFindForPlayerOne : " + tableWordsToFindForPlayerOne)
-            console.log ("Game::onNext() =>tableWordsToFindForPlayerTwo : " + tableWordsToFindForPlayerTwo)
+            //console.log ("Game::onNext() =>tableWordsToFindForPlayerOne : " + tableWordsToFindForPlayerOne)
+            //console.log ("Game::onNext() =>tableWordsToFindForPlayerTwo : " + tableWordsToFindForPlayerTwo)
             // Test ternaire pour avoir le bon tableau de mots à trouver
             const tableWordsToFind = (statue === 'NEXT')?tableWordsToFindForPlayerOne:tableWordsToFindForPlayerTwo
             //console.log("Game::onNext() => tableWordsToFind : " + tableWordsToFind)
@@ -563,13 +566,13 @@ class Game extends Component {
                 playerOne: {
                     playerName : playerOneName,
                     score: scorePlayerOne,
-                    partyInPlayForPlayerOne: partyInPlayForPlayerOne,
+                    partyInPlay: partyInPlayForPlayerOne,
                     tableWordsToFind: tableWordsToFindForPlayerOne,
                 },
                 playerTwo: {
                     playerName : playerTwoName,
                     score: scorePlayerTwo,
-                    partyInPlayForPlayerTwo: partyInPlayForPlayerTwo,
+                    partyInPlay: partyInPlayForPlayerTwo,
                     tableWordsToFind: tableWordsToFindForPlayerTwo,
                 },
             })
@@ -658,6 +661,8 @@ class Game extends Component {
          * Un smiley s'affiche en fonction du résultat
          */
         else {
+            const playerNumber = this.state.playerNumber
+            const next = (partyInPlay===nbPartiesToPlay && playerNumber===nbPlayer)?"Résultats":"Partie suivante"
             //console.log("Game::render => state::startNewParty : " + this.state.startNewParty + " ; this.state.motCache : " + this.state.motCache + " ; this.state.wordToFind :" + this.state.wordToFind)
             return (
                 <div className="App" >
@@ -684,19 +689,19 @@ class Game extends Component {
                                     <div className="Word-To-Find" onChange={this.onKeyPress}>
                                         <span>{motCache}</span>
                                     </div>
-                                    <div className="Img-To-Show">
+                                    <div className="Img-To-Show" width="230" height="310">
                                         {image}
                                     </div>
                                 </div>
                                 <div className="Right">
-                                    <div className="Smiley">
-                                        {smiley}
+                                    <div className="Smiley" ref="canvasSmiley" width="200" height="200">
+                                        <img src={smiley} alt={smiley} />
                                     </div>
                                     <div className="Message-To-Show" hidden={!startNewParty}>
                                         {result}
                                     </div>
                                     <div className="Button" hidden={!startNewParty}>
-                                        <Button className={"Btn-Property"} value={"Partie suivante"} index={0} hidden={!startNewParty} onClick={this.onNext }/>
+                                        <Button className={"Btn-Property"} value={next} index={0} hidden={!startNewParty} onClick={this.onNext }/>
                                     </div>
                                 </div>
                             </div>

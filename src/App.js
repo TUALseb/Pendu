@@ -12,6 +12,7 @@ import Footer from './Footer.js'
 import Button from './Button.js'
 import Player from './Player.js'
 import Configurer from './Configurer.js'
+import About from './About.js'
 
 // Importation du fichier de style
 import './App.css'
@@ -94,6 +95,7 @@ class App extends Component {
         this.onSelectNbPlayer = this.onSelectNbPlayer.bind(this)
         this.onConfigurer = this.onConfigurer.bind(this)
         this.onReturn = this.onReturn.bind(this)
+        this.onAbout = this.onAbout.bind(this)
     }
 
 
@@ -146,6 +148,18 @@ class App extends Component {
         console.log("App::onConfigurer()")
         this.setState({
             statue: 'CONFIGURER',
+        })
+    }
+
+    /**
+     * Méthode qui permet d'afficher la version du jeu
+     * qui seront ensuite utilisées tout au long de la partie
+     * @param index
+     */
+    onAbout(index) {
+        console.log("App::onAbout()")
+        this.setState({
+            statue: 'ABOUT',
         })
     }
 
@@ -214,6 +228,14 @@ class App extends Component {
                 />
             )
         }
+        else if (statue === 'ABOUT') {
+            /**
+             * Permet d'appeler la classe qui s'occupera de la partie configuration du jeu
+             */
+            return(
+                <About />
+            )
+        }
         else {
             /**
              * Renvoie la page principale (page par défaut)
@@ -234,6 +256,7 @@ class App extends Component {
                             <Button className={"Btn-Property"} value={"1 joueur"} index={1} onClick={this.onSelectNbPlayer } />
                             <Button className={"Btn-Property"} value={"2 joueurs"} index={2} onClick={this.onSelectNbPlayer} />
                             <Button className={"Btn-Property"} value={"Configurer"} index={9} onClick={this.onConfigurer} />
+                            <Button className={"Btn-About"} value={"A propos"} index={9} onClick={this.onAbout} />
                         </div>
                     </div>
                     <Footer />

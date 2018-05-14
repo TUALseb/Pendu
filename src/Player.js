@@ -56,7 +56,7 @@ class Player extends Component{
      */
     constructor(props) {
         super(props)
-        console.log ("Player::constructor()")
+        //console.log ("Player::constructor()")
         //console.log ("Player::constructor => props : " + JSON.stringify(props))
         //console.log ("Player::constructor => state : " + JSON.stringify(this.state))
         let statue = props.statue
@@ -73,44 +73,6 @@ class Player extends Component{
         let partyInPlayPlayerTwo = props.playerTwo.partyInPlay
         let player = props.player
         const startNewParty = props.startNewParty
-        if (statue === 'NEXT') {
-            // Nous récupérons les tableaux de mot déjà créés
-            tableWordsToFindPlayerOne = props.playerOne.tableWordsToFind
-            tableWordsToFindPlayerTwo = props.playerTwo.tableWordsToFind
-        }
-
-        if (props.nbPlayer === 1) {
-            //console.log ("Player::Constructor => " + JSON.stringify(props))
-            partyInPlay = statue === 'NEXT'?  props.partyInPlay + 1 : props.partyInPlay
-            partyInPlayPlayerOne = props.partyInPlay + 1
-        }
-        else if (props.playerOne.playerName === props.playerName) {
-            //console.log("nbPlayer : " + props.nbPlayer + "Partie en cours : " + props.partyInPlay + "statue = NEXT_PLAYER")
-            partyInPlayPlayerOne = props.partyInPlay + 1
-            statue = 'NEXT_PLAYER'
-        }
-        else if (props.playerTwo.playerName === props.playerName) {
-            //console.log("nbPlayer : " + props.nbPlayer + "Partie en cours : " + props.partyInPlay + "statue = NEXT")
-            partyInPlayPlayerTwo = props.partyInPlay + 1
-            partyInPlay = props.partyInPlay + 1
-            statue = 'NEXT'
-        }
-
-        // Gérons ici les scores
-        if (props.playerOne.playerName === props.playerName) {
-            scorePlayerOne =  props.score //scorePlayerOne +
-        }
-        else if (props.playerTwo.playerName === props.playerName) {
-
-            scorePlayerTwo =  props.score //scorePlayerTwo +
-        }
-
-
-        if (partyInPlay === props.nbPartiesToPlay) {
-            //console.log ("Player::constructor::props: " + JSON.stringify(props))
-            scorePlayerOne = props.playerOne.score
-            scorePlayerTwo = props.playerTwo.score
-        }
 
         this.state = {
             statue: statue,
@@ -149,7 +111,7 @@ class Player extends Component{
      Appelé après que le composant a été retranscrit pour la première fois dans le DOM réel
      */
     componentDidMount() {
-        console.log ("Player::componentDidMount()")
+        //console.log ("Player::componentDidMount()")
         //console.log ("Player::State =>statue : " + this.state.statue)
         // Nécessaire pour gérer les évènements liés au clavier
         // Nous libérons manuellement cet évènement
@@ -441,7 +403,7 @@ class Player extends Component{
      * @returns {*}
      */
     render() {
-        console.log("Player::render()")
+        //console.log("Player::render()")
         //console.log("Player::render()::state :" + JSON.stringify(this.state) )
         /**
          * 3 cas possibles :
@@ -513,13 +475,13 @@ class Player extends Component{
                                         ))
                                     }
                                 </div>
-                                <div className="Btn-Cancel-Valid">
-                                    <div className="Btn-Ap">
-                                        <Button className={"Btn-Property"} value={"Annuler"} index={99} onClick={this.onCancel } />
-                                    </div>
-                                    <div className="Btn-Ap">
-                                        <Button className={"Btn-Property"} value={"Valider"} index={player} onClick={this.onValid } />
-                                    </div>
+                            </div>
+                            <div className="Btn-Cancel-Valid">
+                                <div className="Btn-Ap">
+                                    <Button className={"Btn-Property"} value={"Annuler"} index={99} onClick={this.onCancel } />
+                                </div>
+                                <div className="Btn-Ap">
+                                    <Button className={"Btn-Property"} value={"Valider"} index={player} onClick={this.onValid } />
                                 </div>
                             </div>
                             <BackToMainPage onClick = {this.onChoice}/>

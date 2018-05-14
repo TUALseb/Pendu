@@ -1,0 +1,16 @@
+/*
+ * Copyright (c) 2018. Sebastien TUAL
+ * date de création :  $today.day-$today.month-2018.
+ * date de modification : $today.day-$today.month-2018.
+ */
+
+.About {
+    display: flex;
+    align-content: center;
+    align-items: center;
+    flex-direction: column;
+    outline: 0.1em solid #000000;
+    background: rgba(223, 223, 223, 0.36);
+    margin: 0.2em;
+    padding: 0.2em;
+}
